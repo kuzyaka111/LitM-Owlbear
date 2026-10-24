@@ -1,4 +1,4 @@
-import {rollD6,animateDice} from './dice.js';
+import {openDiceTray} from './dice.js';
 import {createActionPanel,calculateAction} from './action-panel.js';
 import {createScratchEffects} from './scratch-effects.js';
 import {appendAutoSlot} from './auto-slots.js';
@@ -133,12 +133,10 @@ export function mountSheet(root,state,save,actions) {
   dressScroll(q('.mt-settings-card'));
   q('.mt-roll-dice').addEventListener('click',async()=>{
     if(rolling)return;rolling=true;const button=q('.mt-roll-dice');button.disabled=true;
-    const values=[rollD6(),rollD6()],bonus=currentRoll,total=values[0]+values[1]+bonus;
-    selected.clear();state.actionExtras={power:[],weakness:[]};refreshSelection();localSave();
-    try{
-      if(state.settings.diceAnimation&&!win.matchMedia?.('(prefers-reduced-motion: reduce)').matches)await animateDice(doc,values);
-      dialog('Результат броска',form=>{form.append(el('p','mt-roll-result',String(total)),el('p','',values.join(' + ')+(bonus<0?' − '+Math.abs(bonus):' + '+bonus)+' = '+total));});
-    }catch(error){report(error);}finally{rolling=false;button.disabled=false;fit();}
+    const bonus=currentRoll,sacrifice=specialAction==='sacrifice';
+    const onFirstResult=()=>{selected.clear();state.actionExtras={power:[],weakness:[]};refreshSelection();localSave();};
+    try{await openDiceTray(root,{bonus,sacrifice,onFirstResult,animated:state.settings.diceAnimation&&!win.matchMedia?.('(prefers-reduced-motion: reduce)').matches});}
+    catch(error){report(error);}finally{rolling=false;button.disabled=false;fit();}
   });
   qa('[data-special]').forEach(button=>button.addEventListener('click',()=>{specialAction=specialAction===button.dataset.special?null:button.dataset.special;refreshSelection();}));
   q('.mt-roll-modifier').addEventListener('input',e=>{rollModifier=Math.max(-99,Math.min(99,Math.trunc(Number(e.target.value)||0)));refreshSelection();});

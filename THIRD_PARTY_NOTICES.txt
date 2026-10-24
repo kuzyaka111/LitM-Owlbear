@@ -173,3 +173,8 @@ Bad Script — Copyright 2011 The Bad Script Project Authors.
 Alegreya SC — Copyright 2011 The Alegreya Project Authors.
 Both fonts: SIL Open Font License 1.1; see public/font-licenses/.
 Source: https://github.com/google/fonts/tree/main/ofl/badscript and https://github.com/google/fonts/tree/main/ofl/alegreyasc
+
+
+Three.js — MIT license, https://github.com/mrdoob/three.
+Rapier JavaScript compatibility bindings — Apache-2.0, https://github.com/dimforge/rapier.js.
+Copies are distributed in /licenses/. No Owlbear Dice source or assets are included.

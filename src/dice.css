@@ -8,10 +8,17 @@
 #mist-table-design .mt-v4 .mt-setting{display:flex;gap:8px;align-items:center;width:100%;padding:9px 0;text-align:left;background:none;border:0;border-bottom:1px solid #ac916f35;font:15px/1.5 var(--font-writing);color:#8a816e}
 #mist-table-design .mt-v4 .mt-setting[aria-pressed=true]{color:#38342e}
 #mist-table-design .mt-v4[data-scroll-animation=off] .mt-scroll-toggle svg{transition:none}
-.mt-dice-overlay{position:fixed;inset:0;z-index:2147483646;pointer-events:auto;background:#17130d15;overflow:hidden;perspective:900px}
-.mt-die-holder{position:absolute;left:0;top:0;width:48px;height:48px;perspective:600px}
-.mt-die{width:48px;height:48px;position:relative;transform-style:preserve-3d}
-.mt-die-face{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:3px;padding:7px;box-sizing:border-box;border:1px solid #b39560;border-radius:7px;background:linear-gradient(135deg,#fff3d1,#d1b780);backface-visibility:hidden;box-shadow:inset 0 0 5px #6b482e55}
-.mt-die-face i.pip{background:#432d20;border-radius:50%;box-shadow:inset 0 1px 2px #0007}
-.face-1{transform:translateZ(24px)}.face-6{transform:rotateY(180deg) translateZ(24px)}.face-2{transform:rotateY(90deg) translateZ(24px)}.face-5{transform:rotateY(-90deg) translateZ(24px)}.face-3{transform:rotateX(90deg) translateZ(24px)}.face-4{transform:rotateX(-90deg) translateZ(24px)}
-#mist-table-design .mt-roll-result{text-align:center;font:500 42px var(--font-heading);margin:15px}
+#mist-table-design .mt-dice-dialog{border:0;border-radius:9px;padding:0;width:min(900px,calc(100vw - 20px));max-width:none;background:#eee0bf;color:#3e3024;box-shadow:0 10px 55px #0007;overflow:auto;max-height:calc(100dvh - 20px)}
+#mist-table-design .mt-dice-dialog::backdrop{background:#171e1a66}
+#mist-table-design .mt-dice-layout{display:grid;grid-template-columns:minmax(0,1fr) 230px}
+#mist-table-design .mt-physical-tray{height:380px;min-width:0;background:#26352e;display:flex;align-items:center;justify-content:center;color:#ead9b4;overflow:hidden}
+#mist-table-design .mt-physical-tray canvas{display:block;width:100%;height:100%;touch-action:none}
+#mist-table-design .mt-dice-info{padding:18px;display:flex;flex-direction:column;gap:10px;font:15px/1.4 var(--font-heading)}
+#mist-table-design .mt-dice-info h2{font:500 20px var(--font-heading);margin:0}
+#mist-table-design .mt-dice-info p{margin:0}
+#mist-table-design .mt-dice-info .mt-roll-result{display:block;font:500 44px var(--font-heading);min-height:52px}
+#mist-table-design .mt-dice-info .mt-dice-hint{font:12px/1.5 var(--font-heading);opacity:.75}
+#mist-table-design .mt-dice-info button{border:0;background:#654a33;color:#f6e7c7;padding:9px;font:14px var(--font-heading);cursor:pointer}
+#mist-table-design .mt-dice-info .mt-dice-close{margin-top:auto}
+#mist-table-design .mt-static-die{font:90px Arial,sans-serif;margin:10px;color:#eed8ad}
+@media(max-width:600px){#mist-table-design .mt-dice-layout{grid-template-columns:1fr}#mist-table-design .mt-physical-tray{height:260px}#mist-table-design .mt-dice-info{gap:7px;padding:12px}#mist-table-design .mt-dice-info .mt-roll-result{font-size:32px;min-height:38px}}

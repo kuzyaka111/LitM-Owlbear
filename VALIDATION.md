@@ -102,3 +102,19 @@ SVG состоит из одного полупрозрачного углова
 - 49 tests pass: inclusive unbiased d6 sampling, persisted preferences/default migration, manual trades and additive modifier, four-tab keyboard navigation.
 - Chromium checks: stored scroll/dice toggles survive reload; disabled scroll motion has no active animations; 1 tag + 3 modifier gives Power 4; caution can be selected; fixed dice 1 and 6 produce the correct instant/animated totals; tags clear; no result before animation completes; overlay is removed; no page errors.
 - Reviewed screenshots of centered numeric control/dice icon, moving 3D dice, final result and settings card. Animation respects the extension viewport. Actual Owlbear/mobile host interaction remains a user-side check.
+
+## 0.7.8 — physical dice tray
+- 51 tests pass. Fifteen seeded physical throws settle inside the tray with varied final positions and valid top faces; settled positions remain unchanged. Outcome thresholds 6/7/9/10 verified.
+- Chromium WebGL: physical roll resolves, displayed values plus frozen bonus match total; tray persists; reroll and pointer dragging work; closing disposes/removes tray; animation-off mode retains static dice and result. Desktop and 390px mobile screenshots reviewed; no page errors.
+- Engine chunk is lazy-loaded: 4.87 MB raw / 1.80 MB gzip. Render loop stops at rest and resources are disposed on close. No claim of device-level Owlbear/mobile performance benchmarking.
+- Rules checked: The Hero pp. 97 and 103 allow pair rerolls via Lessons Learned and Deft Remedy. Eligibility/session use remains player-controlled. Sacrifice keeps its distinct outcome labels.
+
+## 2026-10-24 — восстановление публикации 0.7.8 и проверка жизненного цикла
+
+- На момент проверки main=b4e8935 содержал только загруженный ZIP 0.7.8; package.json и публичный manifest.json GitHub Pages оставались 0.7.7. Распакованы исходники обновления, каталог docs пересобран; старые хешированные сборки удалены из docs/assets.
+- 56 автоматических тестов проходят (51 существующий + 5 регрессионных тестов лотка), production-сборка проходит. Проверены хранение/миграции данных, карточки, вкладки, заметки, синхронизация братства через подставной API, ограничения панели ведущего и физика 15 бросков.
+- Новые тесты: сохранение лотка/фиксированного бонуса, однократный сброс выбора после результата, немедленное закрытие во время импорта, освобождение поздно созданного движка, явный fallback при ошибке загрузки и потере контекста, закрытие по pagehide.
+- Выбор тегов сбрасывается после первого результата, а не перед загрузкой. Повторные броски не сбрасывают его повторно. Сбой не делает скрытый автоматический переброс.
+- Освобождение renderer идемпотентно; снимаются обработчики указателя/контекста, отключается ResizeObserver, общая геометрия освобождается один раз, освобождается shadow map. При потере pointer capture удерживаемая кость отпускается. Обрабатываются только основной указатель и основная кнопка.
+- В этом запуске браузерная проверка НЕ выполнена: Chromium отсутствует, установка через Playwright вернула повреждённые ZIP. Описанные выше браузерные проверки 0.7.8 относятся к предыдущей работе, а не к этой редакции. Нужна проверка WebGL и жестов на реальном устройстве в комнате Owlbear.
+- Модуль 3D остаётся лениво загружаемым (~1.80 MB gzip); при выключенной анимации не загружается. Замеры производительности на реальных устройствах не проводились.

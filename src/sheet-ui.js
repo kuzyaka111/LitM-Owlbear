@@ -5,10 +5,10 @@ import { fellowshipTheme, fellowshipPatch } from './fellowship-model.js';
 import { editorTools, renderTheme } from './editor-ui.js';
 
 export function mountSheet(root,state,save,actions) {
-  const tools=editorTools(root),{doc,el,btn,dialog,editText,catalogDialog}=tools;
+  const tools=editorTools(root),{doc,el,btn,dialog,inlineText}=tools;
   const q=s=>root.querySelector(s),qa=s=>[...root.querySelectorAll(s)];
-  const selected=new Set(state.selected),expanded=new Map(),replacements=new Map();
-  let activeTab='party',shared=fellowshipDefaults(),sharedReady=false,sharedBusy=false,sharedStatus='Подключаем братство…',deleted=null;
+  const selected=new Set(state.selected),expanded=new Map();
+  let activeTab='party',shared=fellowshipDefaults(),sharedReady=false,sharedBusy=false,sharedStatus='Подключаем братство…';
   const service=actions.fellowship;
   const report=error=>{const node=q('.mt-ui-message');node.hidden=false;node.textContent=error?.message||String(error);};
   function localSave(){state.selected=[...selected];save();}
@@ -33,13 +33,12 @@ export function mountSheet(root,state,save,actions) {
     q('.mt-clear').disabled=!selected.size;state.selected=[...selected];
   }
   function select(key){if(selected.has(key)){selected.delete(key);if(key.startsWith('extra:'))for(const kind of ['power','weakness'])state.actionExtras[kind]=state.actionExtras[kind].filter(x=>`extra:${kind}:${x.id}`!==key);}else selected.add(key);refreshSelection();localSave();}
-  function preserveReplace(host,node){const previous=host.querySelector('.mt-theme'),scroll=previous?.scrollTop||0;host.replaceChildren(node);node.scrollTop=scroll;}
+  function preserveReplace(host,node){if(host.querySelector('.mt-inline-editor')){host._pendingCard=node;return;}const previous=host.querySelector('.mt-theme'),scroll=previous?.scrollTop||0;host.replaceChildren(node);node.scrollTop=scroll;}
   function mutateTheme(t,change){if(change.kind)t[change.kind][change.index][change.field]=change.value;else t[change.field]=change.value;}
   function themeContext(t,host,core=false,card){
     return {core,isSelected:key=>selected.has(key),select,report,expanded:expanded.get(t.id),onExpand:open=>expanded.set(t.id,open),
       change:async change=>{mutateTheme(t,change);drawLocal(t,host,core,card);refreshSelection();localSave();},
-      replace:async(bookId,reset)=>{replacements.set(t.id,structuredClone(t));const replacement=reset?makeTheme(bookId,t.id):{...structuredClone(t),bookId};const b=getBook(bookId);if(reset&&b.might!=='variable')replacement.might=b.might;Object.assign(t,replacement);drawLocal(t,host,core,card);refreshSelection();localSave();},
-      undo:replacements.has(t.id)?()=>{Object.assign(t,replacements.get(t.id));replacements.delete(t.id);drawLocal(t,host,core,card);refreshSelection();localSave();}:null,
+      replace:core?async(bookId,reset)=>{const replacement=reset?makeTheme(bookId,t.id):{...structuredClone(t),bookId};const b=getBook(bookId);if(reset&&b.might!=='variable')replacement.might=b.might;Object.assign(t,replacement);drawLocal(t,host,core,card);refreshSelection();localSave();}:null,
       remove:card?()=>removeCard(card):null};
   }
   function drawLocal(t,host,core=false,card){preserveReplace(host,renderTheme(t,themeContext(t,host,core,card),tools));}
@@ -63,28 +62,31 @@ export function mountSheet(root,state,save,actions) {
     const body=el('div','mt-character-body');const name=field('Имя героя',state.name,value=>{state.name=value;localSave();},80,true);name.input.className='mt-editor-name';body.append(name.label,field('Имя игрока',state.playerName,value=>{state.playerName=value;localSave();}).label);
     const about=el('details','mt-details');about.append(el('summary','','О персонаже'),field('Описание',state.concept,value=>{state.concept=value;localSave();},500,true).label);body.append(about);
     const relationships=el('details','mt-details mt-relationships');relationships.open=true;relationships.append(el('summary','','Отношения в братстве'));
-    state.relationships.forEach((r,index)=>{const row=el('div','mt-relationship');const tag=btn(r.tag||'Тег отношения','',()=>{if(r.tag)select('relationship:'+r.id);else editRelationship();});tag.dataset.key='relationship:'+r.id;tag.title=r.companion;tag.addEventListener('dblclick',()=>editRelationship());
-      function editRelationship(){dialog('Отношение',(form,close)=>{let companion=r.companion,text=r.tag;form.append(field('Спутник',companion,v=>{companion=v;}).label,field('Тег отношения',text,v=>{text=v;}).label);const saveButton=el('button','mt-primary','Сохранить');saveButton.type='submit';form.append(saveButton);form.addEventListener('submit',()=>{r.companion=companion;r.tag=text;drawCharacter();refreshSelection();localSave();close();});});}
-      row.append(el('small','',r.companion||'Спутник'),tag,btn('✎','',editRelationship,'Редактировать отношение'),btn('×','',()=>{state.relationships.splice(index,1);drawCharacter();refreshSelection();localSave();},'Удалить отношение'));relationships.append(row);
+    state.relationships.forEach((r,index)=>{const row=el('div','mt-relationship');let timer;const tag=btn(r.tag||'Тег отношения','',()=>{clearTimeout(timer);if(r.tag)timer=setTimeout(()=>{if(tag.isConnected)select('relationship:'+r.id);},230);});tag.dataset.key='relationship:'+r.id;tag.title=r.companion;tag.addEventListener('dblclick',()=>{clearTimeout(timer);editRelationship();});
+      function editRelationship(){inlineText(tag,r.tag,async value=>{r.tag=value;drawCharacter();refreshSelection();localSave();},80,'Тег отношения');}
+      const companion=el('small','',r.companion||'Спутник');companion.title='Двойное нажатие — изменить';companion.addEventListener('dblclick',()=>inlineText(companion,r.companion,async value=>{r.companion=value;drawCharacter();localSave();},80,'Спутник'));
+      row.append(companion,tag,btn('×','',()=>{state.relationships.splice(index,1);drawCharacter();refreshSelection();localSave();},'Удалить отношение'));relationships.append(row);
     });
     relationships.append(btn('+ Отношение','mt-add-relationship',()=>{if(state.relationships.length<20){state.relationships.push({id:makeId(),companion:'',tag:''});drawCharacter();localSave();}}));body.append(relationships);article.append(body);
     const growth=el('div','mt-hero-growth');growth.append(el('span','mt-tag-label','ПОТЕНЦИАЛ'));const pips=el('div','mt-promise');for(let i=1;i<=5;i++){const b=btn(i<=state.promise?'◆':'◇','mt-pip',()=>{state.promise=i===state.promise?i-1:i;drawCharacter();localSave();},'Потенциал '+i);b.setAttribute('aria-pressed',String(i<=state.promise));pips.append(b);}growth.append(pips);
     const quint=el('details','mt-details mt-quintessences');quint.open=expanded.get('quint')||false;quint.addEventListener('toggle',()=>expanded.set('quint',quint.open));quint.append(el('summary','','Квинтэссенции · '+state.quintessenceIds.length));
-    for(const id of state.quintessenceIds){const item=improvementById(id);if(!item)continue;const row=el('div','mt-improvement-row');const b=btn(item.name,'',()=>dialog(item.name,form=>form.append(el('p','',item.text),el('small','mt-source-note','The Hero · стр. '+item.page))));b.title=item.text;row.append(b,btn('×','',()=>{state.quintessenceIds=state.quintessenceIds.filter(x=>x!==id);drawCharacter();localSave();},'Удалить квинтэссенцию '+item.name));quint.append(row);}
-    quint.append(btn('+ Выбрать из книги','mt-add-quintessence',()=>catalogDialog('Квинтэссенции',quintessences,state.quintessenceIds,async ids=>{state.quintessenceIds=ids;drawCharacter();localSave();})));
-    if(state.quintessences){const legacy=el('details','mt-details');legacy.append(el('summary','','Прежние записи'),el('p','',state.quintessences),btn('✎','',()=>editText('Прежние записи о квинтэссенциях',state.quintessences,async value=>{state.quintessences=value;drawCharacter();localSave();},2000)));quint.append(legacy);}growth.append(quint);article.append(growth);
+    for(const item of quintessences){const active=state.quintessenceIds.includes(item.id),row=el('div','mt-improvement-row'+(!active?' mt-inactive-improvement':''));
+      const toggle=btn(active?'◆':'◇','mt-improvement-toggle',()=>{state.quintessenceIds=active?state.quintessenceIds.filter(x=>x!==item.id):[...state.quintessenceIds,item.id];drawCharacter();localSave();},'Активировать '+item.name);toggle.setAttribute('aria-pressed',String(active));
+      const title=btn(item.name,'mt-improvement-title',()=>dialog(item.name,form=>form.append(el('p','',item.text),el('small','mt-source-note','The Hero · стр. '+item.page))));title.title=item.text;row.append(toggle,title);quint.append(row);
+    }
+    if(state.quintessences){const legacy=el('details','mt-details'),copy=el('p','',state.quintessences);copy.title='Двойное нажатие — изменить';copy.addEventListener('dblclick',()=>inlineText(copy,state.quintessences,async value=>{state.quintessences=value;drawCharacter();localSave();},2000,'Прежние записи о квинтэссенциях'));legacy.append(el('summary','','Прежние записи'),copy);quint.append(legacy);}growth.append(quint);article.append(growth);
     const storage=el('details','mt-details mt-storage-details');storage.append(el('summary','','Сохранение'));const info=el('div','mt-storage-info');const old=root.querySelector('.mt-prototype-note');if(old)info.append(old);storage.append(info);article.append(storage);preserveReplace(q('.mt-character-host'),article);
   }
   drawCharacter();
 
-  function removeCard(card){deleted={card:structuredClone(card),index:state.cards.indexOf(card),selection:[...selected]};state.cards=state.cards.filter(c=>c!==card);q('.mt-undo').hidden=false;q('.mt-undo span').textContent='Карточка удалена.';drawInventory();refreshSelection();localSave();fit();}
+  function removeCard(card){state.cards=state.cards.filter(c=>c!==card);drawInventory();refreshSelection();localSave();fit();}
   function drawInventory(){
     q('.mt-inventory-host').replaceChildren();
     for(const card of state.cards){const host=el('div','mt-card-slot');host.dataset.cardId=card.id;q('.mt-inventory-host').append(host);
       if(card.type==='theme'){drawLocal(card.theme,host,false,card);continue;}
       const article=el('article','mt-theme mt-backpack-card'),head=el('div','mt-theme-head');head.append(el('span','','Рюкзак'),btn('×','mt-remove-card',()=>removeCard(card),'Удалить карточку '+card.title));article.append(head);
-      const title=btn(card.title||'Рюкзак','mt-backpack-title',()=>{});const editTitle=()=>editText('Название рюкзака',card.title,async value=>{card.title=value;drawInventory();localSave();},80);title.addEventListener('dblclick',editTitle);article.append(title,btn('✎','mt-edit-backpack-title',editTitle,'Изменить название рюкзака'));
-      const items=el('div','mt-backpack-items');for(const item of card.items){const row=el('div','mt-item-row'+(item.scratched?' mt-scratched':''));const key=`card:${card.id}:${item.id}`;let timer;const text=btn(item.text,'mt-tag-text',()=>{});text.dataset.key=key;text.title=item.text;const edit=()=>editText('Тег рюкзака',item.text,async value=>{item.text=value;drawInventory();refreshSelection();localSave();});text.addEventListener('click',()=>{clearTimeout(timer);timer=setTimeout(()=>{if(text.isConnected&&!item.scratched)select(key);},230);});text.addEventListener('dblclick',()=>{clearTimeout(timer);edit();});row.append(text,btn(item.scratched?'↶':'╱','mt-scratch',()=>{item.scratched=!item.scratched;drawInventory();refreshSelection();localSave();},'Зачеркнуть '+item.text),btn('✎','mt-edit-tag',edit,'Редактировать '+item.text),btn('×','mt-remove-item',()=>{card.items=card.items.filter(x=>x!==item);drawInventory();refreshSelection();localSave();},'Удалить тег '+item.text));items.append(row);}article.append(items);
+      const title=btn(card.title||'Рюкзак','mt-backpack-title',()=>{});const editTitle=()=>inlineText(title,card.title,async value=>{card.title=value;drawInventory();localSave();},80,'Название рюкзака');title.addEventListener('dblclick',editTitle);article.append(title);
+      const items=el('div','mt-backpack-items');for(const item of card.items){const row=el('div','mt-item-row'+(item.scratched?' mt-scratched':''));const key=`card:${card.id}:${item.id}`;let timer;const text=btn(item.text,'mt-tag-text',()=>{});text.dataset.key=key;text.title=item.text;const edit=()=>inlineText(text,item.text,async value=>{item.text=value;drawInventory();refreshSelection();localSave();},160,'Тег рюкзака');text.addEventListener('click',()=>{clearTimeout(timer);timer=setTimeout(()=>{if(text.isConnected&&!item.scratched)select(key);},230);});text.addEventListener('dblclick',()=>{clearTimeout(timer);edit();});row.append(text,btn(item.scratched?'↶':'╱','mt-scratch',()=>{item.scratched=!item.scratched;drawInventory();refreshSelection();localSave();},'Зачеркнуть '+item.text),btn('×','mt-remove-item',()=>{card.items=card.items.filter(x=>x!==item);drawInventory();refreshSelection();localSave();},'Удалить тег '+item.text));items.append(row);}article.append(items);
       const form=el('form','mt-add-card-item'),input=el('input');input.maxLength=160;input.required=true;input.placeholder='Новый тег';input.setAttribute('aria-label','Новый тег рюкзака');const add=el('button','','+');add.type='submit';add.setAttribute('aria-label','Добавить тег рюкзака');form.append(input,add);form.addEventListener('submit',e=>{e.preventDefault();if(input.value.trim()&&card.items.length<50){card.items.push({id:makeId(),text:input.value.trim(),scratched:false});drawInventory();refreshSelection();localSave();}});article.append(form);
       const notes=el('details','mt-details mt-backpack-notes');notes.append(el('summary','','Записи'),field('Записи рюкзака',card.notes,v=>{card.notes=v;localSave();},2000,true).label);article.append(notes);host.append(article);
     }
@@ -92,7 +94,6 @@ export function mountSheet(root,state,save,actions) {
   }
   function addCard(type){if(state.cards.length>=30)return;state.cards.push(newCard(type));drawInventory();refreshSelection();localSave();fit();q('.mt-inventory-host').lastElementChild.scrollIntoView?.({block:'nearest',inline:'nearest'});}
   q('.mt-add-backpack').addEventListener('click',()=>addCard('bag'));q('.mt-add-theme').addEventListener('click',()=>addCard('theme'));
-  q('.mt-undo button').addEventListener('click',()=>{if(deleted&&state.cards.length<30){state.cards.splice(deleted.index,0,deleted.card);deleted.selection.forEach(k=>selected.add(k));deleted=null;q('.mt-undo').hidden=true;drawInventory();refreshSelection();localSave();fit();}});
   drawInventory();
   const notes=q('#mt-notes-text');notes.value=state.notes;notes.addEventListener('input',()=>{state.notes=notes.value;localSave();});
   qa('.mt-add-action-tag').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input'),kind=form.dataset.kind;if(input.value.trim()&&state.actionExtras[kind].length<30){const item={id:makeId(),text:input.value.trim()};state.actionExtras[kind].push(item);selected.add(`extra:${kind}:${item.id}`);input.value='';refreshSelection();localSave();}}));

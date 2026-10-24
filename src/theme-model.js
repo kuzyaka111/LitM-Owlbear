@@ -3,7 +3,8 @@ import { themes as demos } from './demo.js';
 export const themebooks = catalog.themebooks;
 export const quintessences = catalog.quintessences;
 export const mightNames = { origin: 'Истоки', adventure: 'Приключение', greatness: 'Величие' };
-export const getBook = id => themebooks.find(b => b.id === id) || themebooks[0];
+const storyBook = {id:'story',name:'Сюжетная тема',might:'variable',power:[],weakness:[],improvements:[]};
+export const getBook = id => id==='story'?storyBook:themebooks.find(b => b.id === id) || themebooks[0];
 export const allImprovements = [...themebooks.flatMap(b => b.improvements), ...quintessences];
 export const improvementById = id => allImprovements.find(x => x.id === id);
 const text = (v, limit, fallback = '') => typeof v === 'string' ? v.slice(0, limit) : fallback;
@@ -13,7 +14,7 @@ export function makeTheme(bookId = 'past', id = crypto.randomUUID()) {
   return { id, bookId: book.id, might: book.might === 'variable' ? 'origin' : book.might,
     power: Array.from({ length: 7 }, (_, i) => ({ text: '', q: String.fromCharCode(65 + i), scratched: false })),
     weakness: Array.from({ length: 3 }, (_, i) => ({ text: '', q: String.fromCharCode(65 + i), scratched: false })),
-    quest: '', improve: 0, abandon: 0, milestone: 0, improvements: [], notes: '' };
+    quest: '', improve: 0, abandon: 0, milestone: 0, improvements: [], storyImprovements: Array.from({length:5},()=>({text:'',active:false})), notes: '' };
 }
 export function cleanTheme(value, fallbackId = 'theme') {
   const v = value && typeof value === 'object' ? value : {};
@@ -26,7 +27,17 @@ export function cleanTheme(value, fallbackId = 'theme') {
   t.quest = text(v.quest, 1000); t.notes = text(v.notes, 5000);
   for (const k of ['improve', 'abandon', 'milestone']) t[k] = count(v[k]);
   t.improvements = Array.isArray(v.improvements) ? [...new Set(v.improvements.filter(x => themebooks.some(b => b.improvements.some(i => i.id === x))))] : [];
+  t.storyImprovements = Array.from({length:Math.max(5,Math.min(30,v.storyImprovements?.length||0))},(_,i)=>({text:text(v.storyImprovements?.[i]?.text,160),active:v.storyImprovements?.[i]?.active===true}));
   return t;
+}
+export function asStoryTheme(value) {
+  const t=cleanTheme(value);
+  if(t.bookId!=='story') {
+    const previous=t.improvements.map(improvementById).filter(Boolean).map(x=>({text:x.name,active:true}));
+    t.storyImprovements=[...previous,...t.storyImprovements.filter(x=>x.text)];
+    while(t.storyImprovements.length<5)t.storyImprovements.push({text:'',active:false});
+  }
+  t.bookId='story';t.improvements=[];return t;
 }
 export function initialThemes(marks = []) {
   return demos.map((d, i) => {

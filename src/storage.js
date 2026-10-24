@@ -1,4 +1,4 @@
-import { cleanTheme, makeTheme, initialThemes, legacyTheme, quintessences } from './theme-model.js';
+import { cleanTheme, asStoryTheme, makeTheme, initialThemes, legacyTheme, quintessences } from './theme-model.js';
 const text = (value, fallback = '', limit = 5000) => typeof value === 'string' ? value.slice(0, limit) : fallback;
 const strings = (value, fallback, count = 50) => Array.isArray(value)
   ? [...new Set(value.filter(x => typeof x === 'string').map(x => x.trim().slice(0, 160)).filter(Boolean))].slice(0, count)
@@ -7,7 +7,7 @@ const count = (value, max) => Number.isInteger(value) ? Math.max(0, Math.min(max
 export const makeId = () => globalThis.crypto.randomUUID();
 const id = (value, fallback) => typeof value === 'string' && /^[a-zA-Z0-9_-]{1,80}$/.test(value) ? value : fallback;
 export function newCard(type) {
-  if (type === 'theme') { const id = makeId(); return { id, type, theme: makeTheme('past', id) }; }
+  if (type === 'theme') { const id = makeId(); return { id, type, theme: makeTheme('story', id) }; }
   return { id: makeId(), type, title: type === 'theme' ? 'Новая тема' : 'Новый рюкзак', typeLabel: '', items: [], weakness: '', quest: '', notes: '', improve: 0, abandon: 0, milestone: 0 };
 }
 export function defaults(view) {
@@ -30,7 +30,7 @@ function cleanCards(cards) {
       let itemId = id(x.id, 'item-' + j); while (itemIds.has(itemId)) itemId += '-copy'; itemIds.add(itemId);
       return { id: itemId, text: text(x.text, '', 160), scratched: x.scratched === true };
     }) : [];
-    if (c.type === 'theme') return { id: cardId, type: 'theme', theme: cleanTheme(c.theme || legacyTheme({ ...c, id: cardId, items }), cardId) };
+    if (c.type === 'theme') return { id: cardId, type: 'theme', theme: asStoryTheme(c.theme || legacyTheme({ ...c, id: cardId, items })) };
     return { id: cardId, type: c.type, title: text(c.title, '', 80), typeLabel: text(c.typeLabel, '', 40), items,
       weakness: text(c.weakness, '', 200), quest: text(c.quest, '', 500), notes: text(c.notes, '', 2000),
       improve: count(c.improve, 3), abandon: count(c.abandon, 3), milestone: count(c.milestone, 3) };

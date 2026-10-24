@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
+import {createScrollMotion} from '../src/scroll-motion.js';
 import {dressScroll} from '../src/scroll-view.js';
 
 test('scroll keeps live fields, toggles accessible improvements and restores expanded state',()=>{
@@ -23,4 +24,14 @@ test('plain cards have no expansion control',()=>{
  const card=dressScroll(dom.window.document.querySelector('article'));
  assert.equal(card.querySelector('.mt-scroll-toggle'),null);
  assert.equal(card.querySelector('.mt-scroll-main textarea').value,'Заметка');
+});
+
+
+test('entrance installs initial keyframes synchronously and measures after stop',()=>{
+ const dom=new JSDOM('<main><section><div class="mt-card-row"><article class="mt-scroll-frame"><div class="mt-scroll-body"></div></article></div></section></main>');
+ const root=dom.window.document.querySelector('main'),card=root.querySelector('article'),body=card.firstElementChild,calls=[];
+ card.getBoundingClientRect=()=>({width:224,left:0,right:224});body.getBoundingClientRect=()=>({height:483});
+ for(const node of [card,body])node.animate=(frames,options)=>{calls.push({node,frames,options});return {cancel(){},finished:new Promise(()=>{})};};
+ createScrollMotion(root).play(root.querySelector('section'));
+ assert.equal(calls.length,2);assert.equal(calls[0].frames[0].opacity,0);assert.equal(calls[1].frames[0].height,'0px');assert.equal(calls[0].options.fill,'both');
 });

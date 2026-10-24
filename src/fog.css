@@ -7,7 +7,7 @@ body[data-view="sheet"]::before{display:none}
 #mist-table-design .mt-v4 .mt-tabs button[aria-selected=true]{background:#505a5c;color:#fff2d8}
 #mist-table-design .mt-v4 .mt-tabs .mt-close-sheet{background:#505a5c;color:#fff2d8;padding:4px 10px;font-size:20px;position:sticky;right:0;z-index:3}
 #mist-table-design .mt-v4 .mt-stage{position:relative;display:grid;grid-template-columns:minmax(0,1fr) var(--card-width);gap:12px;align-items:start;isolation:isolate}
-#mist-table-design .mt-v4 .mt-stage::before{content:"";position:absolute;inset:-7px;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 22% 45%,#e5ede595,transparent 68%),radial-gradient(ellipse at 80% 55%,#d6dfdc70,transparent 68%);filter:blur(4px)}
+#mist-table-design .mt-v4 .mt-stage::before{display:none;content:none}
 #mist-table-design .mt-v4 .mt-main-cards{min-width:0}
 #mist-table-design .mt-v4 .mt-card-row{display:flex;flex-flow:row nowrap;gap:12px;width:100%;max-width:100%;padding:0;margin:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:#7a87775c transparent;align-items:flex-start}
 #mist-table-design .mt-v4 .mt-card-slot{flex:0 0 var(--card-width);width:var(--card-width);min-width:0}

@@ -139,3 +139,16 @@ test('mandatory backpack has no title tag or delete control; new storage can be 
  const {root:r,event,store,dom}=ui();const primary=r.querySelector('.mt-primary-backpack');assert(primary);assert.equal(primary.querySelector('.mt-remove-card'),null);assert.equal(primary.querySelector('.mt-backpack-title'),null);assert.equal(primary.querySelector('.mt-storage-title'),null);assert.equal(r.querySelector('.mt-add-backpack').textContent,'+ Хранилище');
  r.querySelector('.mt-add-backpack').click();let storage=r.querySelector('.mt-storage-card');assert.equal(storage.querySelector('.mt-storage-title').textContent,'Хранилище');storage.querySelector('.mt-storage-title').dispatchEvent(new dom.window.MouseEvent('dblclick',{bubbles:true}));r.querySelector('.mt-inline-editor').value='Сундук';r.querySelector('.mt-inline-editor').dispatchEvent(event('blur'));await settle();assert.equal(store.load().cards[1].title,'Сундук');r.querySelector('.mt-storage-card .mt-remove-card').click();assert.equal(store.load().cards.length,1);assert.equal(store.load().cards[0].id,'original-backpack');
 });
+
+
+test('tab remains hidden until host resize completes; stale completion cannot reveal another tab',async()=>{
+ const dom=new JSDOM('<main></main>'),root=dom.window.document.querySelector('main'),pending=[];
+ const store=makeStore(storage(),{room:'room',player:'1'},'sheet');
+ mountUI(root,'sheet',template,store,{close:async()=>{},fitWindow:()=>new Promise(resolve=>pending.push(resolve))});
+ const themes=root.querySelector('#panel-themes'),notes=root.querySelector('#panel-notes');
+ root.querySelector('#tab-themes').click();assert.equal(themes.style.visibility,'hidden');
+ root.querySelector('#tab-notes').click();assert.equal(notes.style.visibility,'hidden');
+ pending.slice(0,-1).forEach(resolve=>resolve());await settle();
+ assert.equal(themes.hidden,true);assert.equal(notes.style.visibility,'hidden');
+ pending.at(-1)();await settle();assert.equal(notes.style.visibility,'');
+});

@@ -3,6 +3,9 @@ import { createIcons, Feather, X, UserRound, Sprout, BookOpen, ArrowUpRight } fr
 import './style.css';
 import './fog.css';
 import './scrolls.css';
+import rollImage from './scroll-roll.svg';
+import paperImage from './parchment.svg';
+const scrollAssetsReady=Promise.all([rollImage,paperImage].map(src=>{const image=new Image();image.src=src;return image.decode().catch(()=>{});}));
 import sheetTemplate from './sheet.html?raw';
 import gmTemplate from './gm.html?raw';
 import { MODAL_ID, SHEET_POPOVER_ID, sheetBounds, openSheet, watchSheetAction } from './bridge.js';
@@ -22,6 +25,7 @@ function message(text) {
 async function start(inOwlbear) {
   const thisGeneration = ++generation;
   const role = inOwlbear ? await OBR.player.getRole() : 'PREVIEW';
+  if(view==='sheet')await scrollAssetsReady;
   if (thisGeneration !== generation) return;
   renderedRole = role;
   if (view === 'gm' && role !== 'GM' && inOwlbear) { message('Эта панель доступна только ведущему комнаты.'); return; }
@@ -35,7 +39,7 @@ async function start(inOwlbear) {
   const fellowship = view === 'sheet' ? (inOwlbear ? makeFellowshipStore(OBR.room) : makePreviewFellowship(storage)) : null;
   if (fellowship) window.addEventListener('pagehide', () => fellowship.dispose(), { once: true });
   let resizeQueue = Promise.resolve();
-  const fitWindow = (count, hasSelection) => { if (!inOwlbear || view !== 'sheet') return; resizeQueue = resizeQueue.then(async () => { const size = await sheetBounds(OBR, count, hasSelection); await OBR.popover.setWidth(SHEET_POPOVER_ID, size.width); await OBR.popover.setHeight(SHEET_POPOVER_ID, size.height); }).catch(console.error); };
+  const fitWindow = (count, hasSelection) => { if (!inOwlbear || view !== 'sheet') return; resizeQueue = resizeQueue.then(async () => { const size = await sheetBounds(OBR, count, hasSelection); await OBR.popover.setWidth(SHEET_POPOVER_ID, size.width); await OBR.popover.setHeight(SHEET_POPOVER_ID, size.height); }).catch(console.error); return resizeQueue; };
   mountUI(root, view, view === 'gm' ? gmTemplate : sheetTemplate, makeStore(storage, scope, view), {
     close, fellowship, fitWindow, preview: !inOwlbear,
     openSheet: async () => { if (inOwlbear) { await OBR.modal.close(MODAL_ID); await openSheet(OBR, window.location.href); } else window.location.href = new URL('./index.html', window.location.href).href; },

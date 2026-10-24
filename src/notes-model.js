@@ -1,11 +1,13 @@
 const text=(v,fallback='',max=5000)=>typeof v==='string'?v.slice(0,max):fallback;
 export const newNoteSection=()=>({id:crypto.randomUUID(),title:'',text:'',collapsed:false});
-export const newNoteCard=()=>({id:crypto.randomUUID(),title:'Новая заметка',collapsed:false,sections:[newNoteSection()]});
-export function legacyNotes(value){return [{id:'original-notes',title:'Заметки',collapsed:false,sections:[{id:'original-notes-body',title:'',text:value,collapsed:false}]}];}
+export const newNoteHeading=()=>({...newNoteSection(),children:[]});
+export const newNoteCard=()=>({id:crypto.randomUUID(),title:'Новая заметка',open:true,sections:[newNoteHeading()]});
+export function legacyNotes(value){return [{id:'original-notes',title:'Заметки',open:true,sections:[{id:'original-notes-body',title:'',text:value,collapsed:false,children:[]}]}];}
 export function cleanNoteCards(value,previous){
  if(!Array.isArray(value))return legacyNotes(previous);
  const ids=new Set();const unique=(v,fallback)=>{let id=typeof v==='string'&&/^[a-zA-Z0-9_-]{1,80}$/.test(v)?v:fallback;while(ids.has(id))id+='-copy';ids.add(id);return id;};
- return value.filter(c=>c&&typeof c==='object').slice(0,30).map((c,i)=>({id:unique(c.id,'note-'+i),title:text(c.title,'Заметки',120),collapsed:c.collapsed===true,sections:(Array.isArray(c.sections)?c.sections:[]).filter(s=>s&&typeof s==='object').slice(0,50).map((s,j)=>({id:unique(s.id,`note-${i}-section-${j}`),title:text(s.title,'',120),text:text(s.text),collapsed:s.collapsed===true}))}));
+ const leaf=(s,fallback)=>({id:unique(s.id,fallback),title:text(s.title,'',120),text:text(s.text),collapsed:s.collapsed===true});
+ return value.filter(c=>c&&typeof c==='object').slice(0,30).map((c,i)=>({id:unique(c.id,'note-'+i),title:text(c.title,'Заметки',120),open:typeof c.open==='boolean'?c.open:c.collapsed!==true,sections:(Array.isArray(c.sections)?c.sections:[]).filter(s=>s&&typeof s==='object').slice(0,50).map((s,j)=>({...leaf(s,`note-${i}-section-${j}`),children:(Array.isArray(s.children)?s.children:[]).filter(x=>x&&typeof x==='object').slice(0,50).map((child,k)=>leaf(child,`note-${i}-section-${j}-child-${k}`))}))}));
 }
 // Return a single edit so cursor position, selections and following text are retained.
 export function continueList(value,start,end){

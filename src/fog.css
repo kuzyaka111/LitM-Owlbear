@@ -136,7 +136,6 @@ body[data-view="sheet"]::before{display:none}
 #mist-table-design .mt-v4 .mt-stage:not(:has(.mt-action-tag)){grid-template-columns:minmax(0,1fr);min-width:0}
 
 #mist-table-design .mt-v4 .mt-notes-card{display:block}
-#mist-table-design .mt-v4 .mt-notes-card:not([open]){height:34px;min-height:34px;max-height:34px;overflow:hidden}
 #mist-table-design .mt-v4 .mt-note-heading{height:34px;min-height:34px;cursor:pointer;list-style:none;padding:3px 6px;gap:3px}
 #mist-table-design .mt-v4 .mt-note-heading::-webkit-details-marker,#mist-table-design .mt-v4 .mt-note-subheading::-webkit-details-marker{display:none}
 #mist-table-design .mt-v4 .mt-note-arrow{display:inline-block;flex:0 0 12px;font-size:12px;transition:transform .12s}
@@ -147,5 +146,20 @@ body[data-view="sheet"]::before{display:none}
 #mist-table-design .mt-v4 .mt-note-subheading{display:flex;align-items:center;gap:3px;padding:5px 7px;background:#ded3b8;cursor:pointer;list-style:none;color:#67583e}
 #mist-table-design .mt-v4 .mt-note-subheading .mt-note-title{flex:1;width:0;border:0;background:none;font:bold 13px Georgia,serif;padding:3px 0}
 #mist-table-design .mt-v4 .mt-notes-card .mt-note-text{display:block;height:auto;min-height:120px;width:100%;resize:none;padding:9px;font:13px/22px Georgia,serif;background:repeating-linear-gradient(transparent,transparent 21px,#c8b89455 22px),#f8f0de;overflow:hidden;border:0}
-#mist-table-design .mt-v4 details.mt-notes-card:not([open])>.mt-note-body,#mist-table-design .mt-v4 .mt-note-section:not([open])>.mt-note-text{display:none}
 #mist-table-design .mt-v4 .mt-add-note-section{background:none;color:#75634b;border:0;padding:9px;font:11px Georgia,serif}
+
+#mist-table-design .mt-v4 .mt-note-heading{cursor:default}
+#mist-table-design .mt-v4 .mt-note-close{flex:0 0 17px;border:0;background:none;color:inherit;padding:0;font-size:17px}
+#mist-table-design .mt-v4 .mt-note-section-heading{display:flex;align-items:center;gap:3px;padding:7px;background:#b8af95;cursor:pointer;list-style:none;color:#493f2e}
+#mist-table-design .mt-v4 .mt-note-section-heading .mt-note-title{flex:1;width:0;border:0;background:none;font:bold 14px Georgia,serif;padding:3px 0}
+#mist-table-design .mt-v4 .mt-note-section-heading::-webkit-details-marker{display:none}
+#mist-table-design .mt-v4 details[open]>.mt-note-section-heading>.mt-note-arrow{transform:rotate(90deg)}
+#mist-table-design .mt-v4 .mt-note-section:not([open])>.mt-note-section-content{display:none}
+#mist-table-design .mt-v4 .mt-note-subsection{margin-left:10px;border-left:2px solid #b8af9570}
+#mist-table-design .mt-v4 .mt-add-note-subsection,#mist-table-design .mt-v4 .mt-add-note{background:none;color:#75634b;border:0;padding:9px;font:11px Georgia,serif;text-align:left}
+#mist-table-design .mt-v4 .mt-note-index{padding:8px}
+#mist-table-design .mt-v4 .mt-note-index-row{display:flex;gap:5px;border-bottom:1px solid #c8b89465;align-items:center;padding:5px 0}
+#mist-table-design .mt-v4 .mt-open-note{flex:1;min-width:0;text-align:left;overflow-wrap:anywhere;border:0;background:none;padding:6px;color:#514a38;font:14px Georgia,serif}
+#mist-table-design .mt-v4 .mt-open-note[aria-pressed=true]{background:#586448;color:#fff4d8;border-radius:2px}
+#mist-table-design .mt-v4 .mt-empty-notes{padding:6px;font-style:italic;color:#8a816e}
+#mist-table-design .mt-note-cancel{padding:9px 14px;margin:14px 8px 0 0;background:#ded3b8;border:0;color:#514a38}

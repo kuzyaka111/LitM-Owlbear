@@ -58,9 +58,9 @@ test('local test data survives reopening and stays separate per player and room'
 
 test('blocked or malformed storage does not break the application', () => {
   const store = makeStore({ getItem: () => '{bad', setItem: () => { throw new Error('blocked'); } }, {}, 'sheet');
-  assert.equal(store.load().bag.length, 3); assert.equal(store.save(store.load()), false);
+  assert.equal(store.load().cards[0].items.length, 3); assert.equal(store.save(store.load()), false);
   const state = clean({ bag: [null, '<img>', 8], marks: [-1, 0, 2.5, 24], selected: 'bad' }, 'sheet');
-  assert.deepEqual(state.bag, ['<img>']); assert.deepEqual(state.marks, [0]); assert.deepEqual(state.selected, []);
+  assert.deepEqual(state.cards[0].items.map(x => x.text), ['<img>']); assert.deepEqual(state.marks, [0]); assert.deepEqual(state.selected, []);
 });
 
 function ui(view) {
@@ -72,9 +72,9 @@ function ui(view) {
 }
 
 test('sheet selection, tracks, notes and name changes persist', () => {
-  const { root: r, store, event } = ui('sheet'); assert.equal(r.querySelectorAll('.mt-theme').length, 4);
+  const { root: r, store, event } = ui('sheet'); assert.equal(r.querySelectorAll('.mt-hero-theme').length, 4);
   r.querySelector('[data-tag]').click(); assert.equal(store.load().selected.length, 1);
-  r.querySelector('.mt-pip').click(); assert.equal(store.load().marks.length, 1);
+  r.querySelector('.mt-hero-theme .mt-pip').click(); assert.equal(store.load().marks.length, 1);
   const notes = r.querySelector('#mt-notes-text'); notes.value = 'Запись'; notes.dispatchEvent(event('input')); assert.equal(store.load().notes, 'Запись');
   const name = r.querySelector('.mt-editor-name'); name.value = 'Лира'; name.dispatchEvent(event('input')); assert.equal(store.load().name, 'Лира');
   r.querySelector('.mt-clear').click(); assert.equal(store.load().selected.length, 0);
@@ -82,9 +82,9 @@ test('sheet selection, tracks, notes and name changes persist', () => {
 
 test('user text is rendered as text, not HTML', () => {
   const { root: r, event, store } = ui('sheet');
-  r.querySelector('#mt-item-name').value = '<img src=x onerror=alert(1)>';
-  r.querySelector('.mt-add-item').dispatchEvent(event('submit'));
-  assert.equal(r.querySelectorAll('img').length, 0); assert(store.load().bag.includes('<img src=x onerror=alert(1)>'));
+  r.querySelector('.mt-add-card-item input').value = '<img src=x onerror=alert(1)>';
+  r.querySelector('.mt-add-card-item').dispatchEvent(event('submit'));
+  assert.equal(r.querySelectorAll('img').length, 0); assert(store.load().cards[0].items.some(x => x.text === '<img src=x onerror=alert(1)>'));
 });
 
 test('GM scene tags can be added and removed', () => {

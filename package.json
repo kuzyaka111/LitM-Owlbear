@@ -1,6 +1,6 @@
 {
   "name": "legend-in-the-mist-owlbear",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,6 +9,12 @@
     "preview": "vite preview --host 0.0.0.0",
     "test": "node --test tests/*.test.js"
   },
-  "dependencies": {"@owlbear-rodeo/sdk": "3.1.0", "lucide": "0.548.0"},
-  "devDependencies": {"vite": "8.3.5", "jsdom": "26.1.0"}
+  "dependencies": {
+    "@owlbear-rodeo/sdk": "3.1.0",
+    "lucide": "0.548.0"
+  },
+  "devDependencies": {
+    "vite": "8.3.5",
+    "jsdom": "26.1.0"
+  }
 }

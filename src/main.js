@@ -6,6 +6,7 @@ import gmTemplate from './gm.html?raw';
 import { MODAL_ID } from './bridge.js';
 import { makeStore } from './storage.js';
 import { mountUI } from './ui.js';
+import { makeFellowshipStore, makePreviewFellowship } from './fellowship.js';
 
 const root = document.getElementById('mist-table-design');
 const view = document.body.dataset.view;
@@ -29,14 +30,16 @@ async function start(inOwlbear) {
     if (inOwlbear) await (view === 'gm' ? OBR.modal.close(MODAL_ID) : OBR.action.close());
     else message('Предпросмотр закрыт. Обнови страницу, чтобы открыть его снова.');
   };
+  const fellowship = view === 'sheet' ? (inOwlbear ? makeFellowshipStore(OBR.room) : makePreviewFellowship(storage)) : null;
+  if (fellowship) window.addEventListener('pagehide', () => fellowship.dispose(), { once: true });
   mountUI(root, view, view === 'gm' ? gmTemplate : sheetTemplate, makeStore(storage, scope, view), {
-    close,
+    close, fellowship, preview: !inOwlbear,
     openSheet: async () => { if (inOwlbear) { await OBR.modal.close(MODAL_ID); await OBR.action.open(); } else window.location.href = new URL('./index.html', window.location.href).href; },
   });
   createIcons({ icons: { Feather, X, UserRound, Sprout, BookOpen, ArrowUpRight } });
   if (!inOwlbear) {
     const p = root.querySelector('.mt-prototype-note');
-    p.textContent = 'Предпросмотр вне Owlbear · данные сохраняются только в этом браузере.';
+    p.textContent = 'Предпросмотр вне Owlbear · все данные, включая братство, здесь сохраняются только на этом устройстве.';
   }
 }
 

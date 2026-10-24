@@ -1,16 +1,45 @@
 <section class="mt-sheet" aria-label="Лист персонажа">
-      <header class="mt-windowbar"><span><i data-lucide="feather" aria-hidden="true"></i> Лист персонажа</span><span class="mt-save-state" aria-live="polite"></span><button class="mt-close-sheet mt-icon cursor-interaction" aria-label="Закрыть лист"><i data-lucide="x" aria-hidden="true"></i></button></header>
-      <div class="mt-hero">
-        <div class="mt-portrait"><i data-lucide="user-round" aria-hidden="true"></i></div>
-        <div class="mt-hero-text"><span class="mt-eyebrow">ИСТОРИЯ ОДНОГО ГЕРОЯ</span><h2><input class="mt-editor-name" maxlength="80" aria-label="Имя героя" value="Эрин из Вересковой долины"></h2><p>Следопыт, который однажды обещал вернуться</p></div>
-        <div class="mt-branch"><i data-lucide="sprout" aria-hidden="true"></i></div>
-      </div>
-      <nav class="mt-tabs" aria-label="Разделы листа"><button data-sheet-tab="themes" aria-pressed="true" class="cursor-interaction">Темы</button><button data-sheet-tab="bag" aria-pressed="false" class="cursor-interaction">Рюкзак</button><button data-sheet-tab="notes" aria-pressed="false" class="cursor-interaction">Заметки</button></nav>
-      <div class="mt-sheet-content">
-        <div class="mt-themes"></div>
-        <div class="mt-bag" hidden=""><div class="mt-paper-panel"><span class="mt-eyebrow">В ДОРОГУ</span><h3>Рюкзак</h3><div class="mt-bag-items"></div><form class="mt-add-item"><label for="mt-item-name">Новый предмет</label><div><input id="mt-item-name" maxlength="60" placeholder="Название тега предмета" required=""><button type="submit" class="cursor-interaction">Добавить</button></div></form></div></div>
-        <div class="mt-notes" hidden=""><label for="mt-notes-text">Заметки героя</label><textarea id="mt-notes-text" rows="8">У старого моста нас должен ждать мельник. Он знает, кто видел пропавший караван последним.</textarea></div>
-      </div>
-      <div class="mt-status-strip"><span class="mt-eyebrow">СОСТОЯНИЕ</span><span class="mt-status">Усталость · 1</span></div>
-      <footer class="mt-selection" aria-live="polite"><div><span class="mt-eyebrow">ВЫБРАННЫЕ ТЕГИ</span><p class="mt-selected-text">Выбери подходящие теги на карточках</p></div><button class="mt-clear cursor-interaction" disabled="">Снять выбор</button></footer>
+  <header class="mt-windowbar"><span><i data-lucide="feather" aria-hidden="true"></i> Лист персонажа</span><span class="mt-save-state" aria-live="polite"></span><button class="mt-close-sheet mt-icon" aria-label="Закрыть лист"><i data-lucide="x" aria-hidden="true"></i></button></header>
+  <nav class="mt-tabs" aria-label="Разделы листа" role="tablist">
+    <button id="tab-character" data-sheet-tab="character" role="tab" aria-selected="true" aria-pressed="true" aria-controls="panel-character">Персонаж</button>
+    <button id="tab-fellowship" data-sheet-tab="fellowship" role="tab" aria-selected="false" aria-pressed="false" aria-controls="panel-fellowship" tabindex="-1">Братство</button>
+    <button id="tab-bag" data-sheet-tab="bag" role="tab" aria-selected="false" aria-pressed="false" aria-controls="panel-bag" tabindex="-1">Рюкзак</button>
+    <button id="tab-notes" data-sheet-tab="notes" role="tab" aria-selected="false" aria-pressed="false" aria-controls="panel-notes" tabindex="-1">Заметки</button>
+  </nav>
+  <div class="mt-sheet-content">
+    <section id="panel-character" class="mt-character" role="tabpanel" aria-labelledby="tab-character">
+      <article class="mt-character-card mt-theme" aria-label="Карточка персонажа">
+        <div class="mt-theme-head"><span>Карточка персонажа</span><span>История одного героя</span></div>
+        <div class="mt-character-grid">
+          <div class="mt-identity">
+            <span class="mt-eyebrow">ИМЯ ГЕРОЯ</span><textarea class="mt-editor-name mt-auto-size" maxlength="80" rows="2" aria-label="Имя героя"></textarea>
+            <label class="mt-field">Имя игрока<input id="mt-player-name" maxlength="80" placeholder="Как к тебе обращаться"></label>
+            <label class="mt-field">О персонаже<textarea id="mt-concept" maxlength="500" rows="2" placeholder="Кто твой герой?"></textarea></label>
+          </div>
+          <div class="mt-relationships"><h3>Отношения в братстве</h3><div class="mt-relationship-list"></div><button type="button" class="mt-add-relationship mt-secondary">+ Отношение</button></div>
+          <div class="mt-hero-growth"><span class="mt-eyebrow">ПОТЕНЦИАЛ · PROMISE</span><div class="mt-promise mt-pips"></div><label class="mt-field">Квинтэссенции<textarea id="mt-quintessences" maxlength="2000" rows="4" placeholder="Что оставили пройденные пути"></textarea></label></div>
+        </div>
+      </article>
+      <div class="mt-section-heading"><h2>Темы персонажа</h2><span>Четыре грани одной истории</span></div>
+      <div class="mt-themes"></div>
     </section>
+    <section id="panel-fellowship" class="mt-fellowship" role="tabpanel" aria-labelledby="tab-fellowship" hidden>
+      <div class="mt-section-heading"><div><span class="mt-eyebrow">ОБЩАЯ ИСТОРИЯ</span><h2>Братство</h2></div><span class="mt-shared-badge">Общее для комнаты</span></div>
+      <p class="mt-section-hint">Одна карточка для всех участников. Здесь вы храните общую цель, теги и развитие братства.</p>
+      <p class="mt-fellowship-status" role="status">Подключаем карточку братства…</p>
+      <div class="mt-fellowship-card-host"></div>
+    </section>
+    <section id="panel-bag" class="mt-bag" role="tabpanel" aria-labelledby="tab-bag" hidden>
+      <div class="mt-section-heading"><div><span class="mt-eyebrow">В ДОРОГУ</span><h2>Рюкзак</h2></div><div class="mt-card-actions"><button type="button" class="mt-add-backpack mt-secondary">+ Рюкзак</button><button type="button" class="mt-add-theme mt-secondary">+ Тема</button></div></div>
+      <p class="mt-section-hint">Рюкзаки для вещей и дополнительных тегов. Карточки тем — для того, что заслуживает отдельной истории.</p>
+      <div class="mt-undo" role="status" hidden><span></span><button type="button" class="mt-secondary">Вернуть</button></div>
+      <div class="mt-bag-cards"></div>
+      <p class="mt-bag-empty" hidden>Здесь пока нет карточек. Добавь рюкзак или тему.</p>
+    </section>
+    <section id="panel-notes" class="mt-notes" role="tabpanel" aria-labelledby="tab-notes" hidden>
+      <div class="mt-section-heading"><div><span class="mt-eyebrow">НА ПОЛЯХ ИСТОРИИ</span><h2>Заметки</h2></div><span>Личные записи</span></div>
+      <label for="mt-notes-text">Заметки героя</label><textarea id="mt-notes-text" rows="12" maxlength="5000" placeholder="Люди, места, обещания и незаконченные дела…"></textarea>
+    </section>
+  </div>
+  <footer class="mt-selection" aria-live="polite"><div><span class="mt-eyebrow">ВЫБРАННЫЕ ТЕГИ</span><p class="mt-selected-text">Выбери подходящие теги на карточках</p></div><button class="mt-clear" disabled>Снять выбор</button></footer>
+</section>

@@ -26,17 +26,17 @@ test('plain cards have no expansion control',()=>{
  assert.equal(card.querySelector('.mt-scroll-main textarea').value,'Заметка');
 });
 
-test('opening reveals improvements after host resize; a later collapse cancels the pending reveal',async()=>{
+test('expanding and collapsing never change manual scroll, even after delayed host resize',async()=>{
  const dom=new JSDOM('<article><div>Main</div><div class="mt-improvements">Extra</div></article>');
  const card=dom.window.document.querySelector('article');let resize;
  dressScroll(card,{onExpand:open=>open?new Promise(resolve=>resize=resolve):undefined});
  const body=card.querySelector('.mt-scroll-body'),extra=card.querySelector('.mt-scroll-extension'),toggle=card.querySelector('.mt-scroll-toggle');
  Object.defineProperties(body,{scrollHeight:{value:800},clientHeight:{value:500}});Object.defineProperty(extra,'offsetTop',{value:480});
  body.scrollTop=20;toggle.click();await Promise.resolve();assert.equal(body.scrollTop,20);
- resize();await new Promise(resolve=>setTimeout(resolve,0));assert.equal(body.scrollTop,300);
- toggle.click();await new Promise(resolve=>setTimeout(resolve,0));assert.equal(body.scrollTop,20);
+ body.scrollTop=73;resize();await new Promise(resolve=>setTimeout(resolve,0));assert.equal(body.scrollTop,73);
+ toggle.click();await new Promise(resolve=>setTimeout(resolve,0));assert.equal(body.scrollTop,73);
  toggle.click();const staleResize=resize;toggle.click();staleResize();await new Promise(resolve=>setTimeout(resolve,0));
- assert.equal(body.scrollTop,20);assert.equal(extra.getAttribute('aria-hidden'),'true');
+ assert.equal(body.scrollTop,73);assert.equal(extra.getAttribute('aria-hidden'),'true');
 });
 
 

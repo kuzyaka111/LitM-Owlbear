@@ -44,7 +44,6 @@ body[data-view="sheet"]::before{display:none}
 #mist-table-design .mt-v4 .mt-improvements summary,#mist-table-design .mt-v4 .mt-details summary{font-size:11px;cursor:pointer;padding:6px 0;min-height:28px}
 #mist-table-design .mt-v4 .mt-improvement-row{display:flex;gap:4px;border-bottom:1px solid #a5a78940;align-items:center;min-height:28px}
 #mist-table-design .mt-v4 .mt-improvement-row button{min-width:0;flex:1;background:none;color:inherit;border:0;text-align:left;font:12px Georgia,serif;padding:5px 0;overflow-wrap:anywhere}
-#mist-table-design .mt-v4 .mt-legacy-notes p{white-space:pre-wrap;font-size:11px}
 #mist-table-design .mt-v4 .mt-field{display:block;margin:9px 0;font:11px Arial,sans-serif;color:#716853}
 #mist-table-design .mt-v4 .mt-field span{display:block;margin-bottom:4px}
 #mist-table-design .mt-v4 input,#mist-table-design .mt-v4 textarea{width:100%;min-width:0;font:13px/1.4 Georgia,serif;padding:6px;border:0;border-bottom:1px solid #aa97705a;border-radius:0;background:#fff8e740;color:#38342e;box-shadow:none}

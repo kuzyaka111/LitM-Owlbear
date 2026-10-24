@@ -93,7 +93,7 @@ export function renderTheme(theme, ctx, tools) {
       const title=btn(imp.name,'mt-improvement-title',()=>dialog(imp.name,form=>form.append(el('p','',imp.text),el('small','mt-source-note','The Hero · стр. '+imp.page))));title.title=imp.text;r.append(toggle,title);details.append(r);
     }
   }
-  if(theme.notes){const n=el('details','mt-legacy-notes');n.append(el('summary','','Записи темы'),el('p','',theme.notes));details.append(n);}card.append(details);
+  card.append(details);
   if(ctx.remove)head.append(btn('×','mt-delete-card',ctx.remove,'Удалить карточку'));
   if(ctx.busy)card.querySelectorAll('button,select').forEach(x=>x.disabled=true);
   return dressScroll(card,{expanded:ctx.expanded||false,onExpand:ctx.onExpand});

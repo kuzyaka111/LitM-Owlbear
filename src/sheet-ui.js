@@ -1,3 +1,4 @@
+import {mountNotes} from './notes-ui.js';
 import packageInfo from '../package.json' with { type: 'json' };
 import { newCard, makeId } from './storage.js';
 import { makeTheme, getBook, quintessences, improvementById, tagKey } from './theme-model.js';
@@ -97,12 +98,12 @@ export function mountSheet(root,state,save,actions) {
   function addCard(type){if(state.cards.length>=30)return;state.cards.push(newCard(type));drawInventory();refreshSelection();localSave();fit();q('.mt-inventory-host').lastElementChild.scrollIntoView?.({block:'nearest',inline:'nearest'});}
   q('.mt-add-backpack').addEventListener('click',()=>addCard('bag'));q('.mt-add-theme').addEventListener('click',()=>addCard('theme'));
   drawInventory();
-  const notes=q('#mt-notes-text');notes.value=state.notes;notes.addEventListener('input',()=>{state.notes=notes.value;localSave();});
+  const layoutNotes=mountNotes(root,state,localSave,fit,tools);
   qa('.mt-add-action-tag').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input'),kind=form.dataset.kind;if(input.value.trim()&&state.actionExtras[kind].length<30){const item={id:makeId(),text:input.value.trim()};state.actionExtras[kind].push(item);selected.add(`extra:${kind}:${item.id}`);input.value='';refreshSelection();localSave();}}));
   q('.mt-clear').addEventListener('click',()=>{selected.clear();state.actionExtras={power:[],weakness:[]};refreshSelection();localSave();});
   q('.mt-close-sheet').addEventListener('click',()=>Promise.resolve().then(actions.close).catch(report));
-  const tabs=qa('[role=tab]');function switchTab(button){activeTab=button.dataset.sheetTab;tabs.forEach(b=>{const active=b===button;b.setAttribute('aria-selected',String(active));b.setAttribute('aria-pressed',String(active));b.tabIndex=active?0:-1;q('#'+b.getAttribute('aria-controls')).hidden=!active;});fit();}
+  const tabs=qa('[role=tab]');function switchTab(button){activeTab=button.dataset.sheetTab;tabs.forEach(b=>{const active=b===button;b.setAttribute('aria-selected',String(active));b.setAttribute('aria-pressed',String(active));b.tabIndex=active?0:-1;q('#'+b.getAttribute('aria-controls')).hidden=!active;});if(activeTab==='notes')layoutNotes();fit();}
   tabs.forEach((b,i)=>{b.addEventListener('click',()=>switchTab(b));b.addEventListener('keydown',e=>{const n=e.key==='ArrowRight'?(i+1)%3:e.key==='ArrowLeft'?(i+2)%3:e.key==='Home'?0:e.key==='End'?2:null;if(n!==null){e.preventDefault();switchTab(tabs[n]);tabs[n].focus();}});});
-  function fit(){actions.fitWindow?.(activeTab==='themes'?4:activeTab==='notes'?1:2+state.cards.length,!q('.mt-action-card').hidden);}
+  function fit(){actions.fitWindow?.(activeTab==='themes'?4:activeTab==='notes'?Math.max(1,state.noteCards.length):2+state.cards.length,!q('.mt-action-card').hidden);}
   refreshSelection();fit();
 }

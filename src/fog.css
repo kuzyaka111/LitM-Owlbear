@@ -134,3 +134,18 @@ body[data-view="sheet"]::before{display:none}
 /* An empty tag panel must never reserve space, even before selection refresh. */
 #mist-table-design .mt-v4 .mt-action-card:not(:has(.mt-action-tag)){display:none!important}
 #mist-table-design .mt-v4 .mt-stage:not(:has(.mt-action-tag)){grid-template-columns:minmax(0,1fr);min-width:0}
+
+#mist-table-design .mt-v4 .mt-notes-card{display:block}
+#mist-table-design .mt-v4 .mt-notes-card:not([open]){height:34px;min-height:34px;max-height:34px;overflow:hidden}
+#mist-table-design .mt-v4 .mt-note-heading{height:34px;min-height:34px;cursor:pointer;list-style:none;padding:3px 6px;gap:3px}
+#mist-table-design .mt-v4 .mt-note-heading::-webkit-details-marker,#mist-table-design .mt-v4 .mt-note-subheading::-webkit-details-marker{display:none}
+#mist-table-design .mt-v4 .mt-note-arrow{display:inline-block;flex:0 0 12px;font-size:12px;transition:transform .12s}
+#mist-table-design .mt-v4 details[open]>.mt-note-heading>.mt-note-arrow,#mist-table-design .mt-v4 details[open]>.mt-note-subheading>.mt-note-arrow{transform:rotate(90deg)}
+#mist-table-design .mt-v4 .mt-note-heading .mt-note-title{color:#fff2d8;background:none;border:0;font:13px Georgia,serif;padding:4px 0;flex:1;width:0}
+#mist-table-design .mt-v4 .mt-note-title::placeholder{color:inherit;opacity:.65}
+#mist-table-design .mt-v4 .mt-note-delete{flex:0 0 17px;border:0;background:none;color:inherit;padding:0;font-size:17px}
+#mist-table-design .mt-v4 .mt-note-subheading{display:flex;align-items:center;gap:3px;padding:5px 7px;background:#ded3b8;cursor:pointer;list-style:none;color:#67583e}
+#mist-table-design .mt-v4 .mt-note-subheading .mt-note-title{flex:1;width:0;border:0;background:none;font:bold 13px Georgia,serif;padding:3px 0}
+#mist-table-design .mt-v4 .mt-notes-card .mt-note-text{display:block;height:auto;min-height:120px;width:100%;resize:none;padding:9px;font:13px/22px Georgia,serif;background:repeating-linear-gradient(transparent,transparent 21px,#c8b89455 22px),#f8f0de;overflow:hidden;border:0}
+#mist-table-design .mt-v4 details.mt-notes-card:not([open])>.mt-note-body,#mist-table-design .mt-v4 .mt-note-section:not([open])>.mt-note-text{display:none}
+#mist-table-design .mt-v4 .mt-add-note-section{background:none;color:#75634b;border:0;padding:9px;font:11px Georgia,serif}

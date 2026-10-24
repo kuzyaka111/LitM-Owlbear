@@ -1,3 +1,5 @@
+import {dressScroll} from './scroll-view.js';
+import {createScrollMotion} from './scroll-motion.js';
 import {mountNotes} from './notes-ui.js';
 import packageInfo from '../package.json' with { type: 'json' };
 import { newCard, makeId } from './storage.js';
@@ -9,6 +11,7 @@ import { editorTools, renderTheme } from './editor-ui.js';
 export function mountSheet(root,state,save,actions) {
   const tools=editorTools(root),{doc,el,btn,dialog,inlineText,scratchButton}=tools;
   const q=s=>root.querySelector(s),qa=s=>[...root.querySelectorAll(s)];
+  const motion=createScrollMotion(root);
   const selected=new Set(state.selected),expanded=new Map();
   let activeTab='party',shared=fellowshipDefaults(),sharedReady=false,sharedBusy=false;
   const service=actions.fellowship;
@@ -78,7 +81,7 @@ export function mountSheet(root,state,save,actions) {
       const title=btn(item.name,'mt-improvement-title',()=>dialog(item.name,form=>form.append(el('p','',item.text),el('small','mt-source-note','The Hero · стр. '+item.page))));title.title=item.text;row.append(toggle,title);quint.append(row);
     }
     if(state.quintessences){const legacy=el('details','mt-details'),copy=el('p','',state.quintessences);copy.title='Двойное нажатие — изменить';copy.addEventListener('dblclick',()=>inlineText(copy,state.quintessences,async value=>{state.quintessences=value;drawCharacter();localSave();},2000,'Прежние записи о квинтэссенциях'));legacy.append(el('summary','','Прежние записи'),copy);quint.append(legacy);}growth.append(quint);article.append(growth);
-    preserveReplace(q('.mt-character-host'),article);
+    preserveReplace(q('.mt-character-host'),dressScroll(article));
   }
   drawCharacter();
 
@@ -93,7 +96,7 @@ export function mountSheet(root,state,save,actions) {
       article.append(head);
       const items=el('div','mt-backpack-items');for(const item of card.items){const row=el('div','mt-item-row'+(item.scratched?' mt-scratched':''));const key=`card:${card.id}:${item.id}`;let timer;const text=btn(item.text,'mt-tag-text',()=>{});text.dataset.key=key;text.title=item.text;const edit=()=>inlineText(text,item.text,async value=>{item.text=value;drawInventory();refreshSelection();localSave();},160,'Тег рюкзака');text.addEventListener('click',()=>{clearTimeout(timer);timer=setTimeout(()=>{if(text.isConnected&&!item.scratched)select(key);},230);});text.addEventListener('dblclick',()=>{clearTimeout(timer);edit();});row.append(text,scratchButton(item.scratched,()=>{item.scratched=!item.scratched;drawInventory();refreshSelection();localSave();},(item.scratched?'Восстановить ':'Зачеркнуть ')+item.text),btn('×','mt-remove-item',()=>{card.items=card.items.filter(x=>x!==item);drawInventory();refreshSelection();localSave();},'Удалить тег '+item.text));items.append(row);}article.append(items);
       const form=el('form','mt-add-card-item'),input=el('input');input.maxLength=160;input.required=true;input.placeholder='Новый тег';input.setAttribute('aria-label','Новый тег рюкзака');const add=el('button','','+');add.type='submit';add.setAttribute('aria-label','Добавить тег рюкзака');form.append(input,add);form.addEventListener('submit',e=>{e.preventDefault();if(input.value.trim()&&card.items.length<50){card.items.push({id:makeId(),text:input.value.trim(),scratched:false});drawInventory();refreshSelection();localSave();}});article.append(form);
-      const notes=el('details','mt-details mt-backpack-notes');notes.append(el('summary','','Записи'),field('Записи рюкзака',card.notes,v=>{card.notes=v;localSave();},2000,true).label);article.append(notes);host.append(article);
+      const notes=el('details','mt-details mt-backpack-notes');notes.append(el('summary','','Записи'),field('Записи рюкзака',card.notes,v=>{card.notes=v;localSave();},2000,true).label);article.append(notes);host.append(dressScroll(article));
     }
     q('.mt-add-backpack').disabled=q('.mt-add-theme').disabled=state.cards.length>=30;
   }
@@ -104,9 +107,9 @@ export function mountSheet(root,state,save,actions) {
   qa('.mt-add-action-tag').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input'),kind=form.dataset.kind;if(input.value.trim()&&state.actionExtras[kind].length<30){const item={id:makeId(),text:input.value.trim()};state.actionExtras[kind].push(item);selected.add(`extra:${kind}:${item.id}`);input.value='';refreshSelection();localSave();}}));
   q('.mt-clear').addEventListener('click',()=>{selected.clear();state.actionExtras={power:[],weakness:[]};refreshSelection();localSave();});
   q('.mt-close-sheet').addEventListener('click',()=>Promise.resolve().then(actions.close).catch(report));
-  const tabs=qa('[role=tab]');function switchTab(button){activeTab=button.dataset.sheetTab;tabs.forEach(b=>{const active=b===button;b.setAttribute('aria-selected',String(active));b.setAttribute('aria-pressed',String(active));b.tabIndex=active?0:-1;q('#'+b.getAttribute('aria-controls')).hidden=!active;});if(activeTab==='notes')layoutNotes();fit();}
+  const tabs=qa('[role=tab]');function switchTab(button){const changed=activeTab!==button.dataset.sheetTab;activeTab=button.dataset.sheetTab;tabs.forEach(b=>{const active=b===button;b.setAttribute('aria-selected',String(active));b.setAttribute('aria-pressed',String(active));b.tabIndex=active?0:-1;q('#'+b.getAttribute('aria-controls')).hidden=!active;});if(activeTab==='notes')layoutNotes();fit();if(changed)motion.play(q('#panel-'+activeTab));}
   tabs.forEach((b,i)=>{b.addEventListener('click',()=>switchTab(b));b.addEventListener('keydown',e=>{const n=e.key==='ArrowRight'?(i+1)%3:e.key==='ArrowLeft'?(i+2)%3:e.key==='Home'?0:e.key==='End'?2:null;if(n!==null){e.preventDefault();switchTab(tabs[n]);tabs[n].focus();}});});
   function fit(){actions.fitWindow?.(activeTab==='themes'?4:activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden);}
   qa('[role=tabpanel]').forEach(panel=>{const version=el('div','mt-sheet-version','v'+packageInfo.version);panel.querySelector('.mt-card-row').after(version);});
-  refreshSelection();fit();
+  dressScroll(q('.mt-action-card'));refreshSelection();fit();motion.play(q('#panel-party'));
 }

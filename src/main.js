@@ -2,6 +2,7 @@ import OBR from '@owlbear-rodeo/sdk';
 import { createIcons, Feather, X, UserRound, Sprout, BookOpen, ArrowUpRight } from 'lucide';
 import './style.css';
 import './fog.css';
+import './scrolls.css';
 import sheetTemplate from './sheet.html?raw';
 import gmTemplate from './gm.html?raw';
 import { MODAL_ID, SHEET_POPOVER_ID, sheetBounds, openSheet, watchSheetAction } from './bridge.js';

@@ -1,1 +1,0 @@
-import{n as e,r as t}from"./bridge-BKJTMdty.js";t.isAvailable&&t.onReady(()=>{let n=e(t,window.location.href);window.addEventListener(`pagehide`,()=>{n.dispose()},{once:!0})});

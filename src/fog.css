@@ -25,9 +25,7 @@ body[data-view="sheet"]::before{display:none}
 #mist-table-design .mt-v4 .mt-question span{position:relative;z-index:1;background:#f5ecd6}
 #mist-table-design .mt-v4 .mt-tag-text{flex:1;min-width:0;padding:4px 3px;text-align:left;border:0;background:transparent;color:#38342e;font-size:12px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-radius:2px}
 #mist-table-design .mt-v4 .mt-title-row .mt-tag-text{font-size:17px;white-space:normal;line-height:1.18;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;text-align:center}
-#mist-table-design .mt-v4 .mt-tag-text[aria-pressed=true]{background:#586448;color:#fff4d8}
 #mist-table-design .mt-v4 .mt-weakness-slots .mt-tag-text{color:#854f3e}
-#mist-table-design .mt-v4 .mt-weakness-slots .mt-tag-text[aria-pressed=true]{background:#8d5a46;color:#fff3d8}
 #mist-table-design .mt-v4 .mt-empty-tag{color:#8a816e;font-style:italic;opacity:.7}
 #mist-table-design .mt-v4 .mt-scratch,#mist-table-design .mt-v4 .mt-remove-item{flex:0 0 18px;min-width:18px;width:18px;min-height:26px;height:26px;border:0;padding:0;background:transparent;color:#8c7859;font-size:15px}
 #mist-table-design .mt-v4 .mt-scratched .mt-tag-text{text-decoration:line-through;color:#968e7d;background:none}
@@ -56,7 +54,6 @@ body[data-view="sheet"]::before{display:none}
 #mist-table-design .mt-v4 .mt-relationship small{width:100%;font-size:10px;color:#80745c}
 #mist-table-design .mt-v4 .mt-relationship button{background:none;border:0;color:inherit;padding:3px;font-size:12px}
 #mist-table-design .mt-v4 .mt-relationship button:nth-child(2){flex:1;text-align:left;min-width:0;overflow-wrap:anywhere}
-#mist-table-design .mt-v4 .mt-relationship button[aria-pressed=true]{background:#586448;color:#fff4d8}
 #mist-table-design .mt-v4 .mt-add-relationship{border:0;padding:6px 0;background:none;color:#75634b;font-size:11px}
 #mist-table-design .mt-v4 .mt-hero-growth{display:block;margin-top:auto;padding:8px 10px;background:#465052;color:#f8ecd1}
 #mist-table-design .mt-v4 .mt-hero-growth .mt-tag-label{color:#d6d6bb;text-align:center}
@@ -158,10 +155,16 @@ body[data-view="sheet"]::before{display:none}
 
 /* Editing is indicated by a translucent wash, never a frame or focus ring. */
 #mist-table-design input,#mist-table-design textarea,#mist-table-design select{border:0!important;outline:0!important;box-shadow:none!important}
-#mist-table-design :is(button,input,textarea,select,summary):focus,#mist-table-design :is(button,input,textarea,select,summary):focus-visible{outline:0!important;box-shadow:none!important;background-color:rgba(255,255,255,.24)!important}
+#mist-table-design :is(button,input,textarea,select,summary):focus,#mist-table-design :is(button,input,textarea,select,summary):focus-visible{outline:0!important;box-shadow:none!important}
 #mist-table-design .mt-v4 .mt-inline-editor{background:rgba(255,255,255,.3)!important;border:0!important;outline:0!important;box-shadow:none!important;resize:none;border-radius:0;opacity:1}
 #mist-table-design .mt-v4 .mt-storage-title{flex:1;min-width:0;min-height:20px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #mist-table-design .mt-v4 .mt-backpack-items{padding-top:9px}
 #mist-table-design .mt-v4 .mt-track .mt-pip{width:18.4px;min-width:18.4px}
 
 #mist-table-design .mt-v4 .mt-sheet-version{width:var(--card-width);padding:3px 0;margin:0;color:#777e72;opacity:.55;background:none;border:0;box-shadow:none;font:10px/1.3 Arial,sans-serif;text-align:left}
+
+#mist-table-design :is(input:not([type="checkbox"]):not([type="radio"]),textarea):not(.mt-inline-editor):focus{background-color:rgba(255,255,255,.24)!important}
+
+/* Selection uses the card pigment, with a soft spatial fade instead of a focus wash. */
+#mist-table-design .mt-v4 .mt-tag-text,#mist-table-design .mt-v4 .mt-relationship button[data-key]{transition:none}
+#mist-table-design .mt-v4 .mt-tag-text[aria-pressed=true],#mist-table-design .mt-v4 .mt-relationship button[data-key][aria-pressed=true]{background-color:transparent;background-image:radial-gradient(ellipse at center,color-mix(in srgb,var(--scroll-light,#6c503b) 48%,transparent) 0%,color-mix(in srgb,var(--scroll-light,#6c503b) 32%,transparent) 42%,transparent 76%);color:#302c25;border-radius:0}

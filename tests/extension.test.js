@@ -93,8 +93,15 @@ test('GM scene tags can be added and removed', () => {
   r.querySelector('[aria-label="Удалить тег Дождь"]').click(); assert(!store.load().scene.includes('Дождь'));
 });
 
-test('manifest uses only relative asset paths and a single player-sheet action', () => {
+test('manifest URLs retain the GitHub project path even when resolved from the origin', () => {
   const m = JSON.parse(fs.readFileSync(new URL('../public/manifest.json', import.meta.url)));
   assert.equal(m.action.title, 'Лист персонажа'); assert.equal(m.manifest_version, 1);
-  for (const file of [m.icon, m.background_url, m.action.icon, m.action.popover]) assert(file.startsWith('./'));
+  const files = [[m.icon, 'sheet.svg'], [m.background_url, 'background.html'], [m.action.icon, 'sheet.svg'], [m.action.popover, 'index.html']];
+  for (const [url, file] of files) {
+    const expected = `https://kuzyaka111.github.io/LitM-Owlbear/${file}`;
+    for (const base of ['https://kuzyaka111.github.io/', 'https://kuzyaka111.github.io/LitM-Owlbear/manifest.json']) {
+      assert.equal(new URL(url, base).href, expected);
+    }
+  }
+  assert.deepEqual(m, JSON.parse(fs.readFileSync(new URL('../docs/manifest.json', import.meta.url))));
 });

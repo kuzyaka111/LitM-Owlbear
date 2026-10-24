@@ -1,15 +1,15 @@
 {
   "name": "Легенда в Тумане — прототип",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "manifest_version": 1,
   "description": "Лист персонажа, общее братство комнаты, рюкзак с карточками и панель ведущего.",
   "author": "Kuzya",
   "icon": "https://kuzyaka111.github.io/LitM-Owlbear/sheet.svg",
-  "background_url": "https://kuzyaka111.github.io/LitM-Owlbear/background.html?v=0.7.0",
+  "background_url": "https://kuzyaka111.github.io/LitM-Owlbear/background.html?v=0.7.1",
   "action": {
     "title": "Лист персонажа",
     "icon": "https://kuzyaka111.github.io/LitM-Owlbear/sheet.svg",
-    "popover": "https://kuzyaka111.github.io/LitM-Owlbear/index.html?v=0.7.0",
+    "popover": "https://kuzyaka111.github.io/LitM-Owlbear/index.html?v=0.7.1",
     "width": 1000,
     "height": 800
   }

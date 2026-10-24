@@ -3,6 +3,8 @@ import { createIcons, Feather, X, UserRound, Sprout, BookOpen, ArrowUpRight } fr
 import './style.css';
 import './fog.css';
 import './scrolls.css';
+import './fonts/fonts.css';
+import './typography.css';
 import rollImage from './scroll-roll.svg';
 import paperImage from './parchment.svg';
 import brownRoll from './scroll-roll-brown.svg';
@@ -28,7 +30,7 @@ function message(text) {
 async function start(inOwlbear) {
   const thisGeneration = ++generation;
   const role = inOwlbear ? await OBR.player.getRole() : 'PREVIEW';
-  if(view==='sheet')await scrollAssetsReady;
+  if(view==='sheet')await Promise.all([scrollAssetsReady,document.fonts.load('400 15px "Bad Script"'),document.fonts.load('500 13px "Alegreya SC"')]);
   if (thisGeneration !== generation) return;
   renderedRole = role;
   if (view === 'gm' && role !== 'GM' && inOwlbear) { message('Эта панель доступна только ведущему комнаты.'); return; }

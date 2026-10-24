@@ -1,5 +1,5 @@
 /* Independent colored rolls, clipped paper and live HTML content. */
-#mist-table-design .mt-v4 .mt-theme.mt-scroll-frame{display:flex;flex-direction:column;position:relative;width:224px;min-width:224px;height:auto;min-height:0;max-height:min(559px,calc(100dvh - 78px));overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-width:none;overflow-anchor:none;border:0;border-radius:0;background:none;box-shadow:none;padding:0;transform-origin:50% 18px}
+#mist-table-design .mt-v4 .mt-theme.mt-scroll-frame{display:flex;flex-direction:column;position:relative;width:224px;min-width:224px;height:auto;min-height:0;max-height:min(559px,calc(100dvh - var(--toolbar-height,34px) - 44px));overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-width:none;overflow-anchor:none;border:0;border-radius:0;background:none;box-shadow:none;padding:0;transform-origin:50% 18px}
 #mist-table-design .mt-v4 .mt-scroll-frame::before,#mist-table-design .mt-v4 .mt-scroll-frame::after{display:none}
 #mist-table-design .mt-v4 .mt-scroll-top,#mist-table-design .mt-v4 .mt-scroll-bottom{position:relative;z-index:2;flex:none;width:100%;background:var(--scroll-roll,url('./scroll-roll.svg')) center top/100% 36px no-repeat;color:#f4e7c9;border:0;border-radius:0;box-shadow:none}
 #mist-table-design .mt-v4 .mt-scroll-top{height:36px;min-height:36px;padding:5px 13px;letter-spacing:.3px;font:10px Georgia,serif;filter:none}
@@ -46,7 +46,7 @@ html:has(body[data-view="sheet"]),body[data-view="sheet"]{overflow:hidden;overfl
 /* Neutral cards are brown; a theme's Might colors all its painted surfaces. */
 #mist-table-design .mt-v4{--scroll-roll:url('./scroll-roll-brown.svg');--scroll-dark:#3c291f;--scroll-light:#6c503b}
 #mist-table-design .mt-v4 [data-might="origin"]{--scroll-roll:url('./scroll-roll.svg');--scroll-dark:#263c32;--scroll-light:#3d5141}
-#mist-table-design .mt-v4 [data-might="adventure"]{--scroll-roll:url('./scroll-roll-adventure.svg');--scroll-dark:#391c2a;--scroll-light:#70404e}
+#mist-table-design .mt-v4 [data-might="adventure"]{--scroll-roll:url('./scroll-roll-adventure.svg');--scroll-dark:#451b16;--scroll-light:#82382a}
 #mist-table-design .mt-v4 [data-might="greatness"]{--scroll-roll:url('./scroll-roll-greatness.svg');--scroll-dark:#19283f;--scroll-light:#3e526d}
 #mist-table-design .mt-v4 .mt-quest,#mist-table-design .mt-v4 .mt-hero-growth,#mist-table-design .mt-v4 .mt-backpack-notes,#mist-table-design .mt-v4 .mt-scroll-extension .mt-improvements,#mist-table-design .mt-v4 .mt-action-card .mt-scroll-body,#mist-table-design .mt-v4 .mt-scroll-toggle{background:linear-gradient(105deg,var(--scroll-dark),var(--scroll-light))}
 #mist-table-design .mt-v4 .mt-tabs button[aria-selected=true],#mist-table-design .mt-v4 .mt-tabs .mt-close-sheet{background:var(--scroll-dark)}
@@ -59,3 +59,11 @@ html:has(body[data-view="sheet"]),body[data-view="sheet"]{overflow:hidden;overfl
 #mist-table-design .mt-v4 .mt-auto-slot.mt-item-row input{flex:1;font:12px/1.4 Georgia,serif}
 #mist-table-design .mt-v4 .mt-auto-slot.mt-relationship input[data-field="companion"]{font-size:10px}
 #mist-table-design .mt-v4 .mt-auto-slot button{background:none;border:0;color:#8c7859;padding:0 4px}
+
+#mist-table-design .mt-v4 .mt-toolbar{display:flex;align-items:flex-start;gap:6px;flex-wrap:wrap;padding-bottom:3px}
+#mist-table-design .mt-v4 .mt-toolbar .mt-row-actions{flex-wrap:nowrap;min-height:34px}
+#mist-table-design .mt-v4 .mt-toolbar .mt-row-actions[hidden]{display:none}
+#mist-table-design .mt-v4 .mt-toolbar .mt-row-actions button{height:34px;white-space:nowrap;border-radius:3px;background:var(--scroll-dark)}
+#mist-table-design .mt-v4 .mt-scroll-top .mt-might{color:#000;background:#f4ead1}
+#mist-table-design .mt-v4 .mt-might option{color:#000;background:#f4ead1}
+#mist-table-design .mt-v4 .mt-open-note[aria-pressed=true]{background:var(--scroll-dark);color:#fff4d8}

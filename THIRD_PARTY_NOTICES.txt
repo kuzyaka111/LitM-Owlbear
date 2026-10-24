@@ -168,3 +168,8 @@ Volume I: The Hero (2025), pages 92–131, 140–141, 194–195.
 Original game text belongs to its respective rights holders and is not
 covered by the Lucide ISC license above. This is an unofficial extension.
 Russian themebook labels are working UI translations.
+
+Bad Script — Copyright 2011 The Bad Script Project Authors.
+Alegreya SC — Copyright 2011 The Alegreya Project Authors.
+Both fonts: SIL Open Font License 1.1; see public/font-licenses/.
+Source: https://github.com/google/fonts/tree/main/ofl/badscript and https://github.com/google/fonts/tree/main/ofl/alegreyasc

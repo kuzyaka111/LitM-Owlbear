@@ -49,3 +49,14 @@ test('long rows preserve spacing: every card shares one translation and no entry
  assert.equal(moves.length,7);for(const move of moves)assert.deepEqual(move,moves[0]);
  assert.equal(moves[0].options.delay,undefined);assert(moves[0].frames[0].transform.includes('translate3d(-'));assert(moves[0].frames.slice(1).every(f=>f.transform.startsWith('translate3d(0,0,0)')));assert(moves[0].frames.some(f=>f.transform.includes('rotate(.35deg)')));
 });
+
+
+test('only a press and click on the dialog backdrop close the extra window',async()=>{
+ const {editorTools}=await import('../src/editor-ui.js');
+ const dom=new JSDOM('<main><section class="sheet"></section></main>'),root=dom.window.document.querySelector('main');
+ const d=editorTools(root).dialog('Темник',()=>{});d.getBoundingClientRect=()=>({left:100,right:400,top:100,bottom:400});
+ const emit=(type,x,y)=>d.dispatchEvent(new dom.window.MouseEvent(type,{clientX:x,clientY:y,bubbles:true}));
+ emit('pointerdown',120,120);emit('click',120,120);assert(d.isConnected);
+ emit('pointerdown',120,120);emit('click',10,10);assert(d.isConnected);
+ emit('pointerdown',10,10);emit('click',10,10);assert(!d.isConnected);assert(root.querySelector('.sheet'));
+});

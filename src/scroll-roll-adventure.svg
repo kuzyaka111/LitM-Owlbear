@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224 36" preserveAspectRatio="none">
-<defs><linearGradient id="roll" x2="0" y2="1"><stop stop-color="#a37880"/><stop offset=".14" stop-color="#794653"/><stop offset=".48" stop-color="#5d293b"/><stop offset=".83" stop-color="#391c2a"/><stop offset="1" stop-color="#70404e"/></linearGradient><linearGradient id="rim"><stop stop-color="#a49770"/><stop offset=".5" stop-color="#75534c"/><stop offset="1" stop-color="#301720"/></linearGradient><clipPath id="face"><path d="M6 2Q112 5 218 2L218 34Q112 31 6 34Z"/></clipPath></defs>
+<defs><linearGradient id="roll" x2="0" y2="1"><stop stop-color="#a56b51"/><stop offset=".14" stop-color="#843c2e"/><stop offset=".48" stop-color="#6e251e"/><stop offset=".83" stop-color="#451b16"/><stop offset="1" stop-color="#82382a"/></linearGradient><linearGradient id="rim"><stop stop-color="#a49770"/><stop offset=".5" stop-color="#79503a"/><stop offset="1" stop-color="#351812"/></linearGradient><clipPath id="face"><path d="M6 2Q112 5 218 2L218 34Q112 31 6 34Z"/></clipPath></defs>
 <ellipse cx="6" cy="18" rx="5.6" ry="17" fill="url(#rim)"/><ellipse cx="218" cy="18" rx="5.6" ry="17" fill="url(#rim)"/>
 <path d="M6 2Q112 5 218 2L218 34Q112 31 6 34Z" fill="url(#roll)"/>
 

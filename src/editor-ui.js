@@ -10,6 +10,8 @@ export function editorTools(root) {
     error.setAttribute('role','alert'); const close=()=>{ d.close?.();d.remove(); };
     const x=btn('×','mt-dialog-close',close,'Закрыть редактор');d.append(x,heading,form,error);root.append(d);
     form.addEventListener('submit',e=>e.preventDefault());d.addEventListener('close',()=>d.remove(),{once:true});
+    const outside=e=>{const r=d.getBoundingClientRect();return e.target===d&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom);};
+    let backdropPress=false;d.addEventListener('pointerdown',e=>{backdropPress=outside(e);});d.addEventListener('click',e=>{if(backdropPress&&outside(e))close();backdropPress=false;});
     build(form,close,msg=>{error.textContent=msg;});
     if(d.showModal)d.showModal();else d.setAttribute('open','');return d;
   }

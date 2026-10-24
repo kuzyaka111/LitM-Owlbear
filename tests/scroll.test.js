@@ -35,3 +35,17 @@ test('entrance installs initial keyframes synchronously and measures after stop'
  createScrollMotion(root).play(root.querySelector('section'));
  assert.equal(calls.length,2);assert.equal(calls[0].frames[0].opacity,0);assert.equal(calls[1].frames[0].height,'0px');assert.equal(calls[0].options.fill,'both');
 });
+
+test('long rows preserve spacing: every card shares one translation and no entry delay',()=>{
+ const dom=new JSDOM('<main><section><div class="mt-card-row">'+Array.from({length:7},()=>'<article class="mt-scroll-frame"><div class="mt-scroll-body"></div></article>').join('')+'</div></section></main>');
+ const root=dom.window.document.querySelector('main'),cards=[...root.querySelectorAll('article')],moves=[];let started=false;
+ cards.forEach((card,i)=>{
+  card.getBoundingClientRect=()=>{assert.equal(started,false);return {width:224,left:i*236,right:i*236+224}};
+  card.firstElementChild.getBoundingClientRect=()=>{assert.equal(started,false);return {height:481}};
+  card.animate=(frames,options)=>{started=true;moves.push({frames,options});return {cancel(){},finished:new Promise(()=>{})};};
+  card.firstElementChild.animate=()=>({cancel(){},finished:new Promise(()=>{})});
+ });
+ createScrollMotion(root).play(root.querySelector('section'));
+ assert.equal(moves.length,7);for(const move of moves)assert.deepEqual(move,moves[0]);
+ assert.equal(moves[0].options.delay,undefined);assert(!JSON.stringify(moves).includes('rotate'));
+});

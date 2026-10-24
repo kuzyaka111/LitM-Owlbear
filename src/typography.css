@@ -20,3 +20,31 @@
 #mist-table-design .mt-v4 .mt-title-row{padding-top:6px}
 #mist-table-design .mt-v4 .mt-action-card h3{font:500 13px var(--font-heading)}
 #mist-table-design .mt-v4 .mt-action-tag button:first-child{font:400 15px/1.45 var(--font-writing)}
+
+/* One readable heading scale for card caps and internal section labels. */
+#mist-table-design .mt-v4{--card-heading-size:13px}
+#mist-table-design .mt-v4 .mt-theme-head,
+#mist-table-design .mt-v4 .mt-theme-head .mt-book-picker,
+#mist-table-design .mt-v4 .mt-theme-head .mt-story-type,
+#mist-table-design .mt-v4 .mt-theme-head .mt-storage-title,
+#mist-table-design .mt-v4 .mt-theme-head .mt-might,
+#mist-table-design .mt-v4 .mt-tag-label,
+#mist-table-design .mt-v4 .mt-quest .mt-tag-label,
+#mist-table-design .mt-v4 .mt-track-group>span,
+#mist-table-design .mt-v4 .mt-details summary,
+#mist-table-design .mt-v4 .mt-improvements summary,
+#mist-table-design .mt-v4 .mt-legacy-notes summary,
+#mist-table-design .mt-v4 .mt-field>span,
+#mist-table-design .mt-v4 .mt-action-card h3,
+#mist-table-design .mt-v4 .mt-action-total,
+#mist-table-design .mt-v4 .mt-action-total small{font:500 var(--card-heading-size)/1.35 var(--font-heading);letter-spacing:0;text-transform:none}
+#mist-table-design .mt-v4 .mt-tag-label,
+#mist-table-design .mt-v4 .mt-quest .mt-tag-label{height:auto;min-height:20px;padding-top:2px;padding-bottom:2px}
+#mist-table-design .mt-v4 .mt-track-group>span{white-space:nowrap}
+#mist-table-design .mt-v4 .mt-track{gap:6px;padding-inline:5px;justify-content:space-between}
+#mist-table-design .mt-v4 .mt-theme-head .mt-might{width:102px;min-width:102px}
+#mist-table-design .mt-v4 .mt-note-heading .mt-note-title,
+#mist-table-design .mt-v4 .mt-note-section-heading .mt-note-title,
+#mist-table-design .mt-v4 .mt-note-subheading .mt-note-title{font-family:var(--font-heading);font-weight:500;font-style:normal}
+#mist-table-design .mt-v4 .mt-add-action-tag input,
+#mist-table-design .mt-v4 .mt-empty-action{font:400 14px/1.45 var(--font-writing)}

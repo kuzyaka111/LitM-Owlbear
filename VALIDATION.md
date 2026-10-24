@@ -93,3 +93,7 @@ SVG состоит из одного полупрозрачного углова
 - 47 Node tests pass, including Power trade thresholds, sacrifice, modifier separation and interrupted closing animations.
 - Chromium: left-origin selection gradient, calculator opening, special-action expansion, trade/sacrifice exclusivity, modifier, clear/collapse, reopening and reduced motion passed; no page errors. Screenshot inspected at 1280 × 820.
 - Rules checked in The Hero pp. 158–159 (English source); Russian trade labels are working translations. Minimum effect Power on success follows p. 149. Live Owlbear room remains a user-side check.
+
+## 0.7.6 — consistent card headings
+- Internal labels, counters, character field labels and section summaries use Alegreya SC 13px, matching card headers. Notes heading font overrides corrected; calculator entry/empty text uses Bad Script.
+- 47 tests pass. Chromium screenshot reviewed at 1280 × 820; theme and calculator headings have the expected computed font/size, counter labels do not overflow, no page errors.

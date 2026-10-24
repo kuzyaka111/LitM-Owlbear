@@ -33,7 +33,7 @@ test('v1 migration preserves name, notes, marks, selected inventory and all old 
   assert(migrated.selected.includes('card:original-backpack:item-0')); store.save(migrated);
   assert.deepEqual(store.load(), migrated);
   assert.equal(clean({ bag: [], notes: '' }, 'sheet').cards[0].items.length, 0);
-  assert.equal(clean({ cards: [], notes: '' }, 'sheet').cards.length, 0);
+  assert.equal(clean({ cards: [], notes: '' }, 'sheet').cards[0].id, 'original-backpack');
 });
 
 test('three tabs preserve notes and support keyboard navigation', () => {
@@ -133,4 +133,9 @@ test('selection panel hides when empty and after the final tag is scratched or c
  r.querySelector('.mt-hero-theme .mt-tag-text').click();assert(!panel.hidden);assert(r.querySelector('.mt-stage').classList.contains('mt-with-selection'));
  r.querySelector('.mt-hero-theme .mt-scratch').click();await settle();assert(panel.hidden);assert.equal(store.load().selected.length,0);
  r.querySelectorAll('.mt-hero-theme')[1].querySelector('.mt-tag-text').click();assert(!panel.hidden);r.querySelector('.mt-clear').click();assert(panel.hidden);assert(!r.querySelector('.mt-stage').classList.contains('mt-with-selection'));
+});
+
+test('mandatory backpack has no title tag or delete control; new storage can be named and removed',async()=>{
+ const {root:r,event,store,dom}=ui();const primary=r.querySelector('.mt-primary-backpack');assert(primary);assert.equal(primary.querySelector('.mt-remove-card'),null);assert.equal(primary.querySelector('.mt-backpack-title'),null);assert.equal(primary.querySelector('.mt-storage-title'),null);assert.equal(r.querySelector('.mt-add-backpack').textContent,'+ Хранилище');
+ r.querySelector('.mt-add-backpack').click();let storage=r.querySelector('.mt-storage-card');assert.equal(storage.querySelector('.mt-storage-title').textContent,'Хранилище');storage.querySelector('.mt-storage-title').dispatchEvent(new dom.window.MouseEvent('dblclick',{bubbles:true}));r.querySelector('.mt-inline-editor').value='Сундук';r.querySelector('.mt-inline-editor').dispatchEvent(event('blur'));await settle();assert.equal(store.load().cards[1].title,'Сундук');r.querySelector('.mt-storage-card .mt-remove-card').click();assert.equal(store.load().cards.length,1);assert.equal(store.load().cards[0].id,'original-backpack');
 });

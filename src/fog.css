@@ -69,7 +69,6 @@ body[data-view="sheet"]::before{display:none}
 #mist-table-design .mt-v4 .mt-prototype-note{background:none;color:inherit;font-size:10px;padding:5px 0;border:0}
 #mist-table-design .mt-v4 .mt-row-actions{display:flex;gap:3px;flex-wrap:wrap;margin:0;padding:0;min-height:28px}
 #mist-table-design .mt-v4 .mt-row-actions button{border:0;border-radius:0 0 3px 3px;background:#505a5c;color:#fff1d4;padding:6px 12px;font-size:11px}
-#mist-table-design .mt-v4 .mt-backpack-title{border:0;background:none;text-align:center;padding:12px 18px 2px;min-height:55px;font:20px/1.2 Georgia,serif;color:#38342e;overflow-wrap:anywhere}
 #mist-table-design .mt-v4 .mt-backpack-items{padding:0 6px}
 #mist-table-design .mt-v4 .mt-item-row{height:32px;display:flex;gap:2px;border-bottom:1px solid #c8b89465}
 #mist-table-design .mt-v4 .mt-add-card-item{display:flex;gap:3px;margin:8px 8px 12px}
@@ -120,8 +119,6 @@ body[data-view="sheet"]::before{display:none}
 #mist-table-design .mt-v4 .mt-delete-card{border:0;background:#ded3b8;color:#61543b;font-size:10px;padding:5px}
 
 #mist-table-design .mt-v4 .mt-inline-editor{flex:1;min-width:0;width:100%;max-height:90px;padding:2px 3px;margin:0;resize:none;font:12px/1.4 Georgia,serif;background:#fff8e7;color:#38342e;border:1px solid #aa9770;position:relative;z-index:2;opacity:1;font-style:normal}
-#mist-table-design .mt-v4 .mt-title-row .mt-inline-editor{font-size:17px;text-align:center}
-#mist-table-design .mt-v4 .mt-inline-editor[aria-invalid=true]{border-color:#a33}
 
 #mist-table-design .mt-v4 .mt-tag-text,#mist-table-design .mt-v4 .mt-improvement-title{touch-action:manipulation}
 
@@ -163,3 +160,11 @@ body[data-view="sheet"]::before{display:none}
 #mist-table-design .mt-v4 .mt-open-note[aria-pressed=true]{background:#586448;color:#fff4d8;border-radius:2px}
 #mist-table-design .mt-v4 .mt-empty-notes{padding:6px;font-style:italic;color:#8a816e}
 #mist-table-design .mt-note-cancel{padding:9px 14px;margin:14px 8px 0 0;background:#ded3b8;border:0;color:#514a38}
+
+/* Editing is indicated by a translucent wash, never a frame or focus ring. */
+#mist-table-design input,#mist-table-design textarea,#mist-table-design select{border:0!important;outline:0!important;box-shadow:none!important}
+#mist-table-design :is(button,input,textarea,select,summary):focus,#mist-table-design :is(button,input,textarea,select,summary):focus-visible{outline:0!important;box-shadow:none!important;background-color:rgba(255,255,255,.24)!important}
+#mist-table-design .mt-v4 .mt-inline-editor{background:rgba(255,255,255,.3)!important;border:0!important;outline:0!important;box-shadow:none!important;resize:none;border-radius:0;opacity:1}
+#mist-table-design .mt-v4 .mt-storage-title{flex:1;min-width:0;min-height:20px;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#mist-table-design .mt-v4 .mt-backpack-items{padding-top:9px}
+#mist-table-design .mt-v4 .mt-track .mt-pip{width:18.4px;min-width:18.4px}

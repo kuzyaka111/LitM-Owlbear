@@ -16,8 +16,11 @@ export function editorTools(root) {
     if(!button.isConnected)return;
     const input=el('textarea','mt-inline-editor');input.value=value;input.maxLength=max;input.rows=1;input.setAttribute('aria-label',label);input.title='Нажмите вне поля, чтобы сохранить';
     const host=button.closest('.mt-card-slot');let saving=false;
+    // Keep the original field's box and typography, including small companion labels.
+    const rect=button.getBoundingClientRect(),style=doc.defaultView.getComputedStyle(button);
+    for(const property of ['fontFamily','fontSize','fontWeight','fontStyle','lineHeight','letterSpacing','textAlign','color','paddingTop','paddingRight','paddingBottom','paddingLeft','marginTop','marginRight','marginBottom','marginLeft','alignSelf','order'])input.style[property]=style[property];
+    Object.assign(input.style,{boxSizing:'border-box',flex:'0 0 auto',width:rect.width?rect.width+'px':style.width,height:rect.height?rect.height+'px':style.height,minWidth:'0',minHeight:'0',maxWidth:'none',maxHeight:'none',border:'0',outline:'none',boxShadow:'none',overflow:'auto'});
     button.replaceWith(input);
-    const resize=()=>{input.style.height='auto';input.style.height=Math.max(26,input.scrollHeight)+'px';};input.addEventListener('input',resize);
     input.addEventListener('blur',async()=>{
       if(saving)return;saving=true;input.disabled=true;
       try{await onSave(input.value);
@@ -26,7 +29,7 @@ export function editorTools(root) {
       }catch(e){input.disabled=false;input.setAttribute('aria-invalid','true');input.title='Не сохранено: '+(e.message||e);const message=root.querySelector('.mt-ui-message');if(message){message.hidden=false;message.textContent=input.title;}input.focus();}
       finally{saving=false;}
     });
-    resize();input.focus();input.select();return input;
+    input.focus();input.select();return input;
   }
   const scratchButton=(scratched,fn,label)=>{const b=btn('','mt-scratch',fn,label);b.append(clawIcon(doc));b.setAttribute('aria-pressed',String(scratched));return b;};
   return {doc,el,btn,dialog,inlineText,scratchButton};

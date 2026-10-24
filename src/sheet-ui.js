@@ -82,13 +82,15 @@ export function mountSheet(root,state,save,actions) {
   }
   drawCharacter();
 
-  function removeCard(card){state.cards=state.cards.filter(c=>c!==card);drawInventory();refreshSelection();localSave();fit();}
+  function removeCard(card){if(card.type==='bag'&&card.id==='original-backpack')return;state.cards=state.cards.filter(c=>c!==card);drawInventory();refreshSelection();localSave();fit();}
   function drawInventory(){
     q('.mt-inventory-host').replaceChildren();
     for(const card of state.cards){const host=el('div','mt-card-slot');host.dataset.cardId=card.id;q('.mt-inventory-host').append(host);
       if(card.type==='theme'){drawLocal(card.theme,host,false,card);continue;}
-      const article=el('article','mt-theme mt-backpack-card'),head=el('div','mt-theme-head');head.append(el('span','','Рюкзак'),btn('×','mt-remove-card',()=>removeCard(card),'Удалить карточку '+card.title));article.append(head);
-      const title=btn(card.title||'Рюкзак','mt-backpack-title',()=>{});const editTitle=()=>inlineText(title,card.title,async value=>{card.title=value;drawInventory();localSave();},80,'Название рюкзака');title.addEventListener('dblclick',editTitle);article.append(title);
+      const primary=card.id==='original-backpack',article=el('article','mt-theme mt-backpack-card'+(primary?' mt-primary-backpack':' mt-storage-card')),head=el('div','mt-theme-head');
+      if(primary)head.append(el('span','','Рюкзак'));
+      else {const title=btn(card.title||'Хранилище','mt-storage-title',()=>{});title.title='Двойное нажатие — изменить название';title.addEventListener('dblclick',()=>inlineText(title,card.title,async value=>{card.title=value;drawInventory();localSave();},80,'Название хранилища'));head.append(title,btn('×','mt-remove-card',()=>removeCard(card),'Удалить хранилище '+card.title));}
+      article.append(head);
       const items=el('div','mt-backpack-items');for(const item of card.items){const row=el('div','mt-item-row'+(item.scratched?' mt-scratched':''));const key=`card:${card.id}:${item.id}`;let timer;const text=btn(item.text,'mt-tag-text',()=>{});text.dataset.key=key;text.title=item.text;const edit=()=>inlineText(text,item.text,async value=>{item.text=value;drawInventory();refreshSelection();localSave();},160,'Тег рюкзака');text.addEventListener('click',()=>{clearTimeout(timer);timer=setTimeout(()=>{if(text.isConnected&&!item.scratched)select(key);},230);});text.addEventListener('dblclick',()=>{clearTimeout(timer);edit();});row.append(text,scratchButton(item.scratched,()=>{item.scratched=!item.scratched;drawInventory();refreshSelection();localSave();},(item.scratched?'Восстановить ':'Зачеркнуть ')+item.text),btn('×','mt-remove-item',()=>{card.items=card.items.filter(x=>x!==item);drawInventory();refreshSelection();localSave();},'Удалить тег '+item.text));items.append(row);}article.append(items);
       const form=el('form','mt-add-card-item'),input=el('input');input.maxLength=160;input.required=true;input.placeholder='Новый тег';input.setAttribute('aria-label','Новый тег рюкзака');const add=el('button','','+');add.type='submit';add.setAttribute('aria-label','Добавить тег рюкзака');form.append(input,add);form.addEventListener('submit',e=>{e.preventDefault();if(input.value.trim()&&card.items.length<50){card.items.push({id:makeId(),text:input.value.trim(),scratched:false});drawInventory();refreshSelection();localSave();}});article.append(form);
       const notes=el('details','mt-details mt-backpack-notes');notes.append(el('summary','','Записи'),field('Записи рюкзака',card.notes,v=>{card.notes=v;localSave();},2000,true).label);article.append(notes);host.append(article);

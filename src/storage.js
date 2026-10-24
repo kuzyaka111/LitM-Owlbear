@@ -9,7 +9,7 @@ export const makeId = () => globalThis.crypto.randomUUID();
 const id = (value, fallback) => typeof value === 'string' && /^[a-zA-Z0-9_-]{1,80}$/.test(value) ? value : fallback;
 export function newCard(type) {
   if (type === 'theme') { const id = makeId(); return { id, type, theme: makeTheme('story', id) }; }
-  return { id: makeId(), type, title: type === 'theme' ? 'Новая тема' : 'Новый рюкзак', typeLabel: '', items: [], weakness: '', quest: '', notes: '', improve: 0, abandon: 0, milestone: 0 };
+  return { id: makeId(), type, title: 'Хранилище', typeLabel: '', items: [], weakness: '', quest: '', notes: '', improve: 0, abandon: 0, milestone: 0 };
 }
 export function defaults(view) {
   if (view === 'gm') return { scene: ['Густой туман', 'Старый каменный мост'], notes: 'Мельник прячет письмо под настилом. Он согласится поговорить, когда стража уйдёт.' };
@@ -25,7 +25,7 @@ export function defaults(view) {
 }
 function cleanCards(cards) {
   const seen = new Set();
-  return cards.filter(c => c && typeof c === 'object' && ['bag', 'theme'].includes(c.type)).slice(0, 30).map((c, i) => {
+  return cards.filter(c => c && typeof c === 'object' && ['bag', 'theme'].includes(c.type)).slice(0, 31).map((c, i) => {
     let cardId = id(c.id, 'card-' + i); while (seen.has(cardId)) cardId += '-copy'; seen.add(cardId);
     const itemIds = new Set();
     const items = Array.isArray(c.items) ? c.items.filter(x => x && typeof x.text === 'string' && x.text.trim()).slice(0, 50).map((x, j) => {
@@ -49,6 +49,8 @@ export function clean(value, view) {
   if (value.schemaVersion !== 4 && Array.isArray(value.cards)) for (const c of value.cards) {
     if (c.type === 'theme' && Array.isArray(c.items) && c.items.length > 6) cards.push({ ...d.cards[0], id: 'overflow-' + c.id, title: 'Теги: ' + c.title, items: c.items.slice(6).map(x => ({ ...x })) });
   }
+  if(!cards.some(c=>c.type==='bag'&&c.id==='original-backpack'))cards.unshift({...structuredClone(d.cards[0]),items:[],title:'Рюкзак'});
+  for(const c of cards)if(c.type==='bag'&&c.id!=='original-backpack'&&['Новый рюкзак','Рюкзак'].includes(c.title))c.title='Хранилище';
   const heroThemes = Array.from({ length: 4 }, (_, i) => value.heroThemes?.[i] ? cleanTheme({ ...value.heroThemes[i], id: 'hero-' + i }) : initialThemes(value.marks || [])[i]);
   let selected = strings(value.selected, [], 200);
   if (value.schemaVersion !== 4) selected = selected.map(key => {

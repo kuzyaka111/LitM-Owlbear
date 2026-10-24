@@ -42,6 +42,7 @@ export function mountSheet(root, state, save, actions) {
     });
     q('.mt-selected-text').textContent = selected.size ? [...selected].map(k => tags.get(k)).join(' · ') : 'Выбери подходящие теги на карточках';
     q('.mt-clear').disabled = !selected.size; state.selected = [...selected];
+    q('.mt-selection').hidden = !selected.size; q('.mt-selected-count').textContent = String(selected.size);
   }
   function tag(name, key = name) {
     const b = button('', 'mt-tag', () => { selected.has(key) ? selected.delete(key) : selected.add(key); refreshSelection(); save(); });
@@ -103,7 +104,7 @@ export function mountSheet(root, state, save, actions) {
     state.cards.forEach(card => {
       const article = el('article', 'mt-theme mt-inventory-card'); article.dataset.cardId = card.id;
       const head = el('div', 'mt-theme-head');
-      head.append(el('span', '', card.type === 'theme' ? 'Карточка темы' : 'Карточка рюкзака'), button('×', 'mt-remove', () => {
+      head.append(el('span', '', card.type === 'theme' ? 'Тема' : 'Рюкзак'), button('×', 'mt-remove', () => {
         deletedCard = { card: structuredClone(card), index: state.cards.indexOf(card), selected: [...selected].filter(k => k.startsWith('card:' + card.id + ':')) };
         state.cards = state.cards.filter(c => c.id !== card.id); q('.mt-undo').hidden = false; q('.mt-undo span').textContent = `Удалена карточка «${card.title || 'Без названия'}».`;
         renderBag(); refreshSelection(); save();
@@ -173,7 +174,7 @@ export function mountSheet(root, state, save, actions) {
     let ready = false, busy = false;
     const dirty = new Set(), versions = new Map(), inputs = {};
     const card = el('article', 'mt-theme mt-fellowship-card');
-    const head = el('div', 'mt-theme-head'); head.append(el('span', '', 'Карточка братства'), el('span', '', 'Общая тема'));
+    const head = el('div', 'mt-theme-head'); head.append(el('span', '', 'Братство'), el('span', '', 'Общее')); 
     const title = el('h3'), tagList = el('div', 'mt-tag-list'), weakness = el('div', 'mt-weakness');
     const quest = el('div', 'mt-theme-story'), tracks = el('div', 'mt-track mt-three-tracks');
     const improvements = el('p', 'mt-fellowship-improvements');
@@ -230,7 +231,20 @@ export function mountSheet(root, state, save, actions) {
       finally { busy = false; renderShared(); }
     });
     const retry = button('Повторить подключение', 'mt-secondary', () => void connect()); retry.hidden = true;
-    card.append(head, title, el('div', 'mt-type', 'ТЕГИ СИЛЫ'), tagList, weakness, tracks, quest, improvements, details); q('.mt-fellowship-card-host').append(card, retry);
+    const editDock = el('div', 'mt-attached-actions mt-fellowship-actions');
+    const editButton = button('Редактировать карточку', 'mt-secondary', () => {
+      details.open = !details.open;
+      if (details.open) details.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
+      else card.scrollTop = 0;
+    });
+    editButton.setAttribute('aria-expanded', 'false');
+    details.addEventListener('toggle', () => {
+      editButton.setAttribute('aria-expanded', String(details.open));
+      editButton.textContent = details.open ? 'Вернуться к карточке' : 'Редактировать карточку';
+    });
+    editDock.append(editButton);
+    q('.mt-fellowship').append(editDock);
+    card.append(head, title, el('div', 'mt-type', 'ТЕГИ СИЛЫ'), tagList, weakness, tracks, quest, improvements, details, status, retry); q('.mt-fellowship-card-host').append(card);
     service.subscribe((value, isReady) => {
       shared = value; ready = isReady; renderShared();
       if (ready && !busy) setStatus(actions.preview ? 'Предпросмотр: братство сохраняется только на этом устройстве.' : 'Общая карточка · изменения видны всем в комнате.');

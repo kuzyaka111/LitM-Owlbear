@@ -67,3 +67,25 @@ export function watchGMTool(obr, base) {
     },
   };
 }
+
+export const SHEET_MODAL_ID = 'io.github.kuzyaka111.legend-mist/sheet-window';
+
+export async function openSheet(obr, base) {
+  const url = new URL('./index.html', base);
+  url.searchParams.set('surface', 'sheet');
+  await obr.modal.open({ id: SHEET_MODAL_ID, url: url.href, fullScreen: true, hidePaper: true, hideBackdrop: true });
+}
+
+/** The normal extension action remains the entry point; the visible sheet has no host paper. */
+export function watchSheetAction(obr, base, onError = console.error) {
+  let pending = null, alive = true, revision = 0;
+  const launch = () => {
+    if (pending || !alive) return pending;
+    pending = openSheet(obr, base).then(() => obr.action.close()).catch(onError).finally(() => { pending = null; });
+    return pending;
+  };
+  const off = obr.action.onOpenChange(open => { ++revision; if (open) void launch(); });
+  const before = revision;
+  void obr.action.isOpen().then(open => { if (alive && before === revision && open) return launch(); }).catch(onError);
+  return { dispose() { alive = false; off(); } };
+}

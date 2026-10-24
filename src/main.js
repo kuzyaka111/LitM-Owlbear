@@ -1,9 +1,10 @@
 import OBR from '@owlbear-rodeo/sdk';
 import { createIcons, Feather, X, UserRound, Sprout, BookOpen, ArrowUpRight } from 'lucide';
 import './style.css';
+import './fog.css';
 import sheetTemplate from './sheet.html?raw';
 import gmTemplate from './gm.html?raw';
-import { MODAL_ID } from './bridge.js';
+import { MODAL_ID, SHEET_MODAL_ID, openSheet, watchSheetAction } from './bridge.js';
 import { makeStore } from './storage.js';
 import { mountUI } from './ui.js';
 import { makeFellowshipStore, makePreviewFellowship } from './fellowship.js';
@@ -27,14 +28,14 @@ async function start(inOwlbear) {
   let storage;
   try { storage = window.localStorage; } catch { storage = { getItem: () => null, setItem: () => { throw new Error('Storage unavailable'); } }; }
   const close = async () => {
-    if (inOwlbear) await (view === 'gm' ? OBR.modal.close(MODAL_ID) : OBR.action.close());
+    if (inOwlbear) await OBR.modal.close(view === 'gm' ? MODAL_ID : SHEET_MODAL_ID);
     else message('Предпросмотр закрыт. Обнови страницу, чтобы открыть его снова.');
   };
   const fellowship = view === 'sheet' ? (inOwlbear ? makeFellowshipStore(OBR.room) : makePreviewFellowship(storage)) : null;
   if (fellowship) window.addEventListener('pagehide', () => fellowship.dispose(), { once: true });
   mountUI(root, view, view === 'gm' ? gmTemplate : sheetTemplate, makeStore(storage, scope, view), {
     close, fellowship, preview: !inOwlbear,
-    openSheet: async () => { if (inOwlbear) { await OBR.modal.close(MODAL_ID); await OBR.action.open(); } else window.location.href = new URL('./index.html', window.location.href).href; },
+    openSheet: async () => { if (inOwlbear) { await OBR.modal.close(MODAL_ID); await openSheet(OBR, window.location.href); } else window.location.href = new URL('./index.html', window.location.href).href; },
   });
   createIcons({ icons: { Feather, X, UserRound, Sprout, BookOpen, ArrowUpRight } });
   if (!inOwlbear) {
@@ -46,6 +47,12 @@ async function start(inOwlbear) {
 function showError(error) { console.error(error); message('Не удалось открыть расширение. Закрой окно и открой его снова.'); }
 if (OBR.isAvailable) {
   OBR.onReady(() => {
+    if (view === 'sheet' && new URLSearchParams(window.location.search).get('surface') !== 'sheet') {
+      message('Открываем карточки…');
+      const launcher = watchSheetAction(OBR, window.location.href, showError);
+      window.addEventListener('pagehide', () => launcher.dispose(), { once: true });
+      return;
+    }
     void start(true).catch(showError);
     if (view === 'gm') OBR.player.onChange((player) => {
       if (player.role === renderedRole) return;

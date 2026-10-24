@@ -19,6 +19,16 @@ test('scroll keeps live fields, toggles accessible improvements and restores exp
  dressScroll(copy,{expanded:true});assert.equal(copy.querySelector('.mt-scroll-toggle').getAttribute('aria-expanded'),'true');assert.equal(copy.querySelector('.mt-scroll-extension').inert,false);
 });
 
+test('new cards only unroll their paper in place after host resize',async()=>{
+ const dom=new JSDOM('<main><article class="mt-scroll-frame"><div class="mt-scroll-body"></div></article></main>'),root=dom.window.document.querySelector('main'),card=root.firstChild,body=card.firstChild;
+ let ready,paused=false,played=false,positioned=false,frames;
+ card.animate=()=>{throw new Error('The card must not fly in');};body.getBoundingClientRect=()=>({height:481});
+ body.animate=value=>{frames=value;return {pause(){paused=true;},play(){assert(positioned);played=true;},cancel(){},finished:new Promise(()=>{})};};
+ createScrollMotion(root).unfold(card,new Promise(resolve=>ready=resolve),()=>positioned=true);
+ assert(paused);assert.equal(played,false);assert.deepEqual(frames,[{height:'0px'},{height:'481px'}]);
+ ready();await Promise.resolve();assert(played);assert(positioned);
+});
+
 test('plain cards have no expansion control',()=>{
  const dom=new JSDOM('<article><textarea>Заметка</textarea></article>');
  const card=dressScroll(dom.window.document.querySelector('article'));

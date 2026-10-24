@@ -139,11 +139,16 @@ export function mountSheet(root,state,save,actions) {
       article.append(head);
       const items=el('div','mt-backpack-items');function itemRow(item){const row=el('div','mt-item-row mt-tag-row'+(item.scratched?' mt-scratched':''));const key=`card:${card.id}:${item.id}`;let timer;const text=btn(item.text,'mt-tag-text',()=>{});text.dataset.key=key;text.title=item.text;const edit=()=>inlineText(text,item.text,async value=>{item.text=value;drawInventory();refreshSelection();localSave();},160,'Тег рюкзака');text.addEventListener('click',e=>{if(e.detail===0){if(!item.scratched)select(key);return;}clearTimeout(timer);timer=setTimeout(()=>{if(text.isConnected&&!item.scratched)select(key);},230);});text.addEventListener('dblclick',()=>{clearTimeout(timer);edit();});row.append(text,scratchButton(item.scratched,()=>{item.scratched=!item.scratched;drawInventory();refreshSelection();localSave();},(item.scratched?'Восстановить ':'Зачеркнуть ')+item.text),btn('×','mt-remove-item',()=>{card.items=card.items.filter(x=>x!==item);drawInventory();refreshSelection();localSave();},'Удалить тег '+item.text));return row;}card.items.forEach(item=>items.append(itemRow(item)));article.append(items);
       appendAutoSlot(items,{fields:[{key:'text',label:'Новый тег рюкзака',max:160}],items:card.items,limit:50,create:()=>({id:makeId(),text:'',scratched:false}),save:localSave,refresh:refreshSelection,remove:item=>{card.items=card.items.filter(x=>x!==item);drawInventory();refreshSelection();localSave();},commit:(item,row)=>{row.replaceWith(itemRow(item));refreshSelection();},className:'mt-item-row mt-tag-row'});
-      const notes=el('details','mt-details mt-backpack-notes');notes.append(el('summary','','Записи'),field('Записи рюкзака',card.notes,v=>{card.notes=v;localSave();},2000,true).label);article.append(notes);host.append(dressScroll(article));
+      host.append(dressScroll(article));
     }
     q('.mt-add-backpack').disabled=q('.mt-add-theme').disabled=state.cards.length>=30;
   }
-  function addCard(type){if(state.cards.length>=30)return;state.cards.push(newCard(type));drawInventory();refreshSelection();localSave();fit();q('.mt-inventory-host').lastElementChild.scrollIntoView?.({block:'nearest',inline:'nearest'});}
+  function addCard(type){
+    if(state.cards.length>=30)return;
+    motion.stop();state.cards.push(newCard(type));drawInventory();refreshSelection();localSave();
+    const card=q('.mt-inventory-host').lastElementChild.querySelector('.mt-scroll-frame');
+    motion.unfold(card,fit(),()=>{const row=card.closest('.mt-card-row');row.scrollLeft=Math.max(0,row.scrollWidth-row.clientWidth);});
+  }
   q('.mt-add-backpack').addEventListener('click',()=>addCard('bag'));q('.mt-add-theme').addEventListener('click',()=>addCard('theme'));
   drawInventory();
   const layoutNotes=mountNotes(root,state,localSave,fit,tools);

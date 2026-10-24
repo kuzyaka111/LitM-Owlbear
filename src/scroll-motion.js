@@ -3,6 +3,16 @@ export function createScrollMotion(root,random=Math.random){
  const win=root.ownerDocument.defaultView,media=win.matchMedia?.('(prefers-reduced-motion: reduce)');
  let running=[],rows=[];
  function stop(){running.forEach(a=>a.cancel());running=[];rows.forEach(({row,height})=>{row.classList.remove('mt-scroll-entering');row.style.minHeight=height;});rows=[];}
+ function unfold(card,ready,onReady){
+  stop();const body=card.querySelector(':scope > .mt-scroll-body');
+  if(media?.matches||root.querySelector('[data-scroll-animation=off]')||typeof body?.animate!=='function'){
+   Promise.resolve(ready).then(()=>{if(card.isConnected)onReady?.();});return;
+  }
+  const height=body.getBoundingClientRect().height,animation=body.animate([{height:'0px'},{height:height+'px'}],{duration:360,easing:'cubic-bezier(.22,.7,.25,1)',fill:'both'});
+  animation.pause();const animations=[animation];running=animations;
+  Promise.resolve(ready).then(()=>{if(running!==animations||!card.isConnected)return;onReady?.();animation.play();},()=>{if(running===animations)stop();});
+  Promise.allSettled([animation.finished]).then(()=>{if(running===animations)stop();});
+ }
  function play(panel){
   stop();if(media?.matches||root.querySelector('[data-scroll-animation=off]'))return;
   // Measure the entire layout before applying any animation.
@@ -27,5 +37,5 @@ export function createScrollMotion(root,random=Math.random){
   }
   running=animations;Promise.allSettled(animations.map(a=>a.finished)).then(()=>{if(running===animations)stop();});
  }
- root.addEventListener('pointerdown',e=>{if(e.target.closest('.mt-theme'))stop();});root.addEventListener('keydown',e=>{if(e.target.closest('.mt-theme'))stop();});media?.addEventListener?.('change',stop);win.addEventListener('pagehide',stop,{once:true});return {play,stop};
+ root.addEventListener('pointerdown',e=>{if(e.target.closest('.mt-theme'))stop();});root.addEventListener('keydown',e=>{if(e.target.closest('.mt-theme'))stop();});media?.addEventListener?.('change',stop);win.addEventListener('pagehide',stop,{once:true});return {play,unfold,stop};
 }

@@ -44,6 +44,7 @@
 #mist-table-design .mt-v4 .mt-track-group>span{white-space:nowrap}
 #mist-table-design .mt-v4 .mt-track{gap:6px;padding-inline:5px;justify-content:space-between}
 #mist-table-design .mt-v4 .mt-theme-head .mt-might{width:102px;min-width:102px}
+#mist-table-design .mt-v4 .mt-theme-head .mt-fellowship-title{flex:1;min-width:0;color:inherit;opacity:1;font:500 var(--card-heading-size)/1.05 var(--font-heading);white-space:normal}
 #mist-table-design .mt-v4 .mt-note-heading .mt-note-title,
 #mist-table-design .mt-v4 .mt-note-section-heading .mt-note-title,
 #mist-table-design .mt-v4 .mt-note-subheading .mt-note-title{font-family:var(--font-heading);font-weight:500;font-style:normal}

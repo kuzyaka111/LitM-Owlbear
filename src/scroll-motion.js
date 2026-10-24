@@ -5,7 +5,7 @@ export function createScrollMotion(root,random=Math.random){
  let running=[],rows=[];
  function stop(){running.forEach(a=>a.cancel());running=[];rows.forEach(({row,height})=>{row.classList.remove('mt-scroll-entering');row.style.minHeight=height;});rows=[];}
  function unfold(card,ready,onReady){
-  stop();const body=card.querySelector(':scope > .mt-scroll-body');
+  stop();const body=card.querySelector('.mt-scroll-body');
   if(media?.matches||root.querySelector('[data-scroll-animation=off],[data-entrance-animation=off]')||typeof body?.animate!=='function'){
    Promise.resolve(ready).then(()=>{if(card.isConnected)onReady?.();});return;
   }
@@ -18,7 +18,7 @@ export function createScrollMotion(root,random=Math.random){
   stop();if(media?.matches||root.querySelector('[data-scroll-animation=off]'))return;
   const entrance=!root.querySelector('[data-entrance-animation=off]'),sway=!root.querySelector('[data-sway-animation=off]');if(!entrance&&!sway)return;
   // Measure the entire layout before applying any animation.
-  const cards=[...panel.querySelectorAll('.mt-scroll-frame:not(.mt-action-card)')].map(card=>({card,rect:card.getBoundingClientRect(),body:card.querySelector(':scope > .mt-scroll-body')})).filter(x=>x.rect.width);
+  const cards=[...panel.querySelectorAll('.mt-scroll-frame:not(.mt-action-card)')].map(card=>({card,rect:card.getBoundingClientRect(),body:card.querySelector('.mt-scroll-body')})).filter(x=>x.rect.width);
   const scale=renderedScale(root),measured=cards.map(x=>({...x,height:x.body.getBoundingClientRect().height/scale}));
   rows=entrance?[...panel.querySelectorAll('.mt-card-row')].map(row=>({row,height:row.style.minHeight})):[];
   rows.forEach(({row})=>{row.style.minHeight=row.getBoundingClientRect().height/scale+'px';row.classList.add('mt-scroll-entering');});

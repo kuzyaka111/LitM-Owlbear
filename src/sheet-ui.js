@@ -35,13 +35,15 @@ export function mountSheet(root,state,save,actions) {
     if(resized?.then)return Promise.resolve(resized).then(()=>new Promise(resolve=>win.requestAnimationFrame?win.requestAnimationFrame(()=>win.requestAnimationFrame(resolve)):resolve())).then(reserve);
     reserve();return resized;
   });
-  let activeTab='party',shared=fellowshipDefaults(),sharedReady=false,sharedBusy=false;
+  let activeTab='party',shared=fellowshipDefaults(),sharedReady=false;
+  const pendingShared=[];
+  const sharedView=()=>Object.assign({},shared,...pendingShared.map(write=>write.patch));
   const service=actions.fellowship;
   const report=error=>{const node=q('.mt-ui-message');node.hidden=false;node.textContent=error?.message||String(error);};
   function localSave(){state.selected=[...selected];save();}
   function allTags(){
     const tags=new Map();const addTheme=t=>{for(const kind of ['power','weakness'])t[kind].forEach((slot,i)=>{if(slot.text&&!slot.scratched)tags.set(tagKey(t,kind,i),{text:slot.text,kind,source:getBook(t.bookId).name});});};
-    state.heroThemes.forEach(addTheme);if(sharedReady)addTheme(fellowshipTheme(shared));
+    state.heroThemes.forEach(addTheme);if(sharedReady)addTheme(fellowshipTheme(sharedView()));
     state.cards.forEach(c=>{if(c.type==='theme')addTheme(c.theme);else c.items.forEach(item=>{if(item.text.trim()&&!item.scratched)tags.set(`card:${c.id}:${item.id}`,{text:item.text,kind:'power',source:c.title});});});
     state.relationships.forEach(r=>{if(r.tag)tags.set('relationship:'+r.id,{text:r.tag,kind:'power',source:r.companion});});
     for(const kind of ['power','weakness'])state.actionExtras[kind].forEach(x=>tags.set(`extra:${kind}:${x.id}`,{text:x.text,kind,source:'Тег действия'}));
@@ -83,7 +85,7 @@ export function mountSheet(root,state,save,actions) {
     if(resizePending?.then)Promise.resolve(resizePending).then(()=>new Promise(resolve=>win.requestAnimationFrame?win.requestAnimationFrame(()=>win.requestAnimationFrame(resolve)):resolve())).then(keepVisible).catch(report);
     else keepVisible();
   }
-  function preserveReplace(host,node){if(host.querySelector('.mt-inline-editor')){host._pendingCard=node;return;}const scroll=host.querySelector('.mt-scroll-body')?.scrollTop||0;host.replaceChildren(node);const body=node.querySelector('.mt-scroll-body');if(body)body.scrollTop=scroll;}
+  function preserveReplace(host,node){if(host.querySelector('.mt-inline-editor')){host._pendingCard=node;return;}const scroll=host.querySelector('.mt-scroll-body')?.scrollTop||0,flowScroll=host.querySelector('.mt-scroll-flow')?.scrollTop||0;host.replaceChildren(node);const body=node.querySelector('.mt-scroll-body'),flow=node.querySelector('.mt-scroll-flow');if(body)body.scrollTop=scroll;if(flow)flow.scrollTop=flowScroll;}
   function mutateTheme(t,change){if(change.kind)t[change.kind][change.index][change.field]=change.value;else t[change.field]=change.value;}
   function themeContext(t,host,core=false,card){
     return {core,isSelected:key=>selected.has(key),select,report,expanded:expanded.get(t.id),onExpand:open=>{expanded.set(t.id,open);return fit();},
@@ -95,12 +97,17 @@ export function mountSheet(root,state,save,actions) {
   state.heroThemes.forEach(t=>{const host=el('div','mt-card-slot');q('.mt-themes').append(host);drawLocal(t,host,true);});
 
   function drawShared(){
-    const t=fellowshipTheme(shared);preserveReplace(q('.mt-fellowship-host'),renderTheme(t,{isSelected:key=>selected.has(key),select,report,busy:!sharedReady||sharedBusy,
+    const t=fellowshipTheme(sharedView()),host=q('.mt-fellowship-host'),current=host.querySelector('.mt-fellowship-theme');
+    if(current?.updateTheme){current.updateTheme(t,{disabled:!sharedReady});current.setAttribute('aria-busy',String(pendingShared.length>0));return;}
+    const card=renderTheme(t,{isSelected:key=>selected.has(key),select,report,busy:!sharedReady,
       expanded:expanded.get(t.id),onExpand:open=>{expanded.set(t.id,open);return fit();},shared:true,
-      change:async change=>{sharedBusy=true;drawShared();
-        try{await service.update(fellowshipPatch(change));}
-        catch(e){throw e;}finally{sharedBusy=false;drawShared();refreshSelection();}
-      }},tools));
+      change:async change=>{
+        const write={patch:fellowshipPatch(change)},before=new Set(selected);pendingShared.push(write);drawShared();refreshSelection();
+        const removed=[...before].filter(key=>key.startsWith('theme:fellowship:')&&!selected.has(key));
+        try{await service.update(write.patch);}
+        catch(error){pendingShared.splice(pendingShared.indexOf(write),1);drawShared();const available=allTags();removed.forEach(key=>{if(available.has(key))selected.add(key);});refreshSelection();throw error;}
+        pendingShared.splice(pendingShared.indexOf(write),1);drawShared();refreshSelection();
+      }},tools);card.setAttribute('aria-busy',String(pendingShared.length>0));preserveReplace(host,card);
   }
   drawShared();
   if(service){service.subscribe((value,ready)=>{shared=value;sharedReady=ready;drawShared();refreshSelection();});void service.start().catch(error=>{drawShared();report(error);const retry=btn('Повторить','mt-retry-shared',()=>{retry.disabled=true;void service.start().then(()=>retry.remove()).catch(e=>{report(e);retry.disabled=false;});});q('.mt-fellowship-host .mt-theme').append(retry);});}
@@ -121,13 +128,13 @@ export function mountSheet(root,state,save,actions) {
     state.relationships.forEach(r=>relationships.append(relationshipRow(r)));
     appendAutoSlot(relationships,{fields:[{key:'companion',label:'Спутник',max:80},{key:'tag',label:'Тег отношения',max:80}],items:state.relationships,limit:20,create:()=>({id:makeId(),companion:'',tag:''}),save:localSave,refresh:refreshSelection,remove:r=>{state.relationships=state.relationships.filter(x=>x!==r);drawCharacter();refreshSelection();localSave();},commit:(r,row)=>{row.replaceWith(relationshipRow(r));refreshSelection();},className:'mt-relationship'});body.append(relationships);article.append(body);
     const growth=el('div','mt-hero-growth');growth.append(el('span','mt-tag-label','ПОТЕНЦИАЛ'));const pips=el('div','mt-promise');for(let i=1;i<=5;i++){const b=btn(i<=state.promise?'◆':'◇','mt-pip',()=>{state.promise=i===state.promise?i-1:i;drawCharacter();localSave();},'Потенциал '+i);b.setAttribute('aria-pressed',String(i<=state.promise));pips.append(b);}growth.append(pips);
-    const quint=el('details','mt-details mt-quintessences');quint.open=expanded.get('quint')||false;quint.addEventListener('toggle',()=>expanded.set('quint',quint.open));quint.append(el('summary','','Квинтэссенции · '+state.quintessenceIds.length));
+    const quint=el('div','mt-improvements mt-quintessences');quint.setAttribute('aria-label','Квинтэссенции');
     for(const item of quintessences){const active=state.quintessenceIds.includes(item.id),row=el('div','mt-improvement-row'+(!active?' mt-inactive-improvement':''));
       const toggle=btn(active?'◆':'◇','mt-improvement-toggle',()=>{state.quintessenceIds=active?state.quintessenceIds.filter(x=>x!==item.id):[...state.quintessenceIds,item.id];drawCharacter();localSave();},'Активировать '+item.name);toggle.setAttribute('aria-pressed',String(active));
       const title=btn(item.name,'mt-improvement-title',()=>dialog(item.name,form=>form.append(el('p','',item.text),el('small','mt-source-note','The Hero · стр. '+item.page))));title.title=item.text;row.append(toggle,title);quint.append(row);
     }
-    if(state.quintessences){const legacy=el('details','mt-details'),copy=el('p','',state.quintessences);copy.title='Двойное нажатие — изменить';copy.addEventListener('dblclick',()=>inlineText(copy,state.quintessences,async value=>{state.quintessences=value;drawCharacter();localSave();},2000,'Прежние записи о квинтэссенциях'));legacy.append(el('summary','','Прежние записи'),copy);quint.append(legacy);}growth.append(quint);article.append(growth);
-    preserveReplace(q('.mt-character-host'),dressScroll(article));
+    if(state.quintessences){const legacy=el('details','mt-details'),copy=el('p','',state.quintessences);copy.title='Двойное нажатие — изменить';copy.addEventListener('dblclick',()=>inlineText(copy,state.quintessences,async value=>{state.quintessences=value;drawCharacter();localSave();},2000,'Прежние записи о квинтэссенциях'));legacy.append(el('summary','','Прежние записи'),copy);quint.append(legacy);}article.append(growth,quint);
+    preserveReplace(q('.mt-character-host'),dressScroll(article,{flowingFooter:true,extensionLabel:'Квинтэссенции',expanded:expanded.get('quint')||false,onExpand:open=>{expanded.set('quint',open);return fit();}}));
   }
   drawCharacter();
 
@@ -181,7 +188,8 @@ export function mountSheet(root,state,save,actions) {
     const openCards=[...q('#panel-'+activeTab).querySelectorAll('.mt-scroll-frame:has(.mt-scroll-toggle[aria-expanded=true])')];
     if(!q('.mt-action-card').hidden&&q('.mt-action-card .mt-scroll-toggle[aria-expanded=true]'))openCards.push(q('.mt-action-card'));
     const requestedHeight=Math.max(650*SHEET_SCALE,...openCards.map(card=>(card.querySelector('.mt-scroll-main').scrollHeight+card.querySelector('.mt-scroll-extension-inner').scrollHeight+78+44)*SHEET_SCALE+toolbar.getBoundingClientRect().height));
-    const minimumWidth=Math.max(480,q('.mt-tabs').scrollWidth+16)*SHEET_SCALE;
+    const rowActions=[...toolbar.querySelectorAll('.mt-row-actions')].find(node=>!node.hidden);
+    const minimumWidth=Math.max(480,q('.mt-tabs').scrollWidth+(rowActions?rowActions.scrollWidth+6:0)+16)*SHEET_SCALE;
     return resizePending=actions.fitWindow?.(activeTab==='themes'?4:activeTab==='settings'?settingsCardCount():activeTab==='statuses'?statusColumnCount():activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden,requestedHeight,minimumWidth);
   }
   qa('[role=tabpanel]').forEach(panel=>{const version=el('div','mt-sheet-version','v'+packageInfo.version);panel.querySelector('.mt-card-row').after(version);});

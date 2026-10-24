@@ -36,6 +36,14 @@ test('plain cards have no expansion control',()=>{
  assert.equal(card.querySelector('.mt-scroll-main textarea').value,'Заметка');
 });
 
+test('a flowing footer shares the content scroller and stays after the main content during expansion',()=>{
+ const dom=new JSDOM('<article><header class="mt-theme-head">Theme</header><div class="mt-track">Tracks</div><div class="mt-improvements">Extra</div></article>');
+ const card=dressScroll(dom.window.document.querySelector('article'),{flowingFooter:true}),flow=card.querySelector('.mt-scroll-flow'),foot=card.querySelector('.mt-scroll-bottom'),body=card.querySelector('.mt-scroll-body');
+ assert.equal(card.firstElementChild.className,'mt-theme-head mt-scroll-top');assert.deepEqual([...flow.children],[body,foot]);assert(body.querySelector('.mt-scroll-main .mt-track'));
+ flow.scrollTop=41;foot.querySelector('button').click();assert.equal(flow.scrollTop,41);assert.deepEqual([...flow.children],[body,foot]);
+ foot.querySelector('button').click();assert.equal(flow.scrollTop,41);
+});
+
 test('expanding and collapsing never change manual scroll, even after delayed host resize',async()=>{
  const dom=new JSDOM('<article><div>Main</div><div class="mt-improvements">Extra</div></article>');
  const card=dom.window.document.querySelector('article');let resize;

@@ -1,6 +1,6 @@
 import {renderedScale} from './sheet-scale.js';
 let scrollId=0;
-export function dressScroll(card,{expanded=false,onExpand,extensionLabel='Особые улучшения'}={}){
+export function dressScroll(card,{expanded=false,onExpand,extensionLabel='Особые улучшения',flowingFooter=false}={}){
  if(card.classList.contains('mt-scroll-frame'))return card;
  const doc=card.ownerDocument,make=(tag,cls)=>{const n=doc.createElement(tag);n.className=cls;return n;};
  const head=card.querySelector(':scope > .mt-theme-head')||make('div','mt-theme-head');head.classList.add('mt-scroll-top');
@@ -22,5 +22,8 @@ export function dressScroll(card,{expanded=false,onExpand,extensionLabel='Осо
    if(!reduced&&typeof extension.animate==='function')unfolding=extension.animate([{height:from+'px'},{height:(expanded?inner.scrollHeight:0)+'px'}],{duration:360,easing:'cubic-bezier(.22,.7,.25,1)'});
   });sync();foot.append(label,toggle);
  }else{foot.classList.add('mt-scroll-bottom-plain');foot.setAttribute('aria-hidden','true');}
- card.classList.add('mt-scroll-frame');card.replaceChildren(head,body,foot);return card;
+ card.classList.add('mt-scroll-frame');
+ if(flowingFooter){const flow=make('div','mt-scroll-flow');flow.append(body,foot);card.replaceChildren(head,flow);}
+ else card.replaceChildren(head,body,foot);
+ return card;
 }

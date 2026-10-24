@@ -111,11 +111,38 @@ test('shared editor retains draft through remote updates and failed writes', asy
  r.querySelector('.mt-fellowship-host .mt-tag-text').dispatchEvent(new dom.window.MouseEvent('dblclick',{bubbles:true}));const input=r.querySelector('.mt-inline-editor');input.value='Мой черновик';
  await b.update({name:'Другое имя',quest:'Общая цель',might:'greatness',power6:'Шестой',weakness2:'Третья',question6:'J'});assert.equal(input.value,'Мой черновик');
  room.fail(true);input.dispatchEvent(event('blur'));await settle();assert.equal(input.value,'Мой черновик');assert.equal(input.getAttribute('aria-invalid'),'true');
- room.fail(false);input.dispatchEvent(event('blur'));await settle();const m=await room.getMetadata();assert.equal(m[FELLOWSHIP_PREFIX+'name'],'Мой черновик');assert.equal(m[FELLOWSHIP_PREFIX+'quest'],'Общая цель');assert.equal(m[FELLOWSHIP_PREFIX+'power6'],'Шестой');assert.equal(m[FELLOWSHIP_PREFIX+'question6'],'J');a.dispose();b.dispose();
+ room.fail(false);input.dispatchEvent(event('blur'));await settle();const m=await room.getMetadata();assert.equal(m[FELLOWSHIP_PREFIX+'name'],'Мой черновик');assert.equal(m[FELLOWSHIP_PREFIX+'quest'],'Общая цель');assert.equal(m[FELLOWSHIP_PREFIX+'power6'],'Шестой');assert.equal(m[FELLOWSHIP_PREFIX+'question6'],'J');assert.match(r.querySelector('.mt-fellowship-theme .mt-tag-text').getAttribute('aria-label'),/Мой черновик/);assert(!r.querySelector('.mt-fellowship-theme .mt-tag-text').classList.contains('mt-empty-tag'));a.dispose();b.dispose();
 });
 
 test('shared text is not executable HTML', async () => {
  const room=sharedRoom({[FELLOWSHIP_PREFIX+'name']:'<img src=x onerror=alert(1)>'}),service=makeFellowshipStore(room);const {root:r}=ui(undefined,service);await settle();assert.equal(r.querySelectorAll('img').length,0);assert(r.querySelector('.mt-fellowship-host').textContent.includes('<img'));service.dispose();
+});
+
+test('fellowship keeps its live card through pending saves and acknowledgements and animates scratches',async()=>{
+ const room=sharedRoom({[FELLOWSHIP_PREFIX+'power1']:'Защищаю друзей'}),write=room.setMetadata.bind(room);let release,hold=true;
+ room.setMetadata=async patch=>{if(hold){hold=false;await new Promise(resolve=>release=resolve);}return write(patch);};
+ const service=makeFellowshipStore(room),{root:r}=ui(undefined,service);await settle();
+ const card=r.querySelector('.mt-fellowship-theme'),flow=card.querySelector('.mt-scroll-flow'),mark=card.querySelector('[aria-label="Развитие 1"]');flow.scrollTop=65;
+ assert.equal(card.querySelector('.mt-might').disabled,false);
+ mark.click();await settle();assert.equal(r.querySelector('.mt-fellowship-theme'),card);assert.equal(card.querySelector('[aria-label="Развитие 1"]'),mark);assert.equal(mark.getAttribute('aria-pressed'),'true');assert.equal(mark.disabled,false);assert.equal(card.getAttribute('aria-busy'),'true');
+ mark.click();await settle();assert.equal(mark.getAttribute('aria-pressed'),'false');
+ release();await settle();assert.equal(r.querySelector('.mt-fellowship-theme'),card);assert.equal(card.getAttribute('aria-busy'),'false');assert.equal(flow.scrollTop,65);assert.equal((await room.getMetadata())[FELLOWSHIP_PREFIX+'improve'],0);
+ const row=card.querySelector('[data-kind=power][data-index="1"]'),text=row.querySelector('.mt-tag-text'),scratch=row.querySelector('.mt-scratch');
+ scratch.click();await settle();assert.equal(r.querySelector('.mt-fellowship-theme'),card);assert.equal(row.querySelector('.mt-tag-text'),text);assert(row.classList.contains('mt-scratched'));assert(row.classList.contains('mt-scratch-reveal'));assert.equal(scratch.getAttribute('aria-pressed'),'true');
+ card.querySelector('[aria-label="Развитие 2"]').click();await settle();assert(row.classList.contains('mt-scratch-reveal'));assert.equal(r.querySelector('.mt-fellowship-theme'),card);
+ const remote=makeFellowshipStore(room);await remote.start();await remote.update({quest:'Общая цель'});assert.equal(card.querySelector('.mt-quest-text').textContent,'Общая цель');assert(row.classList.contains('mt-scratch-reveal'));assert.equal(r.querySelector('.mt-fellowship-theme'),card);
+ scratch.click();await settle();assert(!row.classList.contains('mt-scratched'));assert(!row.classList.contains('mt-scratch-reveal'));
+ scratch.click();await settle();assert(row.classList.contains('mt-scratch-reveal'));assert.equal((await room.getMetadata())[FELLOWSHIP_PREFIX+'spent1'],true);
+ service.dispose();remote.dispose();
+});
+
+test('failed fellowship writes roll back the live controls and retain a selected tag',async()=>{
+ const room=sharedRoom({[FELLOWSHIP_PREFIX+'power1']:'Друг за друга'}),service=makeFellowshipStore(room),{root:r}=ui(undefined,service);await settle();
+ const card=r.querySelector('.mt-fellowship-theme'),row=card.querySelector('[data-kind=power][data-index="1"]'),text=row.querySelector('.mt-tag-text');text.click();assert.equal(text.getAttribute('aria-pressed'),'true');
+ room.fail(true);row.querySelector('.mt-scratch').click();await settle();
+ assert.equal(r.querySelector('.mt-fellowship-theme'),card);assert(!row.classList.contains('mt-scratched'));assert.equal(text.getAttribute('aria-pressed'),'true');assert.equal(card.getAttribute('aria-busy'),'false');assert.match(r.querySelector('.mt-ui-message').textContent,/Не удалось сохранить/);
+ room.fail(false);const improvement=card.querySelector('.mt-improvement-toggle');improvement.click();await settle();assert.equal(improvement.getAttribute('aria-pressed'),'true');improvement.click();await settle();assert.equal(improvement.getAttribute('aria-pressed'),'false');assert.deepEqual((await room.getMetadata())[FELLOWSHIP_PREFIX+'improvementIds'],[]);
+ service.dispose();
 });
 
 test('changing themebook preserves chosen Might without restore controls',async()=>{
@@ -139,6 +166,19 @@ test('book improvements and quintessences are prefilled inactive rows that toggl
  const {root:r,store}=ui();const card=()=>r.querySelector('.mt-hero-theme');assert.equal(card().querySelectorAll('.mt-improvement-row').length,5);assert.equal(card().querySelectorAll('.mt-inactive-improvement').length,5);
  card().querySelector('.mt-improvement-toggle').click();await settle();assert.equal(store.load().heroThemes[0].improvements.length,1);assert.equal(card().querySelector('.mt-improvement-toggle').textContent,'◆');card().querySelector('.mt-improvement-toggle').click();await settle();assert.equal(store.load().heroThemes[0].improvements.length,0);
  assert.equal(r.querySelectorAll('.mt-quintessences .mt-improvement-row').length,18);r.querySelector('.mt-quintessences .mt-improvement-toggle').click();assert.equal(store.load().quintessenceIds.length,1);
+});
+
+test('quintessences use the lower pull tab and retain expansion and scroll when a choice redraws the character',()=>{
+ const {root:r,store}=ui(),card=()=>r.querySelector('.mt-character-card');
+ assert.equal(card().querySelector('.mt-scroll-main .mt-quintessences'),null);
+ assert.equal(card().querySelector('details.mt-quintessences'),null);
+ assert.equal(card().querySelector('.mt-scroll-bottom-label').textContent,'Квинтэссенции');
+ const toggle=card().querySelector('.mt-scroll-toggle');assert.equal(toggle.getAttribute('aria-expanded'),'false');assert(card().querySelector('.mt-scroll-extension').inert);
+ toggle.click();const flow=card().querySelector('.mt-scroll-flow');flow.scrollTop=57;
+ card().querySelector('.mt-quintessences .mt-improvement-toggle').click();
+ assert.equal(store.load().quintessenceIds.length,1);assert.equal(card().querySelector('.mt-scroll-toggle').getAttribute('aria-expanded'),'true');assert.equal(card().querySelector('.mt-scroll-flow').scrollTop,57);
+ card().querySelector('.mt-scroll-toggle').click();assert.equal(card().querySelector('.mt-scroll-toggle').getAttribute('aria-expanded'),'false');assert(card().querySelector('.mt-scroll-extension').inert);
+ assert.equal(store.load().quintessenceIds.length,1);
 });
 
 test('selection panel hides when empty and after the final tag is scratched or cleared',async()=>{

@@ -28,7 +28,7 @@ export function editorTools(root) {
     input.addEventListener('blur',async()=>{
       if(saving)return;saving=true;input.disabled=true;
       try{await onSave(input.value);
-        if(host?._pendingCard){const node=host._pendingCard;delete host._pendingCard;const scroll=host.querySelector('.mt-theme')?.scrollTop||0;host.replaceChildren(node);node.scrollTop=scroll;}
+        if(host?._pendingCard){const node=host._pendingCard;delete host._pendingCard;const scroll=host.querySelector('.mt-theme')?.scrollTop||0,flowScroll=host.querySelector('.mt-scroll-flow')?.scrollTop||0;host.replaceChildren(node);node.scrollTop=scroll;const flow=node.querySelector('.mt-scroll-flow');if(flow)flow.scrollTop=flowScroll;}
         else if(input.isConnected){button.textContent=input.value||'Пустой тег';input.replaceWith(button);}
       }catch(e){input.disabled=false;input.setAttribute('aria-invalid','true');input.title='Не сохранено: '+(e.message||e);const message=root.querySelector('.mt-ui-message');if(message){message.hidden=false;message.textContent=input.title;}input.focus();}
       finally{saving=false;}
@@ -39,11 +39,13 @@ export function editorTools(root) {
   return {doc,el,btn,dialog,inlineText,scratchButton};
 }
 export function renderTheme(theme, ctx, tools) {
-  const {el,btn,dialog,inlineText,scratchButton}=tools, book=getBook(theme.bookId),story=theme.bookId==='story';
+  const {el,btn,dialog,inlineText,scratchButton}=tools, book=getBook(theme.bookId),story=theme.bookId==='story',fellowship=theme.bookId==='fellowship';
   const card=el('article','mt-theme mt-theme-card');card.dataset.themeId=theme.id;card.dataset.might=theme.might;
   if(ctx.core)card.classList.add('mt-hero-theme');
+  if(fellowship){card.classList.add('mt-fellowship-theme');card.setAttribute('aria-label','Тема Братства');}
   const change = async patch => { await ctx.change(patch); };
   const safely = fn => ()=>Promise.resolve().then(fn).catch(ctx.report);
+  const tagTexts=new Map();
   function question(kind,index) {
     const slot=theme[kind][index];
     dialog(kind==='power'?'Вопросы тегов силы':'Вопросы тегов слабости',(form,close,fail)=>{
@@ -57,6 +59,7 @@ export function renderTheme(theme, ctx, tools) {
     const letter=story?el('span','mt-story-diamond','◇'):btn('','mt-question',()=>question(kind,index),'Выбрать вопрос '+slot.q);if(!story){letter.append(el('span','',slot.q));letter.title=q?.text||'Выбрать вопрос';}
     const edit=()=>inlineText(text,slot.text,value=>change({kind,index,field:'text',value}),160,isTitle?'Название темы':kind==='power'?'Тег силы':'Тег слабости');
     let pending;const text=btn(slot.text||(isTitle?'Название темы':'Пустой тег'),'mt-tag-text',e=>{});text.dataset.key=key;text.title=slot.text+'\nДвойное нажатие — изменить.';text.classList.toggle('mt-empty-tag',!slot.text);
+    tagTexts.set(r,text);
     text.setAttribute('aria-pressed',String(ctx.isSelected(key)));text.setAttribute('aria-label',(isTitle?'Название темы':kind==='power'?'Тег силы':'Тег слабости')+' '+index+': '+(slot.text||'пусто'));
     text.addEventListener('click',e=>{if(!slot.text)return;if(e.detail===0){if(!slot.scratched)ctx.select(key);return;}clearTimeout(pending);pending=setTimeout(()=>{if(text.isConnected&&!slot.scratched)ctx.select(key);},230);});
     text.addEventListener('dblclick',e=>{e.preventDefault();clearTimeout(pending);edit();});
@@ -74,11 +77,11 @@ export function renderTheme(theme, ctx, tools) {
     });
   },'Выбрать темник');bookButton.disabled=!ctx.replace;
   const might=el('select','mt-might');might.setAttribute('aria-label','Могущество темы');for(const [v,label]of Object.entries(mightNames)){const o=el('option','',label);o.value=v;o.selected=v===theme.might;might.append(o);}might.addEventListener('change',safely(()=>change({field:'might',value:might.value})));
-  head.append(story?el('span','mt-story-type','Сюжетная тема'):bookButton,might);card.append(head,row('power',0,true));
+  head.append(fellowship?el('span','mt-fellowship-title',book.name):story?el('span','mt-story-type','Сюжетная тема'):bookButton,might);card.append(head,row('power',0,true));
   const powers=el('div','mt-power-slots');powers.append(el('span','mt-tag-label','Теги Силы'));for(let i=1;i<7;i++)powers.append(row('power',i));
   const weaknesses=el('div','mt-weakness-slots');weaknesses.append(el('span','mt-tag-label','Теги Слабости'));for(let i=0;i<3;i++)weaknesses.append(row('weakness',i));card.append(powers,weaknesses);
   const quest=el('div','mt-quest');const questText=btn(theme.quest||'Задать стремление','mt-quest-text',()=>{});questText.title=theme.quest+'\nДвойной клик — изменить';const editQuest=()=>inlineText(questText,theme.quest,value=>change({field:'quest',value}),ctx.shared?400:1000,'Стремление');questText.addEventListener('dblclick',editQuest);quest.append(el('span','mt-tag-label','СТРЕМЛЕНИЕ'),questText);card.append(quest);
-  const tracks=el('div','mt-track');for(const [field,label]of [['improve','Развитие'],['abandon','Угасание'],['milestone','Вехи']]){const g=el('div','mt-track-group'),p=el('div','mt-pips');for(let i=1;i<=3;i++){const b=btn(i<=theme[field]?'◆':'◇','mt-pip',safely(()=>change({field,value:i===theme[field]?i-1:i})),label+' '+i);b.setAttribute('aria-pressed',String(i<=theme[field]));p.append(b);}g.append(p,el('span','',label));tracks.append(g);}card.append(tracks);
+  const tracks=el('div','mt-track');for(const [field,label]of [['improve','Развитие'],['abandon','Угасание'],['milestone','Вехи']]){const g=el('div','mt-track-group'),p=el('div','mt-pips');g.dataset.track=field;for(let i=1;i<=3;i++){const b=btn(i<=theme[field]?'◆':'◇','mt-pip',safely(()=>change({field,value:i===theme[field]?i-1:i})),label+' '+i);b.setAttribute('aria-pressed',String(i<=theme[field]));p.append(b);}g.append(p,el('span','',label));tracks.append(g);}card.append(tracks);
   const details=el('div','mt-improvements');details.setAttribute('aria-label','Особые улучшения');
   if(story){
     theme.storyImprovements.forEach((item,index)=>{
@@ -90,12 +93,31 @@ export function renderTheme(theme, ctx, tools) {
   }else{
     const options=[...book.improvements,...theme.improvements.filter(id=>!book.improvements.some(x=>x.id===id)).map(improvementById).filter(Boolean)];
     for(const imp of options){const active=theme.improvements.includes(imp.id),r=el('div','mt-improvement-row'+(!active?' mt-inactive-improvement':''));
-      const toggle=btn(active?'◆':'◇','mt-improvement-toggle',safely(()=>change({field:'improvements',value:active?theme.improvements.filter(x=>x!==imp.id):[...theme.improvements,imp.id]})),'Активировать '+imp.name);toggle.setAttribute('aria-pressed',String(active));
+      r.dataset.improvementId=imp.id;
+      const toggle=btn(active?'◆':'◇','mt-improvement-toggle',safely(()=>change({field:'improvements',value:theme.improvements.includes(imp.id)?theme.improvements.filter(x=>x!==imp.id):[...theme.improvements,imp.id]})),'Активировать '+imp.name);toggle.setAttribute('aria-pressed',String(active));
       const title=btn(imp.name,'mt-improvement-title',()=>dialog(imp.name,form=>form.append(el('p','',imp.text),el('small','mt-source-note','The Hero · стр. '+imp.page))));title.title=imp.text;r.append(toggle,title);details.append(r);
     }
   }
   card.append(details);
   if(ctx.remove)head.append(btn('×','mt-delete-card',ctx.remove,'Удалить карточку'));
   if(ctx.busy)card.querySelectorAll('button,select').forEach(x=>x.disabled=true);
-  return dressScroll(card,{expanded:ctx.expanded||false,onExpand:ctx.onExpand});
+  // Shared themes keep their live controls and running animations during room updates.
+  if(fellowship)card.updateTheme=(next,{disabled=false}={})=>{
+    for(const kind of ['power','weakness'])theme[kind].forEach((slot,i)=>Object.assign(slot,next[kind][i]));
+    for(const key of Object.keys(next))if(!['power','weakness'].includes(key))theme[key]=next[key];
+    const setText=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value;};
+    card.dataset.might=theme.might;might.value=theme.might;
+    card.querySelectorAll('.mt-theme-head select,.mt-scroll-main button,.mt-scroll-main select,.mt-improvements button').forEach(node=>{node.disabled=disabled;});
+    card.querySelectorAll('.mt-tag-row[data-kind]').forEach(row=>{
+      const kind=row.dataset.kind,index=Number(row.dataset.index),slot=theme[kind][index],title=row.classList.contains('mt-title-row'),text=tagTexts.get(row),scratch=row.querySelector('.mt-scratch'),letter=row.querySelector('.mt-question');
+      row.classList.toggle('mt-scratched',slot.scratched);
+      if(text){setText(text,slot.text||(title?'Название темы':'Пустой тег'));text.classList.toggle('mt-empty-tag',!slot.text);text.title=slot.text+'\nДвойное нажатие — изменить.';text.setAttribute('aria-label',(title?'Название темы':kind==='power'?'Тег силы':'Тег слабости')+' '+index+': '+(slot.text||'пусто'));}
+      scratch.disabled=disabled||!slot.text;scratch.setAttribute('aria-pressed',String(slot.scratched));scratch.setAttribute('aria-label',(slot.scratched?'Восстановить':'Зачеркнуть')+' '+(slot.text||'тег'));
+      if(letter){setText(letter.querySelector('span'),slot.q);letter.setAttribute('aria-label','Выбрать вопрос '+slot.q);letter.title=book[kind].find(q=>q.letter===slot.q)?.text||'Выбрать вопрос';}
+    });
+    setText(questText,theme.quest||'Задать стремление');questText.title=theme.quest+'\nДвойной клик — изменить';
+    card.querySelectorAll('[data-track]').forEach(group=>group.querySelectorAll('.mt-pip').forEach((button,i)=>{const active=i<theme[group.dataset.track];setText(button,active?'◆':'◇');button.setAttribute('aria-pressed',String(active));}));
+    details.querySelectorAll('[data-improvement-id]').forEach(row=>{const active=theme.improvements.includes(row.dataset.improvementId),button=row.querySelector('.mt-improvement-toggle');row.classList.toggle('mt-inactive-improvement',!active);setText(button,active?'◆':'◇');button.setAttribute('aria-pressed',String(active));});
+  };
+  return dressScroll(card,{expanded:ctx.expanded||false,onExpand:ctx.onExpand,flowingFooter:true});
 }

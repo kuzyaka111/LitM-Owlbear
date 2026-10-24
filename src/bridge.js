@@ -71,10 +71,10 @@ export function watchGMTool(obr, base) {
 export const SHEET_MODAL_ID = 'io.github.kuzyaka111.legend-mist/sheet-window';
 
 export const SHEET_POPOVER_ID = SHEET_MODAL_ID;
-export async function sheetBounds(obr, count = 4, hasSelection = false) {
+export async function sheetBounds(obr, count = 4, hasSelection = false, requestedHeight = 650) {
   const [width, height] = await Promise.all([obr.viewport.getWidth(), obr.viewport.getHeight()]);
   const cards = count + (hasSelection ? 1 : 0);
-  return { width: Math.max(240, Math.min(cards * 224 + (cards - 1) * 12 + 32, width - 32)), height: Math.max(160, Math.min(650, height - 116)) };
+  return { width: Math.max(240, Math.min(cards * 224 + (cards - 1) * 12 + 32, width - 32)), height: Math.max(160, Math.min(requestedHeight, height - 116)) };
 }
 export async function openSheet(obr, base) {
   const url = new URL('./index.html', base); url.searchParams.set('surface', 'sheet');

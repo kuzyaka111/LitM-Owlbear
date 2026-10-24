@@ -19,7 +19,7 @@ export function mountSheet(root,state,save,actions) {
   const win=doc.defaultView,toolbar=q('.mt-toolbar'),sizeToolbar=()=>q('.mt-v4').style.setProperty('--toolbar-height',toolbar.getBoundingClientRect().height+'px');
   if(win.ResizeObserver){const observer=new win.ResizeObserver(sizeToolbar);observer.observe(toolbar);win.addEventListener('pagehide',()=>observer.disconnect(),{once:true});}sizeToolbar();
   const selected=new Set(state.selected),expanded=new Map();
-  let specialAction=null,rollModifier=0,rolling=false,currentRoll=0;
+  let specialAction=null,rollModifier=0,rolling=false,currentRoll=0,resizePending,selectionSequence=0;
   state.settings??={scrollAnimation:true,diceAnimation:true};
   q('.mt-v4').dataset.scrollAnimation=state.settings.scrollAnimation?'on':'off';
   const actionPanel=createActionPanel(q('.mt-action-card'),visible=>{q('.mt-stage').classList.toggle('mt-with-selection',visible);fit();});
@@ -56,11 +56,23 @@ export function mountSheet(root,state,save,actions) {
     qa('[data-special]').forEach(button=>{const active=specialAction===button.dataset.special;button.setAttribute('aria-pressed',String(active));button.querySelector('span').textContent=active?'◆':'◇';button.disabled=false;});
     const hideForTab=activeTab==='notes'||activeTab==='settings';actionPanel.show(chosen.length>0&&!hideForTab,hideForTab);
   }
-  function select(key){if(selected.has(key)){selected.delete(key);if(key.startsWith('extra:'))for(const kind of ['power','weakness'])state.actionExtras[kind]=state.actionExtras[kind].filter(x=>`extra:${kind}:${x.id}`!==key);}else selected.add(key);refreshSelection();localSave();}
-  function preserveReplace(host,node){if(host.querySelector('.mt-inline-editor')){host._pendingCard=node;return;}const previous=host.querySelector('.mt-theme'),scroll=previous?.scrollTop||0;host.replaceChildren(node);node.scrollTop=scroll;}
+  function select(key){
+    if(selected.has(key)){selected.delete(key);if(key.startsWith('extra:'))for(const kind of ['power','weakness'])state.actionExtras[kind]=state.actionExtras[kind].filter(x=>`extra:${kind}:${x.id}`!==key);}else selected.add(key);
+    refreshSelection();localSave();
+    const sequence=++selectionSequence,panel=q('#panel-'+activeTab);
+    // The calculator can narrow the row before Owlbear finishes resizing its host.
+    Promise.resolve(resizePending).then(()=>new Promise(resolve=>win.requestAnimationFrame?win.requestAnimationFrame(()=>win.requestAnimationFrame(resolve)):resolve())).then(()=>{
+      if(sequence!==selectionSequence||panel.hidden)return;
+      const tag=[...panel.querySelectorAll('.mt-tag-text[data-key]')].find(node=>node.dataset.key===key),card=tag?.closest('.mt-scroll-frame'),row=card?.closest('.mt-card-row');
+      if(!row)return;const bounds=card.getBoundingClientRect(),viewport=row.getBoundingClientRect();
+      if(bounds.right>viewport.right-8)row.scrollLeft+=bounds.right-viewport.right+8;
+      else if(bounds.left<viewport.left+8)row.scrollLeft+=bounds.left-viewport.left-8;
+    }).catch(report);
+  }
+  function preserveReplace(host,node){if(host.querySelector('.mt-inline-editor')){host._pendingCard=node;return;}const scroll=host.querySelector('.mt-scroll-body')?.scrollTop||0;host.replaceChildren(node);const body=node.querySelector('.mt-scroll-body');if(body)body.scrollTop=scroll;}
   function mutateTheme(t,change){if(change.kind)t[change.kind][change.index][change.field]=change.value;else t[change.field]=change.value;}
   function themeContext(t,host,core=false,card){
-    return {core,isSelected:key=>selected.has(key),select,report,expanded:expanded.get(t.id),onExpand:open=>expanded.set(t.id,open),
+    return {core,isSelected:key=>selected.has(key),select,report,expanded:expanded.get(t.id),onExpand:open=>{expanded.set(t.id,open);return fit();},
       change:async change=>{mutateTheme(t,change);drawLocal(t,host,core,card);refreshSelection();localSave();},
       replace:core?async(bookId,reset)=>{const replacement=reset?makeTheme(bookId,t.id):{...structuredClone(t),bookId};const b=getBook(bookId);if(reset&&b.might!=='variable')replacement.might=b.might;Object.assign(t,replacement);drawLocal(t,host,core,card);refreshSelection();localSave();}:null,
       remove:card?()=>removeCard(card):null};
@@ -70,7 +82,7 @@ export function mountSheet(root,state,save,actions) {
 
   function drawShared(){
     const t=fellowshipTheme(shared);preserveReplace(q('.mt-fellowship-host'),renderTheme(t,{isSelected:key=>selected.has(key),select,report,busy:!sharedReady||sharedBusy,
-      expanded:expanded.get(t.id),onExpand:open=>expanded.set(t.id,open),shared:true,
+      expanded:expanded.get(t.id),onExpand:open=>{expanded.set(t.id,open);return fit();},shared:true,
       change:async change=>{sharedBusy=true;drawShared();
         try{await service.update(fellowshipPatch(change));}
         catch(e){throw e;}finally{sharedBusy=false;drawShared();refreshSelection();}
@@ -146,7 +158,13 @@ export function mountSheet(root,state,save,actions) {
   function reveal(panel){const sequence=++switchSequence;motion.stop();panel.style.visibility='hidden';Promise.resolve(fit()).then(()=>new Promise(resolve=>{const win=root.ownerDocument.defaultView;if(win.requestAnimationFrame)win.requestAnimationFrame(()=>win.requestAnimationFrame(resolve));else resolve();})).then(()=>{if(sequence!==switchSequence)return;motion.play(panel);panel.style.visibility='';}).catch(error=>{if(sequence===switchSequence)panel.style.visibility='';report(error);});}
   const tabs=qa('[role=tab]');function switchTab(button){const changed=activeTab!==button.dataset.sheetTab;activeTab=button.dataset.sheetTab;tabs.forEach(b=>{const active=b===button;b.setAttribute('aria-selected',String(active));b.setAttribute('aria-pressed',String(active));b.tabIndex=active?0:-1;q('#'+b.getAttribute('aria-controls')).hidden=!active;});q('.mt-row-actions').hidden=activeTab!=='party';refreshSelection();if(activeTab==='notes')layoutNotes();if(changed)reveal(q('#panel-'+activeTab));}
   tabs.forEach((b,i)=>{b.addEventListener('click',()=>switchTab(b));b.addEventListener('keydown',e=>{const n=e.key==='ArrowRight'?(i+1)%tabs.length:e.key==='ArrowLeft'?(i+tabs.length-1)%tabs.length:e.key==='Home'?0:e.key==='End'?tabs.length-1:null;if(n!==null){e.preventDefault();switchTab(tabs[n]);tabs[n].focus();}});});
-  function fit(){if(rolling)return;return actions.fitWindow?.(activeTab==='themes'?4:activeTab==='settings'?1:activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden);}
+  function fit(){
+    if(rolling)return;
+    const openCards=[...q('#panel-'+activeTab).querySelectorAll('.mt-scroll-frame:has(.mt-scroll-toggle[aria-expanded=true])')];
+    if(!q('.mt-action-card').hidden&&q('.mt-action-card .mt-scroll-toggle[aria-expanded=true]'))openCards.push(q('.mt-action-card'));
+    const requestedHeight=Math.max(650,...openCards.map(card=>card.querySelector('.mt-scroll-main').scrollHeight+card.querySelector('.mt-scroll-extension-inner').scrollHeight+78+toolbar.getBoundingClientRect().height+44));
+    return resizePending=actions.fitWindow?.(activeTab==='themes'?4:activeTab==='settings'?1:activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden,requestedHeight);
+  }
   qa('[role=tabpanel]').forEach(panel=>{const version=el('div','mt-sheet-version','v'+packageInfo.version);panel.querySelector('.mt-card-row').after(version);});
-  dressScroll(q('.mt-action-card'),{extensionLabel:'Особые действия'});refreshSelection();createScratchEffects(root);reveal(q('#panel-party'));
+  dressScroll(q('.mt-action-card'),{extensionLabel:'Особые действия',onExpand:fit});refreshSelection();createScratchEffects(root);reveal(q('#panel-party'));
 }

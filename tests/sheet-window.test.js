@@ -1,8 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { openSheet, watchSheetAction, SHEET_POPOVER_ID } from '../src/bridge.js';
+import { openSheet, sheetBounds, watchSheetAction, SHEET_POPOVER_ID } from '../src/bridge.js';
 const viewport={getWidth:async()=>1280,getHeight:async()=>900};
 const tick = () => new Promise(resolve => setTimeout(resolve, 0));
+
+test('expanded cards grow the host window within the room viewport and collapse to its default',async()=>{
+ const obr={viewport:{getWidth:async()=>1280,getHeight:async()=>1200}};
+ assert.equal((await sheetBounds(obr,4,false,950)).height,950);
+ assert.equal((await sheetBounds(obr,4,false,1400)).height,1084);
+ assert.equal((await sheetBounds(obr)).height,650);
+});
 
 test('sheet opens a compact transparent popover below toolbar from the project path', async () => {
   let result;

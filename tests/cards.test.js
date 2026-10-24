@@ -14,6 +14,18 @@ function ui(store = makeStore(storage(), { room: 'room', player: '1' }, 'sheet')
   return { root, state, store, event: type => new dom.window.Event(type, { bubbles: true, cancelable: true }), dom };
 }
 const settle = () => new Promise(resolve => setTimeout(resolve, 0));
+
+test('selecting the last card keeps it in the row after the calculator resizes the host',async()=>{
+ const dom=new JSDOM('<main></main>'),root=dom.window.document.querySelector('main'),pending=[];
+ const store=makeStore(storage(),{room:'room',player:'1'},'sheet');
+ mountUI(root,'sheet',template,store,{close:async()=>{},fitWindow:()=>new Promise(resolve=>pending.push(resolve))});
+ root.querySelector('#tab-themes').click();pending.splice(0).forEach(resolve=>resolve());await settle();
+ const panel=root.querySelector('#panel-themes'),row=panel.querySelector('.mt-card-row'),card=[...panel.querySelectorAll('.mt-theme')].at(-1),body=card.querySelector('.mt-scroll-body');
+ row.getBoundingClientRect=()=>({left:0,right:708});card.getBoundingClientRect=()=>({left:716,right:940});body.scrollTop=40;
+ card.querySelector('.mt-tag-text').click();assert.equal(row.scrollLeft,0);
+ pending.at(-1)();await settle();await settle();
+ assert.equal(row.scrollLeft,240);assert.equal(body.scrollTop,40);assert.equal(card.hidden,false);assert.equal(card.querySelector('.mt-tag-text').getAttribute('aria-pressed'),'true');
+});
 function sharedRoom(initial = {}) {
   let metadata = { ...initial }; const listeners = new Set(); let failure = false;
   return {

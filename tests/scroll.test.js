@@ -45,9 +45,11 @@ test('long rows preserve spacing: every card shares one translation and no entry
   card.animate=(frames,options)=>{started=true;moves.push({frames,options});return {cancel(){},finished:new Promise(()=>{})};};
   card.firstElementChild.animate=()=>({cancel(){},finished:new Promise(()=>{})});
  });
- createScrollMotion(root).play(root.querySelector('section'));
- assert.equal(moves.length,7);for(const move of moves)assert.deepEqual(move,moves[0]);
- assert.equal(moves[0].options.delay,undefined);assert(moves[0].frames[0].transform.includes('translate3d(-'));assert(moves[0].frames.slice(1).every(f=>f.transform.startsWith('translate3d(0,0,0)')));assert(moves[0].frames.some(f=>f.transform.includes('rotate(.35deg)')));
+ let pick=0;createScrollMotion(root,()=>((pick++%4)+.1)/4).play(root.querySelector('section'));
+ assert.equal(moves.length,7);
+ for(const move of moves){assert.equal(move.frames[0].transform,moves[0].frames[0].transform);assert.equal(move.options.delay,undefined);assert(Math.abs(move.frames[1].offset*move.options.duration-344)<.001);assert.equal(move.frames.at(-1).transform,'translate3d(0,0,0)');}
+ assert.equal(new Set(moves.map(m=>m.options.duration)).size,4);
+ assert(moves.some(m=>m.frames.some(f=>f.transform.includes('rotate(1.3deg)'))));
 });
 
 

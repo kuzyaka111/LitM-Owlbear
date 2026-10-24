@@ -64,7 +64,7 @@ html:has(body[data-view="sheet"]),body[data-view="sheet"]{overflow:hidden;overfl
 #mist-table-design .mt-v4 .mt-toolbar .mt-row-actions{flex-wrap:nowrap;min-height:34px}
 #mist-table-design .mt-v4 .mt-toolbar .mt-row-actions[hidden]{display:none}
 #mist-table-design .mt-v4 .mt-toolbar .mt-row-actions button{height:34px;white-space:nowrap;border-radius:3px;background:var(--scroll-dark)}
-#mist-table-design .mt-v4 .mt-scroll-top .mt-might{color:#000;background:#f4ead1}
+#mist-table-design .mt-v4 .mt-scroll-top .mt-might{color:#f4e7c9;background:var(--scroll-dark)}
 #mist-table-design .mt-v4 .mt-might option{color:#000;background:#f4ead1}
 #mist-table-design .mt-v4 .mt-open-note[aria-pressed=true]{background:var(--scroll-dark);color:#fff4d8}
 
@@ -82,3 +82,14 @@ html:has(body[data-view="sheet"]),body[data-view="sheet"]{overflow:hidden;overfl
 #mist-table-design .mt-v4 .mt-special-actions button{display:flex;align-items:center;gap:7px;width:100%;padding:6px 0;border:0;background:none;color:#b6b09a;text-align:left;font:14px/1.5 'Bad Script',cursive}
 #mist-table-design .mt-v4 .mt-special-actions button[aria-pressed=true]{color:#f4e7c9}
 #mist-table-design .mt-v4 .mt-special-actions button:disabled{opacity:.4;cursor:default}
+
+/* Footer and pull tab stay visible; only the paper scrolls. */
+#mist-table-design .mt-v4 .mt-theme.mt-scroll-frame{overflow:visible}
+#mist-table-design .mt-v4 .mt-scroll-body{flex:0 1 auto;min-height:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-width:none}
+#mist-table-design .mt-v4 .mt-scroll-bottom{flex-shrink:0}
+#mist-table-design .mt-v4 .mt-card-row{padding:5px 8px 8px}
+#mist-table-design .mt-v4 .mt-tag-row{position:relative;isolation:isolate}
+#mist-table-design .mt-v4 .mt-tag-row::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,color-mix(in srgb,var(--scroll-light) 52%,transparent),color-mix(in srgb,var(--scroll-light) 26%,transparent) 48%,transparent 92%);opacity:0;transition:opacity 220ms ease-out}
+#mist-table-design .mt-v4 .mt-tag-row:has(.mt-tag-text[aria-pressed=true])::before{opacity:1}
+#mist-table-design .mt-v4 .mt-tag-row .mt-tag-text[aria-pressed=true]{background-image:none}
+#mist-table-design .mt-v4 .mt-tag-row:has(.mt-tag-text[aria-pressed=true]) .mt-question span{background:transparent}

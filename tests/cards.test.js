@@ -179,3 +179,10 @@ test('theme colors follow Might on rerender',async()=>{
  assert.equal(root.querySelector('.mt-power-slots .mt-tag-label').textContent,'Теги Силы');
  assert.equal(root.querySelector('.mt-weakness-slots .mt-tag-label').textContent,'Теги Слабости');
 });
+
+test('notes and settings hide the calculator without dropping selected tags',()=>{
+ const {root:r,store}=ui();r.querySelector('.mt-hero-theme .mt-tag-text').click();
+ const chosen=store.load().selected;assert(chosen.length>0);assert.equal(r.querySelector('.mt-action-card').hidden,false);
+ for(const tab of ['#tab-notes','#tab-settings']){r.querySelector(tab).click();assert.equal(r.querySelector('.mt-action-card').hidden,true);assert.deepEqual(store.load().selected,chosen);}
+ r.querySelector('#tab-party').click();assert.equal(r.querySelector('.mt-action-card').hidden,false);assert.deepEqual(store.load().selected,chosen);
+});

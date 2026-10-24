@@ -1,5 +1,5 @@
 // Move cards as one spaced row. Only the paper reveal is staggered.
-export function createScrollMotion(root){
+export function createScrollMotion(root,random=Math.random){
  const win=root.ownerDocument.defaultView,media=win.matchMedia?.('(prefers-reduced-motion: reduce)');
  let running=[],rows=[];
  function stop(){running.forEach(a=>a.cancel());running=[];rows.forEach(({row,height})=>{row.classList.remove('mt-scroll-entering');row.style.minHeight=height;});rows=[];}
@@ -13,15 +13,13 @@ export function createScrollMotion(root){
   const x=-(Math.max(win.innerWidth,...measured.map(x=>x.rect.right))+32),animations=[];
   for(const [index,{card,body,height}] of measured.entries()){
    if(typeof card.animate!=='function')continue;
-   // Identical displacement and timing preserve the gaps, even for long inventories.
-   animations.push(card.animate([
-    {offset:0,transform:`translate3d(${x}px,0,0)`,opacity:0,easing:'cubic-bezier(.22,.65,.3,1)'},
-    {offset:.4,transform:'translate3d(0,0,0) rotate(0deg)',opacity:1},
-    {offset:.55,transform:'translate3d(0,0,0) rotate(.35deg)',opacity:1},
-    {offset:.7,transform:'translate3d(0,0,0) rotate(-.22deg)',opacity:1},
-    {offset:.85,transform:'translate3d(0,0,0) rotate(.1deg)',opacity:1},
-    {offset:1,transform:'translate3d(0,0,0)',opacity:1}
-   ],{duration:860,easing:'linear',fill:'both'}));
+   // Same 344ms entrance; independently timed, damped settling thereafter.
+   const variants=[{duration:1100,angles:[1.15,-.72,.36,-.12]},{duration:1240,angles:[-.95,.62,-.32,.1]},{duration:1360,angles:[1.3,-.8,.42,-.14]},{duration:1180,angles:[-1.1,.7,-.36,.12]}];
+   const variant=variants[Math.min(3,Math.floor(random()*4))],entry=344/variant.duration;
+   const frames=[{offset:0,transform:`translate3d(${x}px,0,0)`,opacity:0,easing:'cubic-bezier(.22,.65,.3,1)'},{offset:entry,transform:'translate3d(0,0,0) rotate(0deg)',opacity:1}];
+   variant.angles.forEach((angle,i)=>frames.push({offset:entry+(1-entry)*(i+1)/5,transform:`translate3d(0,0,0) rotate(${angle}deg)`,opacity:1,easing:'ease-in-out'}));
+   frames.push({offset:1,transform:'translate3d(0,0,0)',opacity:1});
+   animations.push(card.animate(frames,{duration:variant.duration,easing:'linear',fill:'both'}));
    animations.push(body.animate([
     {offset:0,height:'0px'},{offset:.4,height:'0px'},
     {offset:.95,height:height+'px'},{offset:1,height:height+'px'}

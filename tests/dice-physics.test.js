@@ -15,3 +15,8 @@ test('real physics settles varied throws in bounds without repositioning settled
  assert(new Set(ends).size>10);
  }finally{sim.free();}
 });
+
+test('contact sounds follow physical impacts and stop for settled dice',async()=>{
+ await initPhysics();const impacts=[];const sim=createDiceWorld(Math.random,force=>impacts.push(force));
+ try{sim.throwDice();let values;for(let i=0;i<1800&&!values;i++)values=sim.step();assert(values);assert(impacts.length>0);assert(impacts.every(f=>f>=45));const count=impacts.length;for(let i=0;i<120;i++)sim.step();assert.equal(impacts.length,count);}finally{sim.free();}
+});

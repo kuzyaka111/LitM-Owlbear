@@ -7,13 +7,13 @@ export function calculateAction(base,mode,modifier=0){
 export function createActionPanel(panel,onVisibility){
  const win=panel.ownerDocument.defaultView;
  let visible=false,animation,sequence=0;
- return {show(next){
-  if(next===visible)return;
+ return {show(next,immediate=false){
+  if(next===visible&&!immediate)return;
   visible=next;const token=++sequence;
   const body=panel.querySelector('.mt-scroll-body');
   const from=panel.hidden?0:body?.getBoundingClientRect().height||0;
   animation?.cancel();
-  const reduced=panel.closest('[data-scroll-animation=off]')||win.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const reduced=immediate||panel.closest('[data-scroll-animation=off]')||win.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   if(next){panel.hidden=false;panel.inert=false;onVisibility(true);}
   else panel.inert=true;
   const finish=()=>{if(token!==sequence)return;animation?.cancel();animation=null;if(!next){panel.hidden=true;panel.inert=false;onVisibility(false);}};

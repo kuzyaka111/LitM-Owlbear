@@ -4,6 +4,7 @@ import {createScratchEffects} from './scratch-effects.js';
 import {appendAutoSlot} from './auto-slots.js';
 import {dressScroll} from './scroll-view.js';
 import {createScrollMotion} from './scroll-motion.js';
+import {createCardReorder} from './card-reorder.js';
 import {mountNotes} from './notes-ui.js';
 import packageInfo from '../package.json' with { type: 'json' };
 import { newCard, makeId } from './storage.js';
@@ -182,5 +183,7 @@ export function mountSheet(root,state,save,actions) {
     return resizePending=actions.fitWindow?.(activeTab==='themes'?4:activeTab==='settings'?1:activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden,requestedHeight,minimumWidth);
   }
   qa('[role=tabpanel]').forEach(panel=>{const version=el('div','mt-sheet-version','v'+packageInfo.version);panel.querySelector('.mt-card-row').after(version);});
-  dressScroll(q('.mt-action-card'),{extensionLabel:'Особые действия',onExpand:fit});refreshSelection();createScratchEffects(root);reveal(q('#panel-party'));
+  dressScroll(q('.mt-action-card'),{extensionLabel:'Особые действия',onExpand:fit});refreshSelection();createScratchEffects(root);
+  state.cardOrder??={};createCardReorder(root,{getOrder:key=>state.cardOrder[key],setOrder:(key,order)=>{state.cardOrder[key]=order;localSave();},beforeDrag:()=>motion.stop()});
+  reveal(q('#panel-party'));
 }

@@ -130,3 +130,7 @@ body[data-view="sheet"]::before{display:none}
 #mist-table-design .mt-v4 .mt-action-card>section{flex:none;overflow:visible;min-height:0}
 #mist-table-design .mt-v4 .mt-scratch .mt-claw-icon{display:block;width:17px;height:20px}
 #mist-table-design .mt-v4 .mt-scratch[aria-pressed=true]{color:#a04f3b}
+
+/* An empty tag panel must never reserve space, even before selection refresh. */
+#mist-table-design .mt-v4 .mt-action-card:not(:has(.mt-action-tag)){display:none!important}
+#mist-table-design .mt-v4 .mt-stage:not(:has(.mt-action-tag)){grid-template-columns:minmax(0,1fr);min-width:0}

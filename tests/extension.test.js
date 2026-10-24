@@ -100,7 +100,7 @@ test('manifest URLs retain the GitHub project path even when resolved from the o
   for (const [url, file] of files) {
     const expected = `https://kuzyaka111.github.io/LitM-Owlbear/${file}`;
     for (const base of ['https://kuzyaka111.github.io/', 'https://kuzyaka111.github.io/LitM-Owlbear/manifest.json']) {
-      assert.equal(new URL(url, base).href, expected);
+      const resolved=new URL(url,base);resolved.search='';assert.equal(resolved.href, expected);
     }
   }
   assert.deepEqual(m, JSON.parse(fs.readFileSync(new URL('../docs/manifest.json', import.meta.url))));

@@ -78,6 +78,8 @@ export async function sheetBounds(obr, count = 4, hasSelection = false) {
 }
 export async function openSheet(obr, base) {
   const url = new URL('./index.html', base); url.searchParams.set('surface', 'sheet');
+  // Fetch a fresh HTML entry point; hashed JS/CSS remain cacheable.
+  url.searchParams.set('opened', String(Date.now()));
   const size = await sheetBounds(obr, 3);
   await obr.popover.open({ id: SHEET_POPOVER_ID, url: url.href, ...size,
     anchorReference: 'POSITION', anchorPosition: { left: 16, top: 96 },

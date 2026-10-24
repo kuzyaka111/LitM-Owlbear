@@ -1,3 +1,4 @@
+import packageInfo from '../package.json' with { type: 'json' };
 import { newCard, makeId } from './storage.js';
 import { makeTheme, getBook, quintessences, improvementById, tagKey } from './theme-model.js';
 import { fellowshipDefaults } from './fellowship.js';
@@ -31,7 +32,7 @@ export function mountSheet(root,state,save,actions) {
       if(!list.childElementCount)list.append(el('p','mt-empty-action',kind==='power'?'Выбери подходящие теги силы':'Выбери мешающие теги слабости'));
     }
     q('.mt-clear').disabled=!selected.size;state.selected=[...selected];
-    const panel=q('.mt-action-card'),visible=[...selected].some(key=>tags.has(key)),changed=panel.hidden===visible;panel.hidden=!visible;q('.mt-stage').classList.toggle('mt-with-selection',visible);if(changed)fit();
+    const panel=q('.mt-action-card'),visible=panel.querySelector('.mt-action-tag')!==null,changed=panel.hidden===visible;panel.hidden=!visible;q('.mt-stage').classList.toggle('mt-with-selection',visible);if(changed)fit();
   }
   function select(key){if(selected.has(key)){selected.delete(key);if(key.startsWith('extra:'))for(const kind of ['power','weakness'])state.actionExtras[kind]=state.actionExtras[kind].filter(x=>`extra:${kind}:${x.id}`!==key);}else selected.add(key);refreshSelection();localSave();}
   function preserveReplace(host,node){if(host.querySelector('.mt-inline-editor')){host._pendingCard=node;return;}const previous=host.querySelector('.mt-theme'),scroll=previous?.scrollTop||0;host.replaceChildren(node);node.scrollTop=scroll;}
@@ -76,7 +77,7 @@ export function mountSheet(root,state,save,actions) {
       const title=btn(item.name,'mt-improvement-title',()=>dialog(item.name,form=>form.append(el('p','',item.text),el('small','mt-source-note','The Hero · стр. '+item.page))));title.title=item.text;row.append(toggle,title);quint.append(row);
     }
     if(state.quintessences){const legacy=el('details','mt-details'),copy=el('p','',state.quintessences);copy.title='Двойное нажатие — изменить';copy.addEventListener('dblclick',()=>inlineText(copy,state.quintessences,async value=>{state.quintessences=value;drawCharacter();localSave();},2000,'Прежние записи о квинтэссенциях'));legacy.append(el('summary','','Прежние записи'),copy);quint.append(legacy);}growth.append(quint);article.append(growth);
-    const storage=el('details','mt-details mt-storage-details');storage.append(el('summary','','Сохранение'));const info=el('div','mt-storage-info');const old=root.querySelector('.mt-prototype-note');if(old)info.append(old);storage.append(info);article.append(storage);preserveReplace(q('.mt-character-host'),article);
+    const storage=el('details','mt-details mt-storage-details');storage.append(el('summary','','Сохранение · '+packageInfo.version));const info=el('div','mt-storage-info');const old=root.querySelector('.mt-prototype-note');if(old)info.append(old);storage.append(info);article.append(storage);preserveReplace(q('.mt-character-host'),article);
   }
   drawCharacter();
 

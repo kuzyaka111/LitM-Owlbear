@@ -1,3 +1,4 @@
+import {createScratchEffects} from './scratch-effects.js';
 import {appendAutoSlot} from './auto-slots.js';
 import {dressScroll} from './scroll-view.js';
 import {createScrollMotion} from './scroll-motion.js';
@@ -119,5 +120,5 @@ export function mountSheet(root,state,save,actions) {
   tabs.forEach((b,i)=>{b.addEventListener('click',()=>switchTab(b));b.addEventListener('keydown',e=>{const n=e.key==='ArrowRight'?(i+1)%3:e.key==='ArrowLeft'?(i+2)%3:e.key==='Home'?0:e.key==='End'?2:null;if(n!==null){e.preventDefault();switchTab(tabs[n]);tabs[n].focus();}});});
   function fit(){return actions.fitWindow?.(activeTab==='themes'?4:activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden);}
   qa('[role=tabpanel]').forEach(panel=>{const version=el('div','mt-sheet-version','v'+packageInfo.version);panel.querySelector('.mt-card-row').after(version);});
-  dressScroll(q('.mt-action-card'));refreshSelection();reveal(q('#panel-party'));
+  dressScroll(q('.mt-action-card'));refreshSelection();createScratchEffects(root);reveal(q('#panel-party'));
 }

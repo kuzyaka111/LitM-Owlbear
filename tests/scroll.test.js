@@ -60,3 +60,14 @@ test('only a press and click on the dialog backdrop close the extra window',asyn
  emit('pointerdown',120,120);emit('click',10,10);assert(d.isConnected);
  emit('pointerdown',10,10);emit('click',10,10);assert(!d.isConnected);assert(root.querySelector('.sheet'));
 });
+
+test('tear effect animates only a new scratch, never restore or an unchanged rerender',async()=>{
+ const {createScratchEffects}=await import('../src/scratch-effects.js');
+ const dom=new JSDOM('<main></main>'),root=dom.window.document.querySelector('main');
+ const draw=scratched=>{root.innerHTML='<div class="mt-tag-row '+(scratched?'mt-scratched':'')+'"><button class="mt-tag-text" data-key="tag-1">Тег</button></div>';};
+ draw(true);const effects=createScratchEffects(root);assert(!root.querySelector('.mt-scratch-reveal'));
+ draw(false);effects.refresh();assert(!root.querySelector('.mt-scratch-reveal'));
+ draw(true);effects.refresh();assert(root.querySelector('.mt-scratch-reveal'));
+ draw(true);effects.refresh();assert(!root.querySelector('.mt-scratch-reveal'));
+ draw(false);effects.refresh();draw(true);effects.refresh();assert(root.querySelector('.mt-scratch-reveal'));effects.dispose();
+});

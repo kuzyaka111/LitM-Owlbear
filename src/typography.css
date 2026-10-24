@@ -1,7 +1,7 @@
 /* Local Cyrillic fonts, loaded before the first sheet entrance. */
 #mist-table-design{--font-heading:'Alegreya SC',Georgia,serif;--font-writing:'Bad Script',cursive}
 #mist-table-design .mt-v4 .mt-tag-text,#mist-table-design .mt-v4 .mt-auto-slot.mt-item-row input,#mist-table-design .mt-v4 .mt-relationship button:nth-child(2),#mist-table-design .mt-v4 .mt-auto-slot.mt-relationship input[data-field="tag"]{font-family:var(--font-writing);font-size:15px;font-weight:400;font-style:normal;line-height:1.45}
-#mist-table-design .mt-v4 .mt-title-row .mt-tag-text{font-size:20px;line-height:1.2}
+#mist-table-design .mt-v4 .mt-title-row .mt-tag-text{font-size:18px;line-height:1.2;padding:2px 3px}
 #mist-table-design .mt-v4 .mt-improvement-title{font:400 14px/1.6 var(--font-writing)}
 #mist-table-design .mt-v4 .mt-quest-text{font:400 15px/1.4 var(--font-writing)}
 #mist-table-design .mt-v4 .mt-note-text,#mist-table-design .mt-v4 .mt-backpack-notes textarea{font:400 15px/24px var(--font-writing)}
@@ -16,3 +16,5 @@
 #mist-table-design .mt-v4 .mt-track-group>span{font-size:10px}
 #mist-table-design .mt-v4 .mt-note-title{font-size:14px}
 #mist-table-design .mt-v4 .mt-note-text{background:repeating-linear-gradient(transparent,transparent 23px,#b39a7040 24px)}
+
+#mist-table-design .mt-v4 .mt-title-row{padding-top:6px}

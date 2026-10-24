@@ -21,6 +21,7 @@
 #mist-table-design .mt-v4 .mt-inactive-improvement .mt-improvement-title{color:#b6b09a;opacity:.6}
 #mist-table-design .mt-v4 .mt-quest,#mist-table-design .mt-v4 .mt-hero-growth,#mist-table-design .mt-v4 .mt-backpack-notes{background:linear-gradient(105deg,#263c32,#3d5141);color:#f4e7c9}
 #mist-table-design .mt-v4 .mt-track{background:#b6a47e25}
+#mist-table-design .mt-v4 .mt-theme-card .mt-track{height:60px;min-height:60px;padding-bottom:14px}
 #mist-table-design .mt-v4 .mt-question span{background:#f0e2c2}
 #mist-table-design .mt-v4 .mt-tag-row{border-bottom-color:#ac916f35}
 #mist-table-design .mt-v4 .mt-notes-card .mt-note-text{background:repeating-linear-gradient(transparent,transparent 21px,#b39a7040 22px)}

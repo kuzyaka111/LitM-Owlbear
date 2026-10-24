@@ -6,7 +6,7 @@ export function createScrollMotion(root,random=Math.random){
  function play(panel){
   stop();if(media?.matches||root.querySelector('[data-scroll-animation=off]'))return;
   // Measure the entire layout before applying any animation.
-  const cards=[...panel.querySelectorAll('.mt-scroll-frame')].map(card=>({card,rect:card.getBoundingClientRect(),body:card.querySelector(':scope > .mt-scroll-body')})).filter(x=>x.rect.width);
+  const cards=[...panel.querySelectorAll('.mt-scroll-frame:not(.mt-action-card)')].map(card=>({card,rect:card.getBoundingClientRect(),body:card.querySelector(':scope > .mt-scroll-body')})).filter(x=>x.rect.width);
   const measured=cards.map(x=>({...x,height:x.body.getBoundingClientRect().height}));
   rows=[...panel.querySelectorAll('.mt-card-row')].map(row=>({row,height:row.style.minHeight}));
   rows.forEach(({row})=>{row.style.minHeight=row.getBoundingClientRect().height+'px';row.classList.add('mt-scroll-entering');});

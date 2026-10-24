@@ -1,5 +1,5 @@
 import {openDiceTray} from './dice.js';
-import {createActionPanel,calculateAction} from './action-panel.js';
+import {createActionPanel,createActionTagList,calculateAction} from './action-panel.js';
 import {createScratchEffects} from './scratch-effects.js';
 import {appendAutoSlot} from './auto-slots.js';
 import {dressScroll} from './scroll-view.js';
@@ -22,7 +22,7 @@ export function mountSheet(root,state,save,actions) {
   let specialAction=null,rollModifier=0,rolling=false,currentRoll=0,resizePending,selectionSequence=0;
   state.settings??={scrollAnimation:true,diceAnimation:true};
   q('.mt-v4').dataset.scrollAnimation=state.settings.scrollAnimation?'on':'off';
-  const actionPanel=createActionPanel(q('.mt-action-card'),visible=>{q('.mt-stage').classList.toggle('mt-with-selection',visible);fit();});
+  const actionPanel=createActionPanel(q('.mt-action-card'),visible=>{q('.mt-stage').classList.toggle('mt-with-selection',visible);return fit();});
   let activeTab='party',shared=fellowshipDefaults(),sharedReady=false,sharedBusy=false;
   const service=actions.fellowship;
   const report=error=>{const node=q('.mt-ui-message');node.hidden=false;node.textContent=error?.message||String(error);};
@@ -35,15 +35,15 @@ export function mountSheet(root,state,save,actions) {
     for(const kind of ['power','weakness'])state.actionExtras[kind].forEach(x=>tags.set(`extra:${kind}:${x.id}`,{text:x.text,kind,source:'Тег действия'}));
     return tags;
   }
+  const actionLists=Object.fromEntries(['power','weakness'].map(kind=>[kind,createActionTagList(q('.mt-action-list[data-kind="'+kind+'"]'),(key,item)=>{
+    const row=el('div','mt-action-tag');const text=btn(item.text,'',()=>select(key));text.title=item.source;row.append(text,btn('×','',()=>{selected.delete(key);if(key.startsWith('extra:'))state.actionExtras[kind]=state.actionExtras[kind].filter(x=>`extra:${kind}:${x.id}`!==key);refreshSelection();localSave();},'Убрать '+item.text));return row;
+  },kind==='power'?'Выбери подходящие теги силы':'Выбери мешающие теги слабости')]));
   function refreshSelection(){
     const tags=allTags();for(const key of selected)if(!tags.has(key)&&!(key.startsWith('theme:fellowship:')&&!sharedReady))selected.delete(key);
     qa('[data-key]').forEach(b=>b.setAttribute('aria-pressed',String(selected.has(b.dataset.key))));
+    const pendingRemovals=[];
     for(const kind of ['power','weakness']){
-      const list=q('.mt-action-list[data-kind="'+kind+'"]');list.replaceChildren();
-      for(const key of selected){const item=tags.get(key);if(!item||item.kind!==kind)continue;
-        const row=el('div','mt-action-tag');const text=btn(item.text,'',()=>select(key));text.title=item.source;row.append(text,btn('×','',()=>{selected.delete(key);if(key.startsWith('extra:'))state.actionExtras[kind]=state.actionExtras[kind].filter(x=>`extra:${kind}:${x.id}`!==key);refreshSelection();localSave();},'Убрать '+item.text));list.append(row);
-      }
-      if(!list.childElementCount)list.append(el('p','mt-empty-action',kind==='power'?'Выбери подходящие теги силы':'Выбери мешающие теги слабости'));
+      const pending=actionLists[kind].sync([...selected].map(key=>[key,tags.get(key)]).filter(([,item])=>item?.kind===kind));if(pending)pendingRemovals.push(pending);
     }
     q('.mt-clear').disabled=!selected.size;state.selected=[...selected];
     const chosen=[...selected].map(key=>tags.get(key)).filter(Boolean);
@@ -54,7 +54,7 @@ export function mountSheet(root,state,save,actions) {
     q('.mt-action-power-value').textContent=result.power===null?'—':result.power;
     q('.mt-action-roll-value').textContent=(result.roll>0?'+':'')+result.roll;
     qa('[data-special]').forEach(button=>{const active=specialAction===button.dataset.special;button.setAttribute('aria-pressed',String(active));button.querySelector('span').textContent=active?'◆':'◇';button.disabled=false;});
-    const hideForTab=activeTab==='notes'||activeTab==='settings';actionPanel.show(chosen.length>0&&!hideForTab,hideForTab);
+    const hideForTab=activeTab==='notes'||activeTab==='settings';actionPanel.show(chosen.length>0&&!hideForTab,hideForTab,pendingRemovals.length?Promise.allSettled(pendingRemovals):undefined);
   }
   function select(key){
     if(selected.has(key)){selected.delete(key);if(key.startsWith('extra:'))for(const kind of ['power','weakness'])state.actionExtras[kind]=state.actionExtras[kind].filter(x=>`extra:${kind}:${x.id}`!==key);}else selected.add(key);
@@ -96,9 +96,9 @@ export function mountSheet(root,state,save,actions) {
   function drawCharacter(){
     state.relationships=state.relationships.filter(r=>r.companion.trim()||r.tag.trim());
     const article=el('article','mt-theme mt-character-card');const head=el('div','mt-theme-head');head.append(el('span','','Персонаж'));article.append(head);
-    const body=el('div','mt-character-body');const name=field('Имя героя',state.name,value=>{state.name=value;localSave();},80,true);name.input.className='mt-editor-name';body.append(name.label,field('Имя игрока',state.playerName,value=>{state.playerName=value;localSave();}).label);
-    const about=el('details','mt-details');about.append(el('summary','','О персонаже'),field('Описание',state.concept,value=>{state.concept=value;localSave();},500,true).label);body.append(about);
-    const relationships=el('details','mt-details mt-relationships');relationships.open=true;relationships.append(el('summary','','Отношения в братстве'));
+    const body=el('div','mt-character-body');const name=field('Имя героя',state.name,value=>{state.name=value;localSave();},80,true);name.input.className='mt-editor-name';
+    const player=field('Имя игрока',state.playerName,value=>{state.playerName=value;localSave();});player.input.className='mt-editor-name mt-player-name';body.append(name.label,player.label);
+    const relationships=el('section','mt-relationships');relationships.setAttribute('aria-label','Отношения в братстве');relationships.append(el('h4','mt-relationships-heading','Отношения в братстве'));
     function relationshipRow(r){const row=el('div','mt-relationship');let timer;const tag=btn(r.tag||'Тег отношения','',()=>{clearTimeout(timer);if(r.tag)timer=setTimeout(()=>{if(tag.isConnected)select('relationship:'+r.id);},230);});tag.dataset.key='relationship:'+r.id;tag.title=r.companion;tag.addEventListener('dblclick',()=>{clearTimeout(timer);editRelationship();});
       function editRelationship(){inlineText(tag,r.tag,async value=>{r.tag=value;drawCharacter();refreshSelection();localSave();},80,'Тег отношения');}
       const companion=el('small','',r.companion||'Спутник');companion.title='Двойное нажатие — изменить';companion.addEventListener('dblclick',()=>inlineText(companion,r.companion,async value=>{r.companion=value;drawCharacter();localSave();},80,'Спутник'));
@@ -163,7 +163,8 @@ export function mountSheet(root,state,save,actions) {
     const openCards=[...q('#panel-'+activeTab).querySelectorAll('.mt-scroll-frame:has(.mt-scroll-toggle[aria-expanded=true])')];
     if(!q('.mt-action-card').hidden&&q('.mt-action-card .mt-scroll-toggle[aria-expanded=true]'))openCards.push(q('.mt-action-card'));
     const requestedHeight=Math.max(650,...openCards.map(card=>card.querySelector('.mt-scroll-main').scrollHeight+card.querySelector('.mt-scroll-extension-inner').scrollHeight+78+toolbar.getBoundingClientRect().height+44));
-    return resizePending=actions.fitWindow?.(activeTab==='themes'?4:activeTab==='settings'?1:activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden,requestedHeight);
+    const minimumWidth=Math.max(480,q('.mt-tabs').scrollWidth+16);
+    return resizePending=actions.fitWindow?.(activeTab==='themes'?4:activeTab==='settings'?1:activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden,requestedHeight,minimumWidth);
   }
   qa('[role=tabpanel]').forEach(panel=>{const version=el('div','mt-sheet-version','v'+packageInfo.version);panel.querySelector('.mt-card-row').after(version);});
   dressScroll(q('.mt-action-card'),{extensionLabel:'Особые действия',onExpand:fit});refreshSelection();createScratchEffects(root);reveal(q('#panel-party'));

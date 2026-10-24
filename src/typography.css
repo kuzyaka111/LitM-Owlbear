@@ -6,6 +6,8 @@
 #mist-table-design .mt-v4 .mt-quest-text{font:400 15px/1.4 var(--font-writing)}
 #mist-table-design .mt-v4 .mt-note-text,#mist-table-design .mt-v4 .mt-backpack-notes textarea{font:400 15px/24px var(--font-writing)}
 #mist-table-design .mt-v4 .mt-editor-name{font-family:var(--font-writing);line-height:1.5}
+#mist-table-design .mt-v4 .mt-character-card .mt-player-name{height:41px}
+#mist-table-design .mt-v4 .mt-relationships-heading{margin:0;padding:6px 0;font:500 var(--card-heading-size,13px)/1.35 var(--font-heading)}
 #mist-table-design .mt-v4 .mt-theme-head,#mist-table-design .mt-v4 .mt-theme-head *,#mist-table-design .mt-v4 .mt-tabs button,#mist-table-design .mt-v4 .mt-row-actions button,#mist-table-design .mt-v4 summary,#mist-table-design .mt-v4 .mt-note-title,#mist-table-design .mt-v4 .mt-scroll-bottom-label,#mist-table-design .mt-v4 .mt-tag-label,#mist-table-design .mt-v4 .mt-track-group>span,#mist-table-design .mt-v4 .mt-open-note,#mist-table-design .mt-v4 h3,#mist-table-design .mt-editor-dialog h2{font-family:var(--font-heading);font-weight:500;font-style:normal}
 #mist-table-design .mt-v4 .mt-theme-head{font-size:12px;letter-spacing:0;text-transform:none}
 #mist-table-design .mt-v4 .mt-theme-head .mt-book-picker,#mist-table-design .mt-v4 .mt-theme-head .mt-story-type{font-size:12px}

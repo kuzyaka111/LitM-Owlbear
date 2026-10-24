@@ -1,7 +1,7 @@
 /* Independent colored rolls, clipped paper and live HTML content. */
 #mist-table-design .mt-v4 .mt-theme.mt-scroll-frame{display:flex;flex-direction:column;position:relative;width:224px;min-width:224px;height:auto;min-height:0;max-height:min(559px,calc(100dvh - 78px));overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-width:none;overflow-anchor:none;border:0;border-radius:0;background:none;box-shadow:none;padding:0;transform-origin:50% 18px}
 #mist-table-design .mt-v4 .mt-scroll-frame::before,#mist-table-design .mt-v4 .mt-scroll-frame::after{display:none}
-#mist-table-design .mt-v4 .mt-scroll-top,#mist-table-design .mt-v4 .mt-scroll-bottom{position:relative;z-index:2;flex:none;width:100%;background:url('./scroll-roll.svg') center top/100% 36px no-repeat;color:#f4e7c9;border:0;border-radius:0;box-shadow:none}
+#mist-table-design .mt-v4 .mt-scroll-top,#mist-table-design .mt-v4 .mt-scroll-bottom{position:relative;z-index:2;flex:none;width:100%;background:var(--scroll-roll,url('./scroll-roll.svg')) center top/100% 36px no-repeat;color:#f4e7c9;border:0;border-radius:0;box-shadow:none}
 #mist-table-design .mt-v4 .mt-scroll-top{height:36px;min-height:36px;padding:5px 13px;letter-spacing:.3px;font:10px Georgia,serif;filter:none}
 #mist-table-design .mt-v4 .mt-scroll-top .mt-might{background:#ffffff0c;color:#f4e7c9;width:82px;min-width:82px;font:10px Georgia,serif}
 #mist-table-design .mt-v4 .mt-scroll-body{position:relative;flex:none;width:calc(100% - 8px);margin:-5px 4px 0;overflow:hidden;background-image:linear-gradient(90deg,#92744720,transparent 6%,#fff9df28 48%,transparent 94%,#80643c20),url('./parchment.svg'),radial-gradient(ellipse at 30% 20%,#fff5da,#eee1c0 75%,#dcccaa);background-color:#eee1c0;box-shadow:1px 4px 8px #30291c24;clip-path:polygon(.7% 0,99.4% 0,100% 8%,99.5% 20%,100% 37%,99.6% 54%,100% 73%,99.4% 90%,100% 100%,0 100%,.5% 86%,0 65%,.5% 48%,0 28%,.6% 13%)}
@@ -42,3 +42,20 @@ html:has(body[data-view="sheet"]),body[data-view="sheet"]{overflow:hidden;overfl
 #mist-table-design .mt-v4 .mt-card-row{min-height:0;scrollbar-width:none;overflow-anchor:none}
 #mist-table-design .mt-v4 *::-webkit-scrollbar{display:none}
 #mist-table-design .mt-v4 .mt-action-card .mt-scroll-main{max-height:none}
+
+/* Neutral cards are brown; a theme's Might colors all its painted surfaces. */
+#mist-table-design .mt-v4{--scroll-roll:url('./scroll-roll-brown.svg');--scroll-dark:#3c291f;--scroll-light:#6c503b}
+#mist-table-design .mt-v4 [data-might="origin"]{--scroll-roll:url('./scroll-roll.svg');--scroll-dark:#263c32;--scroll-light:#3d5141}
+#mist-table-design .mt-v4 [data-might="adventure"]{--scroll-roll:url('./scroll-roll-adventure.svg');--scroll-dark:#391c2a;--scroll-light:#70404e}
+#mist-table-design .mt-v4 [data-might="greatness"]{--scroll-roll:url('./scroll-roll-greatness.svg');--scroll-dark:#19283f;--scroll-light:#3e526d}
+#mist-table-design .mt-v4 .mt-quest,#mist-table-design .mt-v4 .mt-hero-growth,#mist-table-design .mt-v4 .mt-backpack-notes,#mist-table-design .mt-v4 .mt-scroll-extension .mt-improvements,#mist-table-design .mt-v4 .mt-action-card .mt-scroll-body,#mist-table-design .mt-v4 .mt-scroll-toggle{background:linear-gradient(105deg,var(--scroll-dark),var(--scroll-light))}
+#mist-table-design .mt-v4 .mt-tabs button[aria-selected=true],#mist-table-design .mt-v4 .mt-tabs .mt-close-sheet{background:var(--scroll-dark)}
+#mist-table-design .mt-v4 .mt-weakness-slots{padding-top:8px}
+#mist-table-design .mt-v4 .mt-quest{height:64px;min-height:64px}
+#mist-table-design .mt-v4 .mt-auto-slot{position:relative}
+#mist-table-design .mt-v4 .mt-auto-slot input{min-width:0;width:100%;border:0;outline:0;box-shadow:none;background:transparent;color:inherit;font:inherit;padding:4px 3px}
+#mist-table-design .mt-v4 .mt-auto-slot input:focus{background:#ffffff4d}
+#mist-table-design .mt-v4 .mt-auto-slot input::placeholder{color:#8a816e;font-style:italic;opacity:.7}
+#mist-table-design .mt-v4 .mt-auto-slot.mt-item-row input{flex:1;font:12px/1.4 Georgia,serif}
+#mist-table-design .mt-v4 .mt-auto-slot.mt-relationship input[data-field="companion"]{font-size:10px}
+#mist-table-design .mt-v4 .mt-auto-slot button{background:none;border:0;color:#8c7859;padding:0 4px}

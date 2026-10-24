@@ -47,5 +47,5 @@ test('long rows preserve spacing: every card shares one translation and no entry
  });
  createScrollMotion(root).play(root.querySelector('section'));
  assert.equal(moves.length,7);for(const move of moves)assert.deepEqual(move,moves[0]);
- assert.equal(moves[0].options.delay,undefined);assert(!JSON.stringify(moves).includes('rotate'));
+ assert.equal(moves[0].options.delay,undefined);assert(moves[0].frames[0].transform.includes('translate3d(-'));assert(moves[0].frames.slice(1).every(f=>f.transform.startsWith('translate3d(0,0,0)')));assert(moves[0].frames.some(f=>f.transform.includes('rotate(.35deg)')));
 });

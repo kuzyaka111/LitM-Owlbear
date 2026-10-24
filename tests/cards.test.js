@@ -152,3 +152,29 @@ test('tab remains hidden until host resize completes; stale completion cannot re
  assert.equal(themes.hidden,true);assert.equal(notes.style.visibility,'hidden');
  pending.at(-1)();await settle();assert.equal(notes.style.visibility,'');
 });
+
+test('inventory and relationships append one empty slot without replacing the active input',()=>{
+ const {root,store,event}=ui();
+ assert.equal(root.querySelector('.mt-add-card-item'),null);assert.equal(root.querySelector('.mt-add-relationship'),null);
+ const bag=root.querySelector('.mt-primary-backpack'),input=bag.querySelector('.mt-empty-slot input');input.focus();
+ input.value='Верёвка';input.dispatchEvent(event('input'));
+ assert(input.isConnected);assert.equal(root.ownerDocument.activeElement,input);assert.equal(bag.querySelectorAll('.mt-empty-slot').length,1);
+ input.value='Длинная верёвка';input.dispatchEvent(event('input'));
+ assert.equal(store.load().cards[0].items.filter(x=>x.text==='Длинная верёвка').length,1);
+ const relationships=root.querySelector('.mt-relationships'),name=relationships.querySelector('.mt-empty-slot input[data-field="companion"]');
+ name.value='Лира';name.dispatchEvent(event('input'));assert.equal(relationships.querySelectorAll('.mt-empty-slot').length,1);
+ const tag=name.parentElement.querySelector('[data-field="tag"]');tag.value='Верный друг';tag.dispatchEvent(event('input'));
+ assert.equal(store.load().relationships.at(-1).tag,'Верный друг');assert.equal(relationships.querySelectorAll('.mt-empty-slot').length,1);
+ input.value='';input.dispatchEvent(event('input'));input.dispatchEvent(new root.ownerDocument.defaultView.FocusEvent('focusout',{bubbles:true}));
+ assert.equal(bag.querySelectorAll('.mt-empty-slot').length,1);assert(!store.load().cards[0].items.some(x=>x.text==='Длинная верёвка'));
+});
+
+test('theme colors follow Might on rerender',async()=>{
+ const {root,event}=ui();
+ for(const might of ['origin','adventure','greatness']){
+  const select=root.querySelector('.mt-hero-theme .mt-might');select.value=might;select.dispatchEvent(event('change'));await settle();
+  assert.equal(root.querySelector('.mt-hero-theme').dataset.might,might);
+ }
+ assert.equal(root.querySelector('.mt-power-slots .mt-tag-label').textContent,'Теги Силы');
+ assert.equal(root.querySelector('.mt-weakness-slots .mt-tag-label').textContent,'Теги Слабости');
+});

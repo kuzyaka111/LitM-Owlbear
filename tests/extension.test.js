@@ -82,8 +82,8 @@ test('sheet selection, tracks, notes and name changes persist', async () => {
 
 test('user text is rendered as text, not HTML', () => {
   const { root: r, event, store } = ui('sheet');
-  r.querySelector('.mt-add-card-item input').value = '<img src=x onerror=alert(1)>';
-  r.querySelector('.mt-add-card-item').dispatchEvent(event('submit'));
+  r.querySelector('.mt-primary-backpack .mt-empty-slot input').value = '<img src=x onerror=alert(1)>';
+  r.querySelector('.mt-primary-backpack .mt-empty-slot input').dispatchEvent(event('input'));
   assert.equal(r.querySelectorAll('img').length, 0); assert(store.load().cards[0].items.some(x => x.text === '<img src=x onerror=alert(1)>'));
 });
 

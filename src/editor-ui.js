@@ -37,7 +37,7 @@ export function editorTools(root) {
 }
 export function renderTheme(theme, ctx, tools) {
   const {el,btn,dialog,inlineText,scratchButton}=tools, book=getBook(theme.bookId),story=theme.bookId==='story';
-  const card=el('article','mt-theme mt-theme-card');card.dataset.themeId=theme.id;
+  const card=el('article','mt-theme mt-theme-card');card.dataset.themeId=theme.id;card.dataset.might=theme.might;
   if(ctx.core)card.classList.add('mt-hero-theme');
   const change = async patch => { await ctx.change(patch); };
   const safely = fn => ()=>Promise.resolve().then(fn).catch(ctx.report);
@@ -72,8 +72,8 @@ export function renderTheme(theme, ctx, tools) {
   },'Выбрать темник');bookButton.disabled=!ctx.replace;
   const might=el('select','mt-might');might.setAttribute('aria-label','Могущество темы');for(const [v,label]of Object.entries(mightNames)){const o=el('option','',label);o.value=v;o.selected=v===theme.might;might.append(o);}might.addEventListener('change',safely(()=>change({field:'might',value:might.value})));
   head.append(story?el('span','mt-story-type','Сюжетная тема'):bookButton,might);card.append(head,row('power',0,true));
-  const powers=el('div','mt-power-slots');powers.append(el('span','mt-tag-label','СИЛА'));for(let i=1;i<7;i++)powers.append(row('power',i));
-  const weaknesses=el('div','mt-weakness-slots');weaknesses.append(el('span','mt-tag-label','СЛАБОСТЬ'));for(let i=0;i<3;i++)weaknesses.append(row('weakness',i));card.append(powers,weaknesses);
+  const powers=el('div','mt-power-slots');powers.append(el('span','mt-tag-label','Теги Силы'));for(let i=1;i<7;i++)powers.append(row('power',i));
+  const weaknesses=el('div','mt-weakness-slots');weaknesses.append(el('span','mt-tag-label','Теги Слабости'));for(let i=0;i<3;i++)weaknesses.append(row('weakness',i));card.append(powers,weaknesses);
   const quest=el('div','mt-quest');const questText=btn(theme.quest||'Задать стремление','mt-quest-text',()=>{});questText.title=theme.quest+'\nДвойной клик — изменить';const editQuest=()=>inlineText(questText,theme.quest,value=>change({field:'quest',value}),ctx.shared?400:1000,'Стремление');questText.addEventListener('dblclick',editQuest);quest.append(el('span','mt-tag-label','СТРЕМЛЕНИЕ'),questText);card.append(quest);
   const tracks=el('div','mt-track');for(const [field,label]of [['improve','Развитие'],['abandon','Угасание'],['milestone','Вехи']]){const g=el('div','mt-track-group'),p=el('div','mt-pips');for(let i=1;i<=3;i++){const b=btn(i<=theme[field]?'◆':'◇','mt-pip',safely(()=>change({field,value:i===theme[field]?i-1:i})),label+' '+i);b.setAttribute('aria-pressed',String(i<=theme[field]));p.append(b);}g.append(p,el('span','',label));tracks.append(g);}card.append(tracks);
   const details=el('div','mt-improvements');details.setAttribute('aria-label','Особые улучшения');

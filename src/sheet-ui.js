@@ -1,3 +1,4 @@
+import {appendAutoSlot} from './auto-slots.js';
 import {dressScroll} from './scroll-view.js';
 import {createScrollMotion} from './scroll-motion.js';
 import {mountNotes} from './notes-ui.js';
@@ -20,7 +21,7 @@ export function mountSheet(root,state,save,actions) {
   function allTags(){
     const tags=new Map();const addTheme=t=>{for(const kind of ['power','weakness'])t[kind].forEach((slot,i)=>{if(slot.text&&!slot.scratched)tags.set(tagKey(t,kind,i),{text:slot.text,kind,source:getBook(t.bookId).name});});};
     state.heroThemes.forEach(addTheme);if(sharedReady)addTheme(fellowshipTheme(shared));
-    state.cards.forEach(c=>{if(c.type==='theme')addTheme(c.theme);else c.items.forEach(item=>{if(!item.scratched)tags.set(`card:${c.id}:${item.id}`,{text:item.text,kind:'power',source:c.title});});});
+    state.cards.forEach(c=>{if(c.type==='theme')addTheme(c.theme);else c.items.forEach(item=>{if(item.text.trim()&&!item.scratched)tags.set(`card:${c.id}:${item.id}`,{text:item.text,kind:'power',source:c.title});});});
     state.relationships.forEach(r=>{if(r.tag)tags.set('relationship:'+r.id,{text:r.tag,kind:'power',source:r.companion});});
     for(const kind of ['power','weakness'])state.actionExtras[kind].forEach(x=>tags.set(`extra:${kind}:${x.id}`,{text:x.text,kind,source:'Тег действия'}));
     return tags;
@@ -64,16 +65,18 @@ export function mountSheet(root,state,save,actions) {
 
   function field(label,value,onInput,max=80,multi=false){const l=el('label','mt-field');l.append(el('span','',label));const input=el(multi?'textarea':'input');input.value=value;input.maxLength=max;if(multi)input.rows=2;input.addEventListener('input',()=>onInput(input.value));l.append(input);return {label:l,input};}
   function drawCharacter(){
+    state.relationships=state.relationships.filter(r=>r.companion.trim()||r.tag.trim());
     const article=el('article','mt-theme mt-character-card');const head=el('div','mt-theme-head');head.append(el('span','','Персонаж'));article.append(head);
     const body=el('div','mt-character-body');const name=field('Имя героя',state.name,value=>{state.name=value;localSave();},80,true);name.input.className='mt-editor-name';body.append(name.label,field('Имя игрока',state.playerName,value=>{state.playerName=value;localSave();}).label);
     const about=el('details','mt-details');about.append(el('summary','','О персонаже'),field('Описание',state.concept,value=>{state.concept=value;localSave();},500,true).label);body.append(about);
     const relationships=el('details','mt-details mt-relationships');relationships.open=true;relationships.append(el('summary','','Отношения в братстве'));
-    state.relationships.forEach((r,index)=>{const row=el('div','mt-relationship');let timer;const tag=btn(r.tag||'Тег отношения','',()=>{clearTimeout(timer);if(r.tag)timer=setTimeout(()=>{if(tag.isConnected)select('relationship:'+r.id);},230);});tag.dataset.key='relationship:'+r.id;tag.title=r.companion;tag.addEventListener('dblclick',()=>{clearTimeout(timer);editRelationship();});
+    function relationshipRow(r){const row=el('div','mt-relationship');let timer;const tag=btn(r.tag||'Тег отношения','',()=>{clearTimeout(timer);if(r.tag)timer=setTimeout(()=>{if(tag.isConnected)select('relationship:'+r.id);},230);});tag.dataset.key='relationship:'+r.id;tag.title=r.companion;tag.addEventListener('dblclick',()=>{clearTimeout(timer);editRelationship();});
       function editRelationship(){inlineText(tag,r.tag,async value=>{r.tag=value;drawCharacter();refreshSelection();localSave();},80,'Тег отношения');}
       const companion=el('small','',r.companion||'Спутник');companion.title='Двойное нажатие — изменить';companion.addEventListener('dblclick',()=>inlineText(companion,r.companion,async value=>{r.companion=value;drawCharacter();localSave();},80,'Спутник'));
-      row.append(companion,tag,btn('×','',()=>{state.relationships.splice(index,1);drawCharacter();refreshSelection();localSave();},'Удалить отношение'));relationships.append(row);
-    });
-    relationships.append(btn('+ Отношение','mt-add-relationship',()=>{if(state.relationships.length<20){state.relationships.push({id:makeId(),companion:'',tag:''});drawCharacter();localSave();}}));body.append(relationships);article.append(body);
+      row.append(companion,tag,btn('×','',()=>{state.relationships=state.relationships.filter(x=>x!==r);drawCharacter();refreshSelection();localSave();},'Удалить отношение'));return row;
+    }
+    state.relationships.forEach(r=>relationships.append(relationshipRow(r)));
+    appendAutoSlot(relationships,{fields:[{key:'companion',label:'Спутник',max:80},{key:'tag',label:'Тег отношения',max:80}],items:state.relationships,limit:20,create:()=>({id:makeId(),companion:'',tag:''}),save:localSave,refresh:refreshSelection,remove:r=>{state.relationships=state.relationships.filter(x=>x!==r);drawCharacter();refreshSelection();localSave();},commit:(r,row)=>{row.replaceWith(relationshipRow(r));refreshSelection();},className:'mt-relationship'});body.append(relationships);article.append(body);
     const growth=el('div','mt-hero-growth');growth.append(el('span','mt-tag-label','ПОТЕНЦИАЛ'));const pips=el('div','mt-promise');for(let i=1;i<=5;i++){const b=btn(i<=state.promise?'◆':'◇','mt-pip',()=>{state.promise=i===state.promise?i-1:i;drawCharacter();localSave();},'Потенциал '+i);b.setAttribute('aria-pressed',String(i<=state.promise));pips.append(b);}growth.append(pips);
     const quint=el('details','mt-details mt-quintessences');quint.open=expanded.get('quint')||false;quint.addEventListener('toggle',()=>expanded.set('quint',quint.open));quint.append(el('summary','','Квинтэссенции · '+state.quintessenceIds.length));
     for(const item of quintessences){const active=state.quintessenceIds.includes(item.id),row=el('div','mt-improvement-row'+(!active?' mt-inactive-improvement':''));
@@ -90,12 +93,13 @@ export function mountSheet(root,state,save,actions) {
     q('.mt-inventory-host').replaceChildren();
     for(const card of state.cards){const host=el('div','mt-card-slot');host.dataset.cardId=card.id;q('.mt-inventory-host').append(host);
       if(card.type==='theme'){drawLocal(card.theme,host,false,card);continue;}
+      card.items=card.items.filter(item=>item.text.trim());
       const primary=card.id==='original-backpack',article=el('article','mt-theme mt-backpack-card'+(primary?' mt-primary-backpack':' mt-storage-card')),head=el('div','mt-theme-head');
       if(primary)head.append(el('span','','Рюкзак'));
       else {const title=btn(card.title||'Хранилище','mt-storage-title',()=>{});title.title='Двойное нажатие — изменить название';title.addEventListener('dblclick',()=>inlineText(title,card.title,async value=>{card.title=value;drawInventory();localSave();},80,'Название хранилища'));head.append(title,btn('×','mt-remove-card',()=>removeCard(card),'Удалить хранилище '+card.title));}
       article.append(head);
-      const items=el('div','mt-backpack-items');for(const item of card.items){const row=el('div','mt-item-row'+(item.scratched?' mt-scratched':''));const key=`card:${card.id}:${item.id}`;let timer;const text=btn(item.text,'mt-tag-text',()=>{});text.dataset.key=key;text.title=item.text;const edit=()=>inlineText(text,item.text,async value=>{item.text=value;drawInventory();refreshSelection();localSave();},160,'Тег рюкзака');text.addEventListener('click',()=>{clearTimeout(timer);timer=setTimeout(()=>{if(text.isConnected&&!item.scratched)select(key);},230);});text.addEventListener('dblclick',()=>{clearTimeout(timer);edit();});row.append(text,scratchButton(item.scratched,()=>{item.scratched=!item.scratched;drawInventory();refreshSelection();localSave();},(item.scratched?'Восстановить ':'Зачеркнуть ')+item.text),btn('×','mt-remove-item',()=>{card.items=card.items.filter(x=>x!==item);drawInventory();refreshSelection();localSave();},'Удалить тег '+item.text));items.append(row);}article.append(items);
-      const form=el('form','mt-add-card-item'),input=el('input');input.maxLength=160;input.required=true;input.placeholder='Новый тег';input.setAttribute('aria-label','Новый тег рюкзака');const add=el('button','','+');add.type='submit';add.setAttribute('aria-label','Добавить тег рюкзака');form.append(input,add);form.addEventListener('submit',e=>{e.preventDefault();if(input.value.trim()&&card.items.length<50){card.items.push({id:makeId(),text:input.value.trim(),scratched:false});drawInventory();refreshSelection();localSave();}});article.append(form);
+      const items=el('div','mt-backpack-items');function itemRow(item){const row=el('div','mt-item-row'+(item.scratched?' mt-scratched':''));const key=`card:${card.id}:${item.id}`;let timer;const text=btn(item.text,'mt-tag-text',()=>{});text.dataset.key=key;text.title=item.text;const edit=()=>inlineText(text,item.text,async value=>{item.text=value;drawInventory();refreshSelection();localSave();},160,'Тег рюкзака');text.addEventListener('click',()=>{clearTimeout(timer);timer=setTimeout(()=>{if(text.isConnected&&!item.scratched)select(key);},230);});text.addEventListener('dblclick',()=>{clearTimeout(timer);edit();});row.append(text,scratchButton(item.scratched,()=>{item.scratched=!item.scratched;drawInventory();refreshSelection();localSave();},(item.scratched?'Восстановить ':'Зачеркнуть ')+item.text),btn('×','mt-remove-item',()=>{card.items=card.items.filter(x=>x!==item);drawInventory();refreshSelection();localSave();},'Удалить тег '+item.text));return row;}card.items.forEach(item=>items.append(itemRow(item)));article.append(items);
+      appendAutoSlot(items,{fields:[{key:'text',label:'Новый тег рюкзака',max:160}],items:card.items,limit:50,create:()=>({id:makeId(),text:'',scratched:false}),save:localSave,refresh:refreshSelection,remove:item=>{card.items=card.items.filter(x=>x!==item);drawInventory();refreshSelection();localSave();},commit:(item,row)=>{row.replaceWith(itemRow(item));refreshSelection();},className:'mt-item-row'});
       const notes=el('details','mt-details mt-backpack-notes');notes.append(el('summary','','Записи'),field('Записи рюкзака',card.notes,v=>{card.notes=v;localSave();},2000,true).label);article.append(notes);host.append(dressScroll(article));
     }
     q('.mt-add-backpack').disabled=q('.mt-add-theme').disabled=state.cards.length>=30;

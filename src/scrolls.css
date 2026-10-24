@@ -67,3 +67,18 @@ html:has(body[data-view="sheet"]),body[data-view="sheet"]{overflow:hidden;overfl
 #mist-table-design .mt-v4 .mt-scroll-top .mt-might{color:#000;background:#f4ead1}
 #mist-table-design .mt-v4 .mt-might option{color:#000;background:#f4ead1}
 #mist-table-design .mt-v4 .mt-open-note[aria-pressed=true]{background:var(--scroll-dark);color:#fff4d8}
+
+/* The action calculator uses the same independent rolls as theme cards. */
+#mist-table-design .mt-v4 .mt-action-card .mt-scroll-top{height:36px;min-height:36px;background-size:100% 36px;display:flex;align-items:center;justify-content:space-between;gap:4px}
+#mist-table-design .mt-v4 .mt-action-card .mt-clear{padding:0;margin:0;align-self:center;font-size:11px;color:#f4e7c9}
+#mist-table-design .mt-v4 .mt-action-card .mt-scroll-bottom{height:52px;min-height:52px;background-size:100% 36px}
+#mist-table-design .mt-v4 .mt-action-total{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:2px 0 10px;font:14px var(--font-heading,Georgia)}
+#mist-table-design .mt-v4 .mt-action-total small{flex-basis:100%;font-size:12px;opacity:.8}
+#mist-table-design .mt-v4 .mt-action-total .mt-roll-modifier{border:0;border-radius:50%;width:30px;height:30px;min-width:30px;padding:0;text-align:center;background:#f4e7c918;color:inherit;appearance:textfield;font:14px var(--font-heading,Georgia)}
+#mist-table-design .mt-v4 .mt-roll-modifier::-webkit-inner-spin-button{appearance:none}
+#mist-table-design .mt-v4 .mt-action-card .mt-scroll-main>section{border-top:1px solid #d8c39c55;padding-top:10px}
+#mist-table-design .mt-v4 .mt-action-tag+.mt-action-tag{border-top:1px solid #d8c39c25}
+#mist-table-design .mt-v4 .mt-special-actions{border-top:1px solid #d8c39c55}
+#mist-table-design .mt-v4 .mt-special-actions button{display:flex;align-items:center;gap:7px;width:100%;padding:6px 0;border:0;background:none;color:#b6b09a;text-align:left;font:14px/1.5 'Bad Script',cursive}
+#mist-table-design .mt-v4 .mt-special-actions button[aria-pressed=true]{color:#f4e7c9}
+#mist-table-design .mt-v4 .mt-special-actions button:disabled{opacity:.4;cursor:default}

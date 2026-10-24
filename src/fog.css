@@ -121,8 +121,8 @@ body[data-view="sheet"]::before{display:none}
 #mist-table-design .mt-v4 .mt-scratch[aria-pressed=true]{color:#a04f3b}
 
 /* An empty tag panel must never reserve space, even before selection refresh. */
-#mist-table-design .mt-v4 .mt-action-card:not(:has(.mt-action-tag)){display:none!important}
-#mist-table-design .mt-v4 .mt-stage:not(:has(.mt-action-tag)){grid-template-columns:minmax(0,1fr);min-width:0}
+#mist-table-design .mt-v4 .mt-action-card[hidden]{display:none!important}
+#mist-table-design .mt-v4 .mt-stage:not(.mt-with-selection){grid-template-columns:minmax(0,1fr);min-width:0}
 
 #mist-table-design .mt-v4 .mt-notes-card{display:block}
 #mist-table-design .mt-v4 .mt-note-heading{height:34px;min-height:34px;cursor:pointer;list-style:none;padding:3px 6px;gap:3px}
@@ -167,4 +167,4 @@ body[data-view="sheet"]::before{display:none}
 
 /* Selection uses the card pigment, with a soft spatial fade instead of a focus wash. */
 #mist-table-design .mt-v4 .mt-tag-text,#mist-table-design .mt-v4 .mt-relationship button[data-key]{transition:none}
-#mist-table-design .mt-v4 .mt-tag-text[aria-pressed=true],#mist-table-design .mt-v4 .mt-relationship button[data-key][aria-pressed=true]{background-color:transparent;background-image:radial-gradient(ellipse at center,color-mix(in srgb,var(--scroll-light,#6c503b) 48%,transparent) 0%,color-mix(in srgb,var(--scroll-light,#6c503b) 32%,transparent) 42%,transparent 76%);color:#302c25;border-radius:0}
+#mist-table-design .mt-v4 .mt-tag-text[aria-pressed=true],#mist-table-design .mt-v4 .mt-relationship button[data-key][aria-pressed=true]{background-color:transparent;background-image:radial-gradient(ellipse at left center,color-mix(in srgb,var(--scroll-light,#6c503b) 48%,transparent) 0%,color-mix(in srgb,var(--scroll-light,#6c503b) 32%,transparent) 42%,transparent 76%);color:#302c25;border-radius:0}

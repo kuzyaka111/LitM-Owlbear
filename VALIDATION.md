@@ -88,3 +88,8 @@ SVG состоит из одного полупрозрачного углова
 ## Проверка 0.7.4
 
 45 существующих тестов прошли. Chromium проверяет три различных градиента Могущества, отсутствие белого фона и временного перехода при одиночном выборе, одинаковый стиль до/после blur, белый фон только при двойном нажатии и появлении редактора, снятие выбора и градиент Рюкзака. Снимок трёх цветов просмотрен; ошибок JavaScript нет.
+
+## 0.7.5 — action calculator
+- 47 Node tests pass, including Power trade thresholds, sacrifice, modifier separation and interrupted closing animations.
+- Chromium: left-origin selection gradient, calculator opening, special-action expansion, trade/sacrifice exclusivity, modifier, clear/collapse, reopening and reduced motion passed; no page errors. Screenshot inspected at 1280 × 820.
+- Rules checked in The Hero pp. 158–159 (English source); Russian trade labels are working translations. Minimum effect Power on success follows p. 149. Live Owlbear room remains a user-side check.

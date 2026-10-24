@@ -18,3 +18,5 @@
 #mist-table-design .mt-v4 .mt-note-text{background:repeating-linear-gradient(transparent,transparent 23px,#b39a7040 24px)}
 
 #mist-table-design .mt-v4 .mt-title-row{padding-top:6px}
+#mist-table-design .mt-v4 .mt-action-card h3{font:500 13px var(--font-heading)}
+#mist-table-design .mt-v4 .mt-action-tag button:first-child{font:400 15px/1.45 var(--font-writing)}

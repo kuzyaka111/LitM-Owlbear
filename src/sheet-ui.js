@@ -1,3 +1,4 @@
+import {createActionPanel,calculateAction} from './action-panel.js';
 import {createScratchEffects} from './scratch-effects.js';
 import {appendAutoSlot} from './auto-slots.js';
 import {dressScroll} from './scroll-view.js';
@@ -17,6 +18,8 @@ export function mountSheet(root,state,save,actions) {
   const win=doc.defaultView,toolbar=q('.mt-toolbar'),sizeToolbar=()=>q('.mt-v4').style.setProperty('--toolbar-height',toolbar.getBoundingClientRect().height+'px');
   if(win.ResizeObserver){const observer=new win.ResizeObserver(sizeToolbar);observer.observe(toolbar);win.addEventListener('pagehide',()=>observer.disconnect(),{once:true});}sizeToolbar();
   const selected=new Set(state.selected),expanded=new Map();
+  let specialAction=null,rollModifier=0;
+  const actionPanel=createActionPanel(q('.mt-action-card'),visible=>{q('.mt-stage').classList.toggle('mt-with-selection',visible);fit();});
   let activeTab='party',shared=fellowshipDefaults(),sharedReady=false,sharedBusy=false;
   const service=actions.fellowship;
   const report=error=>{const node=q('.mt-ui-message');node.hidden=false;node.textContent=error?.message||String(error);};
@@ -40,7 +43,15 @@ export function mountSheet(root,state,save,actions) {
       if(!list.childElementCount)list.append(el('p','mt-empty-action',kind==='power'?'Выбери подходящие теги силы':'Выбери мешающие теги слабости'));
     }
     q('.mt-clear').disabled=!selected.size;state.selected=[...selected];
-    const panel=q('.mt-action-card'),visible=panel.querySelector('.mt-action-tag')!==null,changed=panel.hidden===visible;panel.hidden=!visible;q('.mt-stage').classList.toggle('mt-with-selection',visible);if(changed)fit();
+    const chosen=[...selected].map(key=>tags.get(key)).filter(Boolean);
+    const base=chosen.reduce((n,t)=>n+(t.kind==='power'?1:-1),0);
+    if(!chosen.length){specialAction=null;rollModifier=0;q('.mt-roll-modifier').value='0';}
+    if((specialAction==='caution'&&base>2)||(specialAction==='hedge'&&base<2))specialAction=null;
+    const result=calculateAction(base,specialAction,rollModifier);
+    q('.mt-action-power-value').textContent=result.power===null?'—':result.power;
+    q('.mt-action-roll-value').textContent=(result.roll>0?'+':'')+result.roll;
+    qa('[data-special]').forEach(button=>{const active=specialAction===button.dataset.special;button.setAttribute('aria-pressed',String(active));button.querySelector('span').textContent=active?'◆':'◇';button.disabled=(button.dataset.special==='caution'&&base>2)||(button.dataset.special==='hedge'&&base<2);});
+    actionPanel.show(chosen.length>0);
   }
   function select(key){if(selected.has(key)){selected.delete(key);if(key.startsWith('extra:'))for(const kind of ['power','weakness'])state.actionExtras[kind]=state.actionExtras[kind].filter(x=>`extra:${kind}:${x.id}`!==key);}else selected.add(key);refreshSelection();localSave();}
   function preserveReplace(host,node){if(host.querySelector('.mt-inline-editor')){host._pendingCard=node;return;}const previous=host.querySelector('.mt-theme'),scroll=previous?.scrollTop||0;host.replaceChildren(node);node.scrollTop=scroll;}
@@ -112,6 +123,8 @@ export function mountSheet(root,state,save,actions) {
   drawInventory();
   const layoutNotes=mountNotes(root,state,localSave,fit,tools);
   qa('.mt-add-action-tag').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input'),kind=form.dataset.kind;if(input.value.trim()&&state.actionExtras[kind].length<30){const item={id:makeId(),text:input.value.trim()};state.actionExtras[kind].push(item);selected.add(`extra:${kind}:${item.id}`);input.value='';refreshSelection();localSave();}}));
+  qa('[data-special]').forEach(button=>button.addEventListener('click',()=>{specialAction=specialAction===button.dataset.special?null:button.dataset.special;refreshSelection();}));
+  q('.mt-roll-modifier').addEventListener('input',e=>{rollModifier=Math.max(-99,Math.min(99,Math.trunc(Number(e.target.value)||0)));refreshSelection();});
   q('.mt-clear').addEventListener('click',()=>{selected.clear();state.actionExtras={power:[],weakness:[]};refreshSelection();localSave();});
   q('.mt-close-sheet').addEventListener('click',()=>Promise.resolve().then(actions.close).catch(report));
   let switchSequence=0;
@@ -120,5 +133,5 @@ export function mountSheet(root,state,save,actions) {
   tabs.forEach((b,i)=>{b.addEventListener('click',()=>switchTab(b));b.addEventListener('keydown',e=>{const n=e.key==='ArrowRight'?(i+1)%3:e.key==='ArrowLeft'?(i+2)%3:e.key==='Home'?0:e.key==='End'?2:null;if(n!==null){e.preventDefault();switchTab(tabs[n]);tabs[n].focus();}});});
   function fit(){return actions.fitWindow?.(activeTab==='themes'?4:activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden);}
   qa('[role=tabpanel]').forEach(panel=>{const version=el('div','mt-sheet-version','v'+packageInfo.version);panel.querySelector('.mt-card-row').after(version);});
-  dressScroll(q('.mt-action-card'));refreshSelection();createScratchEffects(root);reveal(q('#panel-party'));
+  dressScroll(q('.mt-action-card'),{extensionLabel:'Особые действия'});refreshSelection();createScratchEffects(root);reveal(q('#panel-party'));
 }

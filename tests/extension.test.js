@@ -71,10 +71,10 @@ function ui(view) {
   return { root, store, event: type => new dom.window.Event(type, { bubbles: true, cancelable: true }) };
 }
 
-test('sheet selection, tracks, notes and name changes persist', () => {
+test('sheet selection, tracks, notes and name changes persist', async () => {
   const { root: r, store, event } = ui('sheet'); assert.equal(r.querySelectorAll('.mt-hero-theme').length, 4);
-  r.querySelector('[data-tag]').click(); assert.equal(store.load().selected.length, 1);
-  r.querySelector('.mt-hero-theme .mt-pip').click(); assert.equal(store.load().marks.length, 1);
+  r.querySelector('.mt-hero-theme [data-key]').click(); assert.equal(store.load().selected.length, 1);
+  r.querySelector('.mt-hero-theme .mt-pip').click(); await new Promise(r=>setTimeout(r,0)); assert.equal(store.load().heroThemes[0].improve, 1);
   const notes = r.querySelector('#mt-notes-text'); notes.value = 'Запись'; notes.dispatchEvent(event('input')); assert.equal(store.load().notes, 'Запись');
   const name = r.querySelector('.mt-editor-name'); name.value = 'Лира'; name.dispatchEvent(event('input')); assert.equal(store.load().name, 'Лира');
   r.querySelector('.mt-clear').click(); assert.equal(store.load().selected.length, 0);

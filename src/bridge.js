@@ -70,10 +70,18 @@ export function watchGMTool(obr, base) {
 
 export const SHEET_MODAL_ID = 'io.github.kuzyaka111.legend-mist/sheet-window';
 
+export const SHEET_POPOVER_ID = SHEET_MODAL_ID;
+export async function sheetBounds(obr, count = 4) {
+  const [width, height] = await Promise.all([obr.viewport.getWidth(), obr.viewport.getHeight()]);
+  return { width: Math.max(240, Math.min((count + 1) * 224 + count * 12 + 32, width - 32)), height: Math.max(160, Math.min(650, height - 116)) };
+}
 export async function openSheet(obr, base) {
-  const url = new URL('./index.html', base);
-  url.searchParams.set('surface', 'sheet');
-  await obr.modal.open({ id: SHEET_MODAL_ID, url: url.href, fullScreen: true, hidePaper: true, hideBackdrop: true });
+  const url = new URL('./index.html', base); url.searchParams.set('surface', 'sheet');
+  const size = await sheetBounds(obr, 3);
+  await obr.popover.open({ id: SHEET_POPOVER_ID, url: url.href, ...size,
+    anchorReference: 'POSITION', anchorPosition: { left: 16, top: 96 },
+    anchorOrigin: { horizontal: 'LEFT', vertical: 'TOP' }, transformOrigin: { horizontal: 'LEFT', vertical: 'TOP' },
+    marginThreshold: 0, hidePaper: true, disableClickAway: true });
 }
 
 /** The normal extension action remains the entry point; the visible sheet has no host paper. */

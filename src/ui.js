@@ -19,7 +19,7 @@ export function mountUI(root, view, template, store, actions) {
   function save() {
     const saved = store.save(state);
     q('.mt-save-state').textContent = saved ? 'Сохранено' : 'Не сохранено';
-    if (!saved && info) info.closest('details').open = true;
+    if (!saved) { const current = root.querySelector('.mt-storage-details'); if (current) current.open = true; }
     note.classList.toggle('mt-error', !saved);
     note.textContent = saved ? normalNote : 'Браузер не разрешил сохранение. После закрытия окна изменения могут потеряться.';
   }

@@ -4,7 +4,7 @@ import './style.css';
 import './fog.css';
 import sheetTemplate from './sheet.html?raw';
 import gmTemplate from './gm.html?raw';
-import { MODAL_ID, SHEET_MODAL_ID, openSheet, watchSheetAction } from './bridge.js';
+import { MODAL_ID, SHEET_POPOVER_ID, sheetBounds, openSheet, watchSheetAction } from './bridge.js';
 import { makeStore } from './storage.js';
 import { mountUI } from './ui.js';
 import { makeFellowshipStore, makePreviewFellowship } from './fellowship.js';
@@ -28,13 +28,15 @@ async function start(inOwlbear) {
   let storage;
   try { storage = window.localStorage; } catch { storage = { getItem: () => null, setItem: () => { throw new Error('Storage unavailable'); } }; }
   const close = async () => {
-    if (inOwlbear) await OBR.modal.close(view === 'gm' ? MODAL_ID : SHEET_MODAL_ID);
+    if (inOwlbear) { if (view === 'gm') await OBR.modal.close(MODAL_ID); else await OBR.popover.close(SHEET_POPOVER_ID); }
     else message('Предпросмотр закрыт. Обнови страницу, чтобы открыть его снова.');
   };
   const fellowship = view === 'sheet' ? (inOwlbear ? makeFellowshipStore(OBR.room) : makePreviewFellowship(storage)) : null;
   if (fellowship) window.addEventListener('pagehide', () => fellowship.dispose(), { once: true });
+  let resizeQueue = Promise.resolve();
+  const fitWindow = count => { if (!inOwlbear || view !== 'sheet') return; resizeQueue = resizeQueue.then(async () => { const size = await sheetBounds(OBR, count); await OBR.popover.setWidth(SHEET_POPOVER_ID, size.width); await OBR.popover.setHeight(SHEET_POPOVER_ID, size.height); }).catch(console.error); };
   mountUI(root, view, view === 'gm' ? gmTemplate : sheetTemplate, makeStore(storage, scope, view), {
-    close, fellowship, preview: !inOwlbear,
+    close, fellowship, fitWindow, preview: !inOwlbear,
     openSheet: async () => { if (inOwlbear) { await OBR.modal.close(MODAL_ID); await openSheet(OBR, window.location.href); } else window.location.href = new URL('./index.html', window.location.href).href; },
   });
   createIcons({ icons: { Feather, X, UserRound, Sprout, BookOpen, ArrowUpRight } });

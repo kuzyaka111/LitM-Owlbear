@@ -1,42 +1,28 @@
-<section class="mt-sheet" aria-label="Лист персонажа">
+<section class="mt-sheet mt-v4" aria-label="Лист персонажа">
   <nav class="mt-tabs" aria-label="Разделы листа" role="tablist">
-    <button id="tab-character" data-sheet-tab="character" role="tab" aria-selected="true" aria-pressed="true" aria-controls="panel-character">Персонаж</button>
-    <button id="tab-fellowship" data-sheet-tab="fellowship" role="tab" aria-selected="false" aria-pressed="false" aria-controls="panel-fellowship" tabindex="-1">Братство</button>
-    <button id="tab-bag" data-sheet-tab="bag" role="tab" aria-selected="false" aria-pressed="false" aria-controls="panel-bag" tabindex="-1">Рюкзак</button>
-    <button id="tab-notes" data-sheet-tab="notes" role="tab" aria-selected="false" aria-pressed="false" aria-controls="panel-notes" tabindex="-1">Заметки</button>
-    <button class="mt-close-sheet mt-icon" aria-label="Закрыть лист" title="Закрыть лист"><i data-lucide="x" aria-hidden="true"></i></button>
+    <button id="tab-party" role="tab" data-sheet-tab="party" aria-selected="true" aria-controls="panel-party">Персонаж и Братство</button>
+    <button id="tab-themes" role="tab" data-sheet-tab="themes" aria-selected="false" aria-controls="panel-themes" tabindex="-1">Темы</button>
+    <button id="tab-notes" role="tab" data-sheet-tab="notes" aria-selected="false" aria-controls="panel-notes" tabindex="-1">Заметки</button>
+    <button type="button" class="mt-close-sheet" aria-label="Закрыть лист">×</button>
   </nav>
-  <div class="mt-sheet-content">
-    <section id="panel-character" class="mt-character" role="tabpanel" aria-labelledby="tab-character">
-      <div class="mt-themes mt-card-row" tabindex="0" aria-label="Карточки персонажа — прокрутка по горизонтали">
-        <article class="mt-character-card mt-theme" aria-label="Карточка персонажа">
-          <div class="mt-theme-head"><span>Персонаж</span><span class="mt-save-state" aria-live="polite"></span></div>
-          <div class="mt-character-grid">
-            <div class="mt-identity">
-              <label class="mt-eyebrow" for="mt-hero-name">ИМЯ ГЕРОЯ</label><textarea id="mt-hero-name" class="mt-editor-name mt-auto-size" maxlength="80" rows="2" aria-label="Имя героя"></textarea>
-              <label class="mt-field">Имя игрока<input id="mt-player-name" maxlength="80" placeholder="Имя игрока"></label>
-              <details class="mt-inline-details"><summary>О персонаже</summary><textarea id="mt-concept" aria-label="О персонаже" maxlength="500" rows="3" placeholder="Кто твой герой?"></textarea></details>
-            </div>
-            <details class="mt-relationships mt-inline-details" open><summary>Отношения в братстве</summary><div class="mt-relationship-list"></div><button type="button" class="mt-add-relationship mt-secondary">+ Отношение</button></details>
-          </div>
-          <div class="mt-hero-growth mt-theme-story"><span class="mt-eyebrow">ПОТЕНЦИАЛ</span><div class="mt-promise mt-pips"></div><details class="mt-inline-details"><summary>Квинтэссенции</summary><textarea id="mt-quintessences" aria-label="Квинтэссенции" maxlength="2000" rows="4" placeholder="Что оставили пройденные пути"></textarea></details></div>
-          <details class="mt-storage-details mt-inline-details"><summary>Сохранение</summary><div class="mt-storage-info"></div></details>
-        </article>
-      </div>
-    </section>
-    <section id="panel-fellowship" class="mt-fellowship" role="tabpanel" aria-labelledby="tab-fellowship" hidden>
-      <div class="mt-fellowship-card-host mt-card-row"></div>
-      <p class="mt-fellowship-status" role="status">Подключаем карточку братства…</p>
-    </section>
-    <section id="panel-bag" class="mt-bag" role="tabpanel" aria-labelledby="tab-bag" hidden>
-      <div class="mt-bag-cards mt-card-row" tabindex="0" aria-label="Карточки рюкзака — прокрутка по горизонтали"></div>
-      <article class="mt-bag-empty mt-theme" hidden><div class="mt-theme-head">Рюкзак</div><div class="mt-empty-card-content">Добавь карточку рюкзака или темы кнопками под ней.</div></article>
-      <div class="mt-card-actions mt-attached-actions"><button type="button" class="mt-add-backpack mt-secondary">+ Рюкзак</button><button type="button" class="mt-add-theme mt-secondary">+ Тема</button></div>
-      <div class="mt-undo mt-attached-actions" role="status" hidden><span></span><button type="button" class="mt-secondary">Вернуть</button></div>
-    </section>
-    <section id="panel-notes" class="mt-notes" role="tabpanel" aria-labelledby="tab-notes" hidden>
-      <article class="mt-theme mt-notes-card"><div class="mt-theme-head"><span>Заметки</span><span>Личные</span></div><label for="mt-notes-text" class="mt-sr-only">Заметки героя</label><textarea id="mt-notes-text" maxlength="5000" placeholder="Люди, места, обещания и незаконченные дела…"></textarea></article>
-    </section>
+  <div class="mt-stage">
+    <div class="mt-main-cards">
+      <section id="panel-party" role="tabpanel" aria-labelledby="tab-party">
+        <div class="mt-card-row" tabindex="0" aria-label="Карточки персонажа и братства">
+          <div class="mt-fellowship-host mt-card-slot"></div>
+          <div class="mt-character-host mt-card-slot"></div>
+          <div class="mt-inventory-host"></div>
+        </div>
+        <div class="mt-row-actions"><button type="button" class="mt-add-backpack">+ Рюкзак</button><button type="button" class="mt-add-theme">+ Тема</button><span class="mt-undo" hidden><span></span><button type="button">Вернуть</button></span></div>
+      </section>
+      <section id="panel-themes" role="tabpanel" aria-labelledby="tab-themes" hidden><div class="mt-themes mt-card-row" tabindex="0" aria-label="Четыре темы персонажа"></div></section>
+      <section id="panel-notes" role="tabpanel" aria-labelledby="tab-notes" hidden><div class="mt-card-row"><article class="mt-theme mt-notes-card"><div class="mt-theme-head">Заметки</div><label class="mt-sr-only" for="mt-notes-text">Заметки героя</label><textarea id="mt-notes-text" maxlength="5000" placeholder="Личные записи…"></textarea></article></div></section>
+    </div>
+    <aside class="mt-action-card mt-theme" aria-label="Теги действия">
+      <section class="mt-action-power"><h3>Теги силы</h3><div class="mt-action-list" data-kind="power"></div><form class="mt-add-action-tag" data-kind="power"><input maxlength="160" aria-label="Дополнительный тег силы" placeholder="Добавить тег силы"><button aria-label="Добавить силу">+</button></form></section>
+      <section class="mt-action-weakness"><h3>Теги слабости</h3><div class="mt-action-list" data-kind="weakness"></div><form class="mt-add-action-tag" data-kind="weakness"><input maxlength="160" aria-label="Дополнительный тег слабости" placeholder="Добавить тег слабости"><button aria-label="Добавить слабость">+</button></form></section>
+      <button type="button" class="mt-clear">Снять выбор</button>
+    </aside>
   </div>
-  <details class="mt-selection" aria-live="polite" hidden><summary>Выбранные теги <span class="mt-selected-count"></span></summary><p class="mt-selected-text"></p><button class="mt-clear" disabled>Снять выбор</button></details>
+  <div class="mt-ui-message" role="status" hidden></div>
 </section>

@@ -1,90 +1,123 @@
-/* The sheet floats above the table: only cards and their attached controls are solid. */
-html:has(body[data-view="sheet"]),body[data-view="sheet"]{background:transparent}
-body[data-view="sheet"]{--card-width:224px;--card-height:560px;--card-gap:14px;--sheet-inset:24px;min-height:100vh}
-body[data-view="sheet"]::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 15% 38%,rgba(228,235,230,.49),transparent 62%),radial-gradient(ellipse at 78% 58%,rgba(210,220,219,.40),transparent 63%),radial-gradient(ellipse at 48% 95%,rgba(236,237,220,.30),transparent 70%)}
-#mist-table-design .mt-sheet{width:100%;min-height:100vh;background:transparent;border:0;border-radius:0;box-shadow:none;overflow:visible;padding:32px 0 24px}
-#mist-table-design .mt-sheet .mt-tabs{position:relative;display:flex;align-items:stretch;gap:3px;width:max-content;max-width:calc(100% - 2 * var(--sheet-inset));margin:0 0 0 var(--sheet-inset);padding:0;background:none;border:0;overflow-x:auto;scrollbar-width:none;z-index:3}
-#mist-table-design .mt-sheet .mt-tabs button{min-height:38px;padding:9px 13px;border:0;border-radius:4px 4px 0 0;background:#d4d7cce0;color:#4a514a;font:13px Georgia,serif;box-shadow:none;flex-shrink:0}
-#mist-table-design .mt-sheet .mt-tabs button[aria-selected=true]{background:#505a5c;color:#fff4db}
-#mist-table-design .mt-sheet .mt-tabs .mt-close-sheet{width:36px;min-width:36px;padding:5px;background:#505a5ce6;color:#fff4db;margin-left:3px}
-#mist-table-design .mt-sheet-content{padding:0;background:transparent}
-#mist-table-design .mt-sheet [role="tabpanel"]{position:relative;padding:0 var(--sheet-inset)}
-#mist-table-design .mt-sheet .mt-card-row{display:flex;flex-flow:row nowrap;align-items:flex-start;gap:var(--card-gap);max-width:none;width:calc(100% + 2 * var(--sheet-inset));margin:0 calc(-1 * var(--sheet-inset));padding:0 var(--sheet-inset) 9px;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:#7d897875 transparent;scroll-snap-type:x proximity}
-#mist-table-design .mt-sheet .mt-theme{width:var(--card-width);height:var(--card-height);min-height:var(--card-height);max-height:var(--card-height);flex:0 0 var(--card-width);display:flex;flex-direction:column;margin:0;box-sizing:border-box;overflow-x:hidden;overflow-y:auto;scroll-snap-align:start;scrollbar-width:thin;scrollbar-color:#8c826b55 transparent;border:0;border-radius:2px;background:radial-gradient(ellipse at 20% 40%,#fff9e7,transparent 70%),var(--mt-paper);box-shadow:0 5px 12px #30372d24}
-#mist-table-design .mt-sheet .mt-theme>*{flex-shrink:0}
-#mist-table-design .mt-sheet .mt-theme-head{position:sticky;top:0;z-index:2;min-height:34px;padding:7px 10px;font:10px/1.5 Arial,sans-serif;letter-spacing:.45px}
-#mist-table-design .mt-sheet .mt-theme h3{font-size:22px;line-height:1.18;min-height:82px;padding:16px 10px;text-align:center;justify-content:center;align-items:center;margin:0}
-#mist-table-design .mt-sheet .mt-theme .mt-type{font-size:10px;margin:3px 0 8px}
-#mist-table-design .mt-sheet .mt-tag{font-size:13px;line-height:1.4;padding:10px 5px;min-height:42px}
-#mist-table-design .mt-sheet .mt-weakness{font-size:13px;margin:12px 8px 18px;padding:10px 7px;min-height:60px}
-#mist-table-design .mt-sheet .mt-track{padding:9px 6px;min-height:56px;flex-wrap:nowrap}
-#mist-table-design .mt-sheet .mt-track .mt-pip{min-width:23px;min-height:30px;padding:0 2px;font-size:17px}
-#mist-table-design .mt-sheet .mt-track-group>span{font-size:10px;letter-spacing:0}
-#mist-table-design .mt-sheet .mt-theme-story{min-height:145px;padding:17px 13px;text-align:center;border:0}
-#mist-table-design .mt-sheet .mt-theme-story strong{font-size:14px;line-height:1.4;margin-bottom:12px}
-#mist-table-design .mt-sheet .mt-theme-story p{font-size:12px;line-height:1.55}
-#mist-table-design .mt-sheet .mt-field{font:11px/1.5 Arial,sans-serif;margin:12px 0}
-#mist-table-design .mt-sheet input,#mist-table-design .mt-sheet textarea{font-size:14px;padding:7px 6px;border:0;border-radius:0;background:#fff8e750;box-shadow:inset 0 -1px #a3916f55}
-#mist-table-design .mt-sheet input:focus,#mist-table-design .mt-sheet textarea:focus{background:#fff8e7}
-#mist-table-design .mt-sheet .mt-character-grid{display:block;padding:16px 12px 12px}
-#mist-table-design .mt-sheet .mt-character-grid>div+div,#mist-table-design .mt-sheet .mt-character-grid>details{border:0;margin:16px 0 0;padding:0}
-#mist-table-design .mt-sheet .mt-character-card .mt-editor-name{font:22px/1.2 Georgia,serif;text-align:center;margin:4px 0 10px;padding:8px 0 12px;background:transparent;box-shadow:none;resize:none}
-#mist-table-design .mt-sheet .mt-identity>.mt-eyebrow{text-align:center;font-size:9px;letter-spacing:1px}
-#mist-table-design .mt-sheet .mt-character-card .mt-save-state{font-size:9px;color:#e3e7d7;letter-spacing:0;text-transform:none}
-#mist-table-design .mt-sheet .mt-inline-details summary{cursor:pointer;font-size:12px;line-height:1.4;padding:5px 0;min-height:28px}
-#mist-table-design .mt-sheet .mt-inline-details textarea{margin-top:7px}
-#mist-table-design .mt-sheet .mt-card-hint{font-size:12px;line-height:1.5;padding:6px 0}
-#mist-table-design .mt-sheet .mt-relationship{padding-right:20px;margin-bottom:8px}
-#mist-table-design .mt-sheet .mt-relationship .mt-field{margin:5px 0}
-#mist-table-design .mt-sheet .mt-secondary{min-height:32px;padding:6px 9px;font-size:12px;border:0;border-radius:2px;background:#c3c5aa65}
-#mist-table-design .mt-sheet .mt-hero-growth{margin-top:auto;display:block;min-height:112px;padding:12px}
-#mist-table-design .mt-sheet .mt-hero-growth .mt-eyebrow{color:#e8dfca;font-size:10px}
-#mist-table-design .mt-sheet .mt-promise{justify-content:center;margin:5px 0}
-#mist-table-design .mt-sheet .mt-promise .mt-pip{color:#e5d7aa;min-width:29px;min-height:32px;font-size:19px;padding:0}
-#mist-table-design .mt-sheet .mt-hero-growth textarea{background:#f6ecd7;color:#38342e}
-#mist-table-design .mt-sheet .mt-storage-details{padding:3px 12px;background:#424b50;color:#cdd3c4}
-#mist-table-design .mt-sheet .mt-storage-details summary{font:10px Arial,sans-serif;min-height:25px;line-height:15px}
-#mist-table-design .mt-sheet .mt-prototype-note{padding:7px 0;border:0;background:transparent;color:inherit;font-size:11px}
-#mist-table-design .mt-sheet .mt-prototype-note.mt-error{color:#ffdabf}
-#mist-table-design .mt-sheet .mt-card-body{padding:14px 12px 18px}
-#mist-table-design .mt-sheet .mt-card-title{margin-top:0}
-#mist-table-design .mt-sheet .mt-card-title>span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
-#mist-table-design .mt-sheet .mt-card-title textarea{font:22px/1.2 Georgia,serif;text-align:center;background:transparent;box-shadow:none;padding:5px 0 12px}
-#mist-table-design .mt-sheet .mt-item-row .mt-tag{font-size:13px}
-#mist-table-design .mt-sheet .mt-item-row>.mt-remove,#mist-table-design .mt-sheet .mt-scratch{min-width:26px;padding:4px}
-#mist-table-design .mt-sheet .mt-add-card-item{gap:4px}
-#mist-table-design .mt-sheet .mt-add-card-item input{font-size:12px;padding:6px 4px}
-#mist-table-design .mt-sheet .mt-add-card-item button{padding:0 9px;border:0;font-size:21px}
-#mist-table-design .mt-sheet .mt-card-details{padding:10px 12px;border:0}
-#mist-table-design .mt-sheet .mt-card-details summary{font-size:12px}
-#mist-table-design .mt-sheet .mt-fellowship-card .mt-tag-list{padding:0 9px}
-#mist-table-design .mt-sheet .mt-fellowship-card .mt-theme-story{min-height:100px}
-#mist-table-design .mt-sheet .mt-fellowship-card .mt-theme-story p{font-size:14px}
-#mist-table-design .mt-sheet .mt-fellowship-card .mt-theme-story .mt-eyebrow{font-size:9px;letter-spacing:1px}
-#mist-table-design .mt-sheet .mt-fellowship-improvements{font-size:12px;padding:10px 12px}
-#mist-table-design .mt-sheet .mt-fellowship-status{font:10px/1.5 Arial,sans-serif;padding:8px 12px;margin:0;background:#ded3b8;color:#4e5940}
-#mist-table-design .mt-sheet .mt-fellowship-status.mt-error{color:#7b3328;background:#f3dbcf}
-#mist-table-design .mt-sheet .mt-fellowship-form .mt-primary{font-size:12px;padding:7px 9px}
-#mist-table-design .mt-sheet .mt-attached-actions{display:flex;flex-wrap:wrap;gap:3px;width:var(--card-width);margin:-9px 0 0;padding:0;background:transparent;position:relative;z-index:3}
-#mist-table-design .mt-sheet .mt-attached-actions button{flex:1;border-radius:0 0 4px 4px;min-height:36px;background:#505a5c;color:#f8edd4;box-shadow:0 3px 6px #30372d20}
-#mist-table-design .mt-sheet .mt-undo{margin:8px 0 0;display:block;background:#e5dfc9e6;padding:9px;border-radius:2px;font-size:11px}
-#mist-table-design .mt-sheet .mt-undo button{margin-top:6px}
-#mist-table-design .mt-sheet .mt-bag-empty{margin-bottom:9px}
-#mist-table-design .mt-sheet .mt-bag-cards:empty{display:none}
-#mist-table-design .mt-sheet .mt-empty-card-content{padding:60px 20px;text-align:center;font-style:italic;color:#716853}
-#mist-table-design .mt-sheet .mt-notes-card{padding:0}
-#mist-table-design .mt-sheet .mt-notes-card textarea{min-height:0;height:auto;flex:1;resize:none;margin:0;padding:14px 12px;border:0;box-shadow:none;line-height:27px;font-size:14px;background:repeating-linear-gradient(transparent,transparent 26px,#c8b89455 27px),#f8f0de}
-#mist-table-design .mt-sheet .mt-selection{display:block;width:var(--card-width);padding:0 10px 8px;margin:0 0 0 var(--sheet-inset);background:#505a5cf2;color:#f8edd4;border:0;border-radius:0 0 4px 4px;box-shadow:0 3px 6px #30372d20}
-#mist-table-design .mt-sheet .mt-selection summary{padding:8px 0;font-size:12px;cursor:pointer}
-#mist-table-design .mt-sheet .mt-selection .mt-clear{color:#f8edd4;border:0;padding:6px 0;font-size:11px;min-height:30px}
-#mist-table-design .mt-sheet .mt-selected-text{font-size:12px}
-#mist-table-design .mt-sr-only{position:absolute!important;width:1px;height:1px;padding:0!important;margin:-1px!important;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
-@media(max-width:600px){body[data-view="sheet"]{--sheet-inset:14px}#mist-table-design .mt-sheet{padding-top:20px}#mist-table-design .mt-sheet .mt-tabs{gap:2px}#mist-table-design .mt-sheet .mt-tabs button{padding:9px 8px;font-size:12px}#mist-table-design .mt-sheet .mt-tabs .mt-close-sheet{min-width:30px;width:30px;margin-left:0}}
-
-#mist-table-design .mt-sheet .mt-hero-theme h3{height:90px;min-height:90px;font-size:20px;padding:8px 10px}
-#mist-table-design .mt-sheet .mt-hero-theme .mt-theme-story{height:142px;min-height:142px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#a8ad9166 transparent}
-#mist-table-design .mt-sheet .mt-fellowship-editor>summary{display:none}
-#mist-table-design .mt-sheet .mt-fellowship-editor:not([open]){padding:0}
-#mist-table-design .mt-sheet:has(#panel-character:not([hidden])) .mt-selection{margin-top:-9px}
-
-#mist-table-design .mt-sheet .mt-tabs .mt-close-sheet{position:sticky;right:0;z-index:4}
+html:has(body[data-view="sheet"]),body[data-view="sheet"]{background:transparent;min-height:0}
+body[data-view="sheet"]::before{display:none}
+#mist-table-design .mt-v4{--card-width:224px;--card-height:560px;width:100%;padding:4px 8px 8px;background:transparent;border:0;border-radius:0;box-shadow:none;overflow:visible;min-height:0;font:13px/1.4 Georgia,serif}
+#mist-table-design .mt-v4 *{box-sizing:border-box}
+#mist-table-design .mt-v4 .mt-tabs{display:flex;gap:2px;width:max-content;max-width:100%;margin:0;padding:0;background:none;border:0;overflow-x:auto;scrollbar-width:none}
+#mist-table-design .mt-v4 .mt-tabs button{border:0;border-radius:3px 3px 0 0;min-height:34px;padding:7px 12px;background:#d4d7cce8;color:#46504a;font-size:12px;white-space:nowrap;flex-shrink:0}
+#mist-table-design .mt-v4 .mt-tabs button[aria-selected=true]{background:#505a5c;color:#fff2d8}
+#mist-table-design .mt-v4 .mt-tabs .mt-close-sheet{background:#505a5c;color:#fff2d8;padding:4px 10px;font-size:20px;position:sticky;right:0;z-index:3}
+#mist-table-design .mt-v4 .mt-stage{position:relative;display:grid;grid-template-columns:minmax(0,1fr) var(--card-width);gap:12px;align-items:start;isolation:isolate}
+#mist-table-design .mt-v4 .mt-stage::before{content:"";position:absolute;inset:-7px;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 22% 45%,#e5ede595,transparent 68%),radial-gradient(ellipse at 80% 55%,#d6dfdc70,transparent 68%);filter:blur(4px)}
+#mist-table-design .mt-v4 .mt-main-cards{min-width:0}
+#mist-table-design .mt-v4 .mt-card-row{display:flex;flex-flow:row nowrap;gap:12px;width:100%;max-width:100%;padding:0;margin:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin;scrollbar-color:#7a87775c transparent;align-items:flex-start}
+#mist-table-design .mt-v4 .mt-card-slot{flex:0 0 var(--card-width);width:var(--card-width);min-width:0}
+#mist-table-design .mt-v4 .mt-inventory-host{display:contents}
+#mist-table-design .mt-v4 .mt-theme{display:flex;flex-direction:column;width:var(--card-width);min-width:var(--card-width);height:var(--card-height);min-height:var(--card-height);max-height:var(--card-height);margin:0;flex:0 0 var(--card-width);border:0;border-radius:2px;background:radial-gradient(ellipse at 15% 40%,#fff9e7,transparent 70%),#f4ead1;box-shadow:0 3px 8px #30372d24;overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#8c826b55 transparent}
+#mist-table-design .mt-v4 .mt-theme>*{flex-shrink:0}
+#mist-table-design .mt-v4 .mt-theme-head{position:relative;display:flex;gap:4px;align-items:center;justify-content:space-between;height:30px;min-height:30px;padding:3px 7px;font:10px/1.4 Arial,sans-serif;letter-spacing:.2px;background:#505a5c;color:#f5eedc}
+#mist-table-design .mt-v4 .mt-theme-head button{background:none;color:inherit;border:0;min-width:0;font-size:11px;text-align:left;padding:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#mist-table-design .mt-v4 .mt-book-picker{flex:1}
+#mist-table-design .mt-v4 .mt-might{font:10px Arial,sans-serif;width:91px;min-width:91px;background:#65706a;border:0;border-radius:2px;color:#fff4da;padding:4px 1px}
+#mist-table-design .mt-v4 .mt-tag-row{display:flex;align-items:center;gap:2px;height:30px;min-height:30px;padding:0 5px;border-bottom:1px solid #c8b89465}
+#mist-table-design .mt-v4 .mt-title-row{height:54px;min-height:54px;border:0}
+#mist-table-design .mt-v4 .mt-question{flex:0 0 20px;width:20px;height:20px;padding:0;margin:0 3px 0 1px;min-height:0;background:transparent;border:0;position:relative;color:#786746;font:10px Arial,sans-serif}
+#mist-table-design .mt-v4 .mt-question::before{content:"";position:absolute;inset:3px;border:1px solid #a49167;transform:rotate(45deg)}
+#mist-table-design .mt-v4 .mt-question span{position:relative;z-index:1;background:#f5ecd6}
+#mist-table-design .mt-v4 .mt-tag-text{flex:1;min-width:0;padding:4px 3px;text-align:left;border:0;background:transparent;color:#38342e;font-size:12px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-radius:2px}
+#mist-table-design .mt-v4 .mt-title-row .mt-tag-text{font-size:17px;white-space:normal;line-height:1.18;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;text-align:center}
+#mist-table-design .mt-v4 .mt-tag-text[aria-pressed=true]{background:#586448;color:#fff4d8}
+#mist-table-design .mt-v4 .mt-weakness-slots .mt-tag-text{color:#854f3e}
+#mist-table-design .mt-v4 .mt-weakness-slots .mt-tag-text[aria-pressed=true]{background:#8d5a46;color:#fff3d8}
+#mist-table-design .mt-v4 .mt-empty-tag{color:#8a816e;font-style:italic;opacity:.7}
+#mist-table-design .mt-v4 .mt-scratch,#mist-table-design .mt-v4 .mt-edit-tag,#mist-table-design .mt-v4 .mt-remove-item{flex:0 0 18px;min-width:18px;width:18px;min-height:26px;height:26px;border:0;padding:0;background:transparent;color:#8c7859;font-size:15px}
+#mist-table-design .mt-v4 .mt-scratched .mt-tag-text{text-decoration:line-through;color:#968e7d;background:none}
+#mist-table-design .mt-v4 .mt-scratch:disabled{opacity:.2}
+#mist-table-design .mt-v4 .mt-tag-label{display:block;height:14px;padding:1px 8px;font:9px/1.3 Arial,sans-serif;color:#80745c;letter-spacing:1px}
+#mist-table-design .mt-v4 .mt-weakness-slots .mt-tag-label{color:#965e4c}
+#mist-table-design .mt-v4 .mt-quest{height:66px;min-height:66px;position:relative;margin-top:5px;padding:2px 23px 3px 8px;background:#465052;color:#f8ecd1}
+#mist-table-design .mt-v4 .mt-quest .mt-tag-label{text-align:center;color:#d6d6bb;font-size:9px;padding:2px}
+#mist-table-design .mt-v4 .mt-quest-text{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;width:100%;padding:3px 0;border:0;background:none;color:#fff2cc;text-align:center;font:italic 12px/1.4 Georgia,serif}
+#mist-table-design .mt-v4 .mt-edit-quest{position:absolute;right:3px;bottom:15px;width:20px;height:24px;border:0;background:none;color:#dfd7bb;padding:0}
+#mist-table-design .mt-v4 .mt-track{display:flex;align-items:center;justify-content:space-around;gap:0;margin:0;padding:4px 3px;height:50px;min-height:50px;background:#ded3b8;flex-wrap:nowrap}
+#mist-table-design .mt-v4 .mt-track-group{gap:1px}
+#mist-table-design .mt-v4 .mt-track-group>span{font:9px Arial,sans-serif;letter-spacing:0}
+#mist-table-design .mt-v4 .mt-pips{display:flex;gap:0}
+#mist-table-design .mt-v4 .mt-pip{min-width:23px;width:23px;min-height:26px;padding:0;font-size:17px;line-height:1.2;background:none;border:0;color:#847455}
+#mist-table-design .mt-v4 .mt-improvements{margin-top:auto;background:#465052;color:#f4e9d0;padding:0 8px;min-height:28px}
+#mist-table-design .mt-v4 .mt-improvements summary,#mist-table-design .mt-v4 .mt-details summary{font-size:11px;cursor:pointer;padding:6px 0;min-height:28px}
+#mist-table-design .mt-v4 .mt-improvement-row{display:flex;gap:4px;border-bottom:1px solid #a5a78940;align-items:center;min-height:28px}
+#mist-table-design .mt-v4 .mt-improvement-row button{min-width:0;flex:1;background:none;color:inherit;border:0;text-align:left;font:12px Georgia,serif;padding:5px 0;overflow-wrap:anywhere}
+#mist-table-design .mt-v4 .mt-improvement-row button:last-child{flex:0 0 18px}
+#mist-table-design .mt-v4 .mt-add-improvement,#mist-table-design .mt-v4 .mt-add-quintessence{margin:6px 0;padding:5px 0;background:none;color:inherit;border:0;font-size:11px}
+#mist-table-design .mt-v4 .mt-legacy-notes p{white-space:pre-wrap;font-size:11px}
+#mist-table-design .mt-v4 .mt-fellowship-status{background:#ded3b8;margin:0;padding:4px 7px;font:9px/1.4 Arial,sans-serif;color:#596246}
+#mist-table-design .mt-v4 .mt-undo-theme,#mist-table-design .mt-v4 .mt-delete-card{border:0;background:#ded3b8;color:#61543b;font-size:10px;padding:5px}
+#mist-table-design .mt-v4 .mt-field{display:block;margin:9px 0;font:11px Arial,sans-serif;color:#716853}
+#mist-table-design .mt-v4 .mt-field span{display:block;margin-bottom:4px}
+#mist-table-design .mt-v4 input,#mist-table-design .mt-v4 textarea{width:100%;min-width:0;font:13px/1.4 Georgia,serif;padding:6px;border:0;border-bottom:1px solid #aa97705a;border-radius:0;background:#fff8e740;color:#38342e;box-shadow:none}
+#mist-table-design .mt-v4 .mt-character-body{padding:6px 12px}
+#mist-table-design .mt-v4 .mt-editor-name{font:19px/1.2 Georgia,serif;text-align:center;height:70px;padding:6px 0;resize:none;background:transparent;border:0}
+#mist-table-design .mt-v4 .mt-relationship{position:relative;display:flex;flex-wrap:wrap;padding:4px 0;margin:0;border-bottom:1px solid #c8b89460;gap:3px}
+#mist-table-design .mt-v4 .mt-relationship small{width:100%;font-size:10px;color:#80745c}
+#mist-table-design .mt-v4 .mt-relationship button{background:none;border:0;color:inherit;padding:3px;font-size:12px}
+#mist-table-design .mt-v4 .mt-relationship button:nth-child(2){flex:1;text-align:left;min-width:0;overflow-wrap:anywhere}
+#mist-table-design .mt-v4 .mt-relationship button[aria-pressed=true]{background:#586448;color:#fff4d8}
+#mist-table-design .mt-v4 .mt-add-relationship{border:0;padding:6px 0;background:none;color:#75634b;font-size:11px}
+#mist-table-design .mt-v4 .mt-hero-growth{display:block;margin-top:auto;padding:8px 10px;background:#465052;color:#f8ecd1}
+#mist-table-design .mt-v4 .mt-hero-growth .mt-tag-label{color:#d6d6bb;text-align:center}
+#mist-table-design .mt-v4 .mt-promise{display:flex;justify-content:center;margin:2px 0 4px}
+#mist-table-design .mt-v4 .mt-promise .mt-pip{color:#e2d4a6;width:28px;min-width:28px}
+#mist-table-design .mt-v4 .mt-storage-details{background:#465052;color:#c5cbbd;padding:0 10px}
+#mist-table-design .mt-v4 .mt-storage-details summary{font-size:10px;min-height:24px}
+#mist-table-design .mt-v4 .mt-save-state{font:9px Arial,sans-serif;text-transform:none;letter-spacing:0}
+#mist-table-design .mt-v4 .mt-prototype-note{background:none;color:inherit;font-size:10px;padding:5px 0;border:0}
+#mist-table-design .mt-v4 .mt-row-actions{display:flex;gap:3px;flex-wrap:wrap;margin:0;padding:0;min-height:28px}
+#mist-table-design .mt-v4 .mt-row-actions button{border:0;border-radius:0 0 3px 3px;background:#505a5c;color:#fff1d4;padding:6px 12px;font-size:11px}
+#mist-table-design .mt-v4 .mt-undo{margin:0;padding:0;font-size:10px;background:#e5ddc7;display:inline-flex;align-items:center;gap:6px}
+#mist-table-design .mt-v4 .mt-undo span{padding:4px}
+#mist-table-design .mt-v4 .mt-backpack-title{border:0;background:none;text-align:center;padding:12px 18px 2px;min-height:55px;font:20px/1.2 Georgia,serif;color:#38342e;overflow-wrap:anywhere}
+#mist-table-design .mt-v4 .mt-edit-backpack-title{border:0;background:none;color:#8c7859;font-size:12px;align-self:flex-end;margin-right:7px}
+#mist-table-design .mt-v4 .mt-backpack-items{padding:0 6px}
+#mist-table-design .mt-v4 .mt-item-row{height:32px;display:flex;gap:2px;border-bottom:1px solid #c8b89465}
+#mist-table-design .mt-v4 .mt-add-card-item{display:flex;gap:3px;margin:8px 8px 12px}
+#mist-table-design .mt-v4 .mt-add-card-item button{border:0;background:#586448;color:#fff1d4;font-size:18px;padding:3px 10px}
+#mist-table-design .mt-v4 .mt-backpack-notes{margin-top:auto;background:#465052;color:#f8ecd1;padding:5px 10px}
+#mist-table-design .mt-v4 .mt-backpack-notes .mt-field{color:#e3dac5}
+#mist-table-design .mt-v4 .mt-backpack-notes textarea{background:#f8f0dd}
+#mist-table-design .mt-v4 .mt-notes-card textarea{flex:1;min-height:0;height:auto;resize:none;border:0;padding:12px;font:13px/26px Georgia,serif;background:repeating-linear-gradient(transparent,transparent 25px,#c8b89455 26px),#f8f0de}
+#mist-table-design .mt-v4 .mt-action-card{background:#465052;color:#f8ecd1;box-shadow:0 3px 8px #30372d24;padding:14px 12px;position:relative}
+#mist-table-design .mt-v4 .mt-action-card>section{flex:1;min-height:0;display:flex;flex-direction:column;overflow:auto}
+#mist-table-design .mt-v4 .mt-action-card h3{display:block;margin:0;padding:0 0 9px;min-height:0;height:auto;text-align:left;font:12px Arial,sans-serif;letter-spacing:.4px;color:#e3dbc1}
+#mist-table-design .mt-v4 .mt-action-weakness h3{color:#dab09d}
+#mist-table-design .mt-v4 .mt-action-list{min-height:32px}
+#mist-table-design .mt-v4 .mt-empty-action{font:italic 12px/1.6 Georgia,serif;color:#b6bdaf;padding:4px 0}
+#mist-table-design .mt-v4 .mt-action-tag{display:flex;gap:3px;padding:4px 0;align-items:center}
+#mist-table-design .mt-v4 .mt-action-tag button{border:0;background:none;color:#f3e5c1;text-align:left;min-width:0;padding:3px 0;font:13px/1.4 Georgia,serif;overflow-wrap:anywhere;flex:1}
+#mist-table-design .mt-v4 .mt-action-tag button:last-child{flex:0 0 16px;text-align:right}
+#mist-table-design .mt-v4 .mt-action-weakness .mt-action-tag button{color:#e0b09b}
+#mist-table-design .mt-v4 .mt-add-action-tag{display:flex;gap:3px;margin:10px 0 14px}
+#mist-table-design .mt-v4 .mt-add-action-tag input{background:none;color:#f3e5c1;border-bottom:1px solid #9da38b55;font-size:11px;padding:4px 0}
+#mist-table-design .mt-v4 .mt-add-action-tag input::placeholder{color:#a7b09f}
+#mist-table-design .mt-v4 .mt-add-action-tag button{background:none;border:0;color:#f3e5c1;padding:2px 3px;font-size:20px}
+#mist-table-design .mt-v4 .mt-clear{border:0;background:none;color:#c4cbbd;font-size:11px;align-self:flex-start;padding:8px 0 0;margin:0}
+#mist-table-design .mt-v4 .mt-ui-message{margin:5px 0;padding:8px;background:#f3dbcf;color:#7b3328;font-size:12px}
+#mist-table-design .mt-editor-dialog{position:fixed;inset:0;margin:auto;width:min(510px,calc(100% - 24px));max-width:calc(100% - 24px);max-height:calc(100% - 20px);padding:24px 20px 18px;border:0;border-radius:4px;background:#f4ead1;color:#38342e;box-shadow:0 15px 60px #15201c55;overflow:auto;font:14px/1.5 Georgia,serif}
+#mist-table-design .mt-editor-dialog::backdrop{background:#2e393766}
+#mist-table-design .mt-editor-dialog h2{font-size:23px;padding-right:25px;margin:0 0 14px}
+#mist-table-design .mt-editor-dialog .mt-dialog-close{position:absolute;right:8px;top:5px;border:0;background:none;color:#78684e;font-size:26px}
+#mist-table-design .mt-editor-dialog form{display:block;margin:0}
+#mist-table-design .mt-editor-dialog textarea{font-size:16px;width:100%;resize:vertical;background:#fff8e7;border:1px solid #c8b894;padding:10px}
+#mist-table-design .mt-editor-dialog .mt-primary{padding:9px 14px;margin-top:14px;background:#586448;border:0;border-radius:3px;color:#fff1d4;font-size:13px}
+#mist-table-design .mt-editor-dialog .mt-source-note{font:11px/1.5 Arial,sans-serif;color:#80745c;margin:8px 0}
+#mist-table-design .mt-editor-dialog .mt-question-option{width:100%;display:flex;gap:10px;padding:10px 7px;border:0;border-bottom:1px solid #c8b894;background:transparent;color:#38342e;text-align:left;font:13px/1.5 Georgia,serif}
+#mist-table-design .mt-editor-dialog .mt-question-option[aria-pressed=true]{background:#d6dcc5}
+#mist-table-design .mt-editor-dialog .mt-catalog-option{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #c8b894;font:13px/1.5 Georgia,serif;color:#38342e}
+#mist-table-design .mt-editor-dialog .mt-catalog-option input{width:17px;flex:0 0 17px;margin:3px 0;accent-color:#586448}
+#mist-table-design .mt-editor-dialog .mt-catalog-option small{display:block;font-size:12px;margin-top:4px}
+#mist-table-design .mt-editor-dialog .mt-catalog-option strong{font-size:15px}
+#mist-table-design .mt-editor-dialog select{width:100%;background:#fff8e7;color:#38342e;padding:8px;border:1px solid #c8b894}
+#mist-table-design .mt-editor-dialog .mt-reset-theme{display:flex;gap:8px;align-items:flex-start;margin:16px 0;font-size:13px}
+#mist-table-design .mt-editor-dialog .mt-reset-theme input{width:17px;flex:0 0 17px}
+#mist-table-design .mt-dialog-error{color:#8d4536;font-size:12px}
+#mist-table-design .mt-sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media(max-width:600px){#mist-table-design .mt-v4 .mt-stage{grid-template-columns:minmax(224px,1fr) 224px;min-width:460px}#mist-table-design .mt-v4{overflow-x:auto}#mist-table-design .mt-v4 .mt-tabs button{padding:7px 9px}#mist-table-design .mt-v4 .mt-tabs .mt-close-sheet{margin-left:auto}}

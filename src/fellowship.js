@@ -1,7 +1,13 @@
 export const FELLOWSHIP_PREFIX = 'io.github.kuzyaka111.legend-mist/fellowship/';
-export const fellowshipLimits = { name: 80, power1: 80, power2: 80, weakness: 160, quest: 400, improvements: 800 };
-export const fellowshipDefaults = () => ({ name: '', power1: '', power2: '', weakness: '', quest: '', improvements: '', improve: 0, abandon: 0, milestone: 0, spent0: false, spent1: false, spent2: false });
+import { getBook } from './theme-model.js';
+export const fellowshipLimits = { name: 160, power1: 160, power2: 160, weakness: 160, quest: 400, improvements: 800 };
+export const fellowshipDefaults = () => ({ might: 'origin', improvementIds: [], ...Object.fromEntries(Array.from({length:7},(_,i)=>['question'+i,String.fromCharCode(65+i)])), ...Object.fromEntries(Array.from({length:3},(_,i)=>['weakQuestion'+i,String.fromCharCode(65+i)])), ...Object.fromEntries([3,4,5,6].flatMap(i=>[['power'+i,''],['spent'+i,false]])), weakness1:'', weakness2:'', weakSpent0:false, weakSpent1:false, weakSpent2:false, name: '', power1: '', power2: '', weakness: '', quest: '', improvements: '', improve: 0, abandon: 0, milestone: 0, spent0: false, spent1: false, spent2: false });
 function normalize(field, value) {
+  if (field === 'might') return ['origin','adventure','greatness'].includes(value) ? value : 'origin';
+  if (field === 'improvementIds') return Array.isArray(value) ? [...new Set(value.filter(id => getBook('fellowship').improvements.some(i=>i.id===id)))] : [];
+  if (field.startsWith('question') || field.startsWith('weakQuestion')) { const weak = field.startsWith('weak'); return typeof value === 'string' && (weak ? /^[A-D]$/ : /^[A-J]$/).test(value) ? value : String.fromCharCode(65+Number(field.match(/\d+/)?.[0]||0)); }
+  if (/^(power[3-6]|weakness[12])$/.test(field)) return typeof value === 'string' ? value.slice(0,160) : '';
+  if (field.startsWith('weakSpent')) return value === true;
   if (field in fellowshipLimits) return typeof value === 'string' ? value.slice(0, fellowshipLimits[field]) : '';
   if (field.startsWith('spent')) return value === true;
   return Number.isInteger(value) ? Math.max(0, Math.min(3, value)) : 0;

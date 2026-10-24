@@ -1,0 +1,2195 @@
+{
+  "source": "Legend in the Mist, Volume I: The Hero (2025), supplied by the user",
+  "language": "en",
+  "themebooks": [
+    {
+      "id": "circumstance",
+      "name": "Обстоятельства",
+      "originalName": "Circumstance",
+      "page": 92,
+      "might": "origin",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What Circumstance do you find yourself in?"
+        },
+        {
+          "letter": "B",
+          "text": "What tools or trappings of your position or station do you carry?"
+        },
+        {
+          "letter": "C",
+          "text": "Who can you call upon or relate to thanks to your Circumstance?"
+        },
+        {
+          "letter": "D",
+          "text": "What social skills have you developed as part of your Circumstance?"
+        },
+        {
+          "letter": "E",
+          "text": "How can you exploit your Circumstance to get out of trouble?"
+        },
+        {
+          "letter": "F",
+          "text": "Where do you go to be with others of similar social status?"
+        },
+        {
+          "letter": "G",
+          "text": "What special right or privilege comes with your Circumstance?"
+        },
+        {
+          "letter": "H",
+          "text": "What knowledge or knack is common to people in your position?"
+        },
+        {
+          "letter": "I",
+          "text": "How have you learned to overcome your Circumstances?"
+        },
+        {
+          "letter": "J",
+          "text": "What is the motto or creed you’ve adopted?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What’s the biggest challenge you face due to your unique position?"
+        },
+        {
+          "letter": "B",
+          "text": "What aspect of your Circumstance do others scorn, shun, or detest?"
+        },
+        {
+          "letter": "C",
+          "text": "What kinds of places or situations are off limits to you?"
+        },
+        {
+          "letter": "D",
+          "text": "How do others commonly mistreat you?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "circumstance-1",
+          "name": "Comfort Zone",
+          "text": "When you camp or sojourn in the environment of your Circumstance, you may recover one scratched power tag in addition to any other benefits.",
+          "page": 93
+        },
+        {
+          "id": "circumstance-2",
+          "name": "Expected Role",
+          "text": "Choose a status that represents how society expects you to behave, such as friendly, threatening, or in-charge. Once per session, before you take a social action befitting your expected role, you may gain this status at tier 2.",
+          "page": 93
+        },
+        {
+          "id": "circumstance-3",
+          "name": "Familiar Matters",
+          "text": "There are things everyone in your situation knows. Once per scene, you may ask the Narrator for one important detail about a subject related to your Circumstance.",
+          "page": 93
+        },
+        {
+          "id": "circumstance-4",
+          "name": "Strength From Adversity",
+          "text": "Once per session, when a weakness tag from this theme is invoked, you may gain driven-2, which helps this roll and expires after it.",
+          "page": 93
+        },
+        {
+          "id": "circumstance-5",
+          "name": "Trudging Along",
+          "text": "Choose a type of status that you’ve become accustomed to given your Circumstance, such as tired or humiliated. Once per scene, you may ignore a status you have of that type if it is tier 3 or lower.",
+          "page": 93
+        }
+      ]
+    },
+    {
+      "id": "devotion",
+      "name": "Преданность",
+      "originalName": "Devotion",
+      "page": 94,
+      "might": "origin",
+      "power": [
+        {
+          "letter": "A",
+          "text": "Who or what are you Devoted to?"
+        },
+        {
+          "letter": "B",
+          "text": "What action do you most commonly take in service of your Devotion?"
+        },
+        {
+          "letter": "C",
+          "text": "What feeling does your Devotion fill you with that you can call upon?"
+        },
+        {
+          "letter": "D",
+          "text": "What possession do you carry or have that symbolizes your Devotion?"
+        },
+        {
+          "letter": "E",
+          "text": "Where or when can you connect with your Devotion?"
+        },
+        {
+          "letter": "F",
+          "text": "What does the object of your Devotion often help you with?"
+        },
+        {
+          "letter": "G",
+          "text": "What quality do you possess that best exemplifies your dedication?"
+        },
+        {
+          "letter": "H",
+          "text": "What approach do you take in social situations due to your Devotion?"
+        },
+        {
+          "letter": "I",
+          "text": "What ethos or saying do you aspire to live up to in your dedication?"
+        },
+        {
+          "letter": "J",
+          "text": "What useful ritual or habit do you have to show your Devotion?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What are you blind to because of your Devotion?"
+        },
+        {
+          "letter": "B",
+          "text": "What duties do you have that frequently need your time or resources?"
+        },
+        {
+          "letter": "C",
+          "text": "What unsightly or destructive behavior can your Devotion evoke in you?"
+        },
+        {
+          "letter": "D",
+          "text": "What often threatens the object of your Devotion?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "devotion-1",
+          "name": "Bodyguard",
+          "text": "When your Devotion or a person representing it takes Consequence, you may take it instead of them (and possibly react to it), if the Narrator deems it possible.",
+          "page": 95
+        },
+        {
+          "id": "devotion-2",
+          "name": "Catch Me When I Fall",
+          "text": "Once per session, when you act with the object of your Devotion or a person representing it at your side, and the outcome is only Consequences, you may choose to Succeed as well.",
+          "page": 95
+        },
+        {
+          "id": "devotion-3",
+          "name": "Deeply Committed",
+          "text": "Your dedication fills you with purpose. Once per scene, when you take action to pursue this theme’s Quest, you may first gain committed-2, which expires after that action.",
+          "page": 95
+        },
+        {
+          "id": "devotion-4",
+          "name": "Goes Both Ways",
+          "text": "Once per session, if the object of your Devotion is near, you may gain a story tag representing aid granted by them, such as an item, encouragement, knowledge, or direct help.",
+          "page": 95
+        },
+        {
+          "id": "devotion-5",
+          "name": "Unwavering",
+          "text": "Once per session, when a tag in this theme would be scratched for any reason, you may keep it unscratched instead.",
+          "page": 95
+        }
+      ]
+    },
+    {
+      "id": "past",
+      "name": "Прошлое",
+      "originalName": "Past",
+      "page": 96,
+      "might": "origin",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What past event or existence has shaped your life?"
+        },
+        {
+          "letter": "B",
+          "text": "What major lesson did you learn from your Past?"
+        },
+        {
+          "letter": "C",
+          "text": "What clothing or equipment have you kept with you?"
+        },
+        {
+          "letter": "D",
+          "text": "What memento do you still hold on to?"
+        },
+        {
+          "letter": "E",
+          "text": "What person or people from your Past can you still call upon?"
+        },
+        {
+          "letter": "F",
+          "text": "What situation from your Past are you skilled at dealing with?"
+        },
+        {
+          "letter": "G",
+          "text": "What reputation have you earned for yourself locally?"
+        },
+        {
+          "letter": "H",
+          "text": "What secret skill or technique did you pick up?"
+        },
+        {
+          "letter": "I",
+          "text": "What quality of character have you developed from your experiences?"
+        },
+        {
+          "letter": "J",
+          "text": "What particular culture, clique, or people do you connect with now?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What ugly secret do you keep, connected to your Past?"
+        },
+        {
+          "letter": "B",
+          "text": "What person or group from your Past is still out to get you?"
+        },
+        {
+          "letter": "C",
+          "text": "What past situations bring back painful or unwanted memories?"
+        },
+        {
+          "letter": "D",
+          "text": "What physical or mental marks has your Past left on you?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "past-1",
+          "name": "Face From The Past",
+          "text": "Once per session, when you meet a character from your Past for the first time in the game, you may describe how your last meeting went and give them an appropriate tier-2 status.",
+          "page": 97
+        },
+        {
+          "id": "past-2",
+          "name": "Lessons Learned",
+          "text": "Once per session, when you roll a total of 6 or less, you may explain how this situation is familiar to you from your Past, reroll the dice, and take the new result.",
+          "page": 97
+        },
+        {
+          "id": "past-3",
+          "name": "Not Letting Go",
+          "text": "Whenever you burn a tag from this theme for Power, you can mark Abandon on any other theme instead of marking that tag as scratched.",
+          "page": 97
+        },
+        {
+          "id": "past-4",
+          "name": "Put It Behind Me",
+          "text": "When you Make a Sacrifice at the Scarring sacrifice level, you may forego the roll and treat it as a 7-9 instead, Success with Consequences. You must choose to replace this theme.",
+          "page": 97
+        },
+        {
+          "id": "past-5",
+          "name": "Vivid Memory",
+          "text": "Once per session, when a weakness tag from this theme is invoked, you may discover (ask the Narrator) or reveal (decide yourself, Narrator approves) one important detail from your Past and gain an appropriate story tag or a tier-2 emotional status.",
+          "page": 97
+        }
+      ]
+    },
+    {
+      "id": "people",
+      "name": "Народ",
+      "originalName": "People",
+      "page": 98,
+      "might": "origin",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What do your People call themselves or one of their members?"
+        },
+        {
+          "letter": "B",
+          "text": "What physical attribute common to your People serves you best?"
+        },
+        {
+          "letter": "C",
+          "text": "What skill, technique, or trick is practiced by your People?"
+        },
+        {
+          "letter": "D",
+          "text": "What item of cultural significance do you carry with you?"
+        },
+        {
+          "letter": "E",
+          "text": "What knowledge is shared among your People?"
+        },
+        {
+          "letter": "F",
+          "text": "Where are your People from, commonly found, or most comfortable?"
+        },
+        {
+          "letter": "G",
+          "text": "When in need, who among your People can you call for aid?"
+        },
+        {
+          "letter": "H",
+          "text": "What is the combat style or typical weapon used by your People?"
+        },
+        {
+          "letter": "I",
+          "text": "What useful quality about you is very typical of your People?"
+        },
+        {
+          "letter": "J",
+          "text": "What unique or supernatural ability do your People possess?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What plight or difficulty of your People most affects you?"
+        },
+        {
+          "letter": "B",
+          "text": "What often causes strife or discord among your People?"
+        },
+        {
+          "letter": "C",
+          "text": "When are you hindered by your cultural ways or inherited traits?"
+        },
+        {
+          "letter": "D",
+          "text": "How or by whom are your People most prejudiced against?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "people-1",
+          "name": "Shared Language",
+          "text": "Your People respond well to your presence. Once per scene, when you socially interact with them and get both a Success and Consequences, you may choose not to take the Consequences.",
+          "page": 99
+        },
+        {
+          "id": "people-2",
+          "name": "Stand Out",
+          "text": "You are an unusual member of your People. Once per scene, when you act against your People’s habits, culture, or traditions and get both a Success and Consequences, you may choose not to take the Consequences.",
+          "page": 99
+        },
+        {
+          "id": "people-3",
+          "name": "True To My Tribe",
+          "text": "You are an exemplary member of your People. Once per scene, when acting according to your People’s habits, culture, or traditions would put you at risk or disadvantage and you still choose to do so, you may mark Improve on this theme.",
+          "page": 99
+        },
+        {
+          "id": "people-4",
+          "name": "Trust in Legacy",
+          "text": "Choose one power tag describing your People’s abilities or ways. Once per session, when you roll with this tag and get only Consequences, you may choose to Succeed as well.",
+          "page": 99
+        },
+        {
+          "id": "people-5",
+          "name": "Wisdom Handed Down",
+          "text": "You command the lore of your People. Once per scene, you may ask the Narrator for one important detail from an area of knowledge possessed by your People.",
+          "page": 99
+        }
+      ]
+    },
+    {
+      "id": "personality",
+      "name": "Личность",
+      "originalName": "Personality",
+      "page": 100,
+      "might": "origin",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What Personality trait is most central to you?"
+        },
+        {
+          "letter": "B",
+          "text": "In what situations does your Personality truly shine?"
+        },
+        {
+          "letter": "C",
+          "text": "How do you influence other people?"
+        },
+        {
+          "letter": "D",
+          "text": "What item or garment best expresses your personal style?"
+        },
+        {
+          "letter": "E",
+          "text": "What interpersonal or social skill or talent do you possess?"
+        },
+        {
+          "letter": "F",
+          "text": "When in trouble or stressed, what emotion or behavior do you turn to?"
+        },
+        {
+          "letter": "G",
+          "text": "What is an unexpected but useful facet of your Personality?"
+        },
+        {
+          "letter": "H",
+          "text": "How do you support or help others?"
+        },
+        {
+          "letter": "I",
+          "text": "How do you resist influence or stay true to yourself?"
+        },
+        {
+          "letter": "J",
+          "text": "How can your unique worldview help you figure things out?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "In what situations does your Personality get you into trouble?"
+        },
+        {
+          "letter": "B",
+          "text": "What is an ugly or unfortunate aspect of your Personality?"
+        },
+        {
+          "letter": "C",
+          "text": "What unwanted behavior does your Personality push you toward?"
+        },
+        {
+          "letter": "D",
+          "text": "Who finds you, or who do you find, irksome or loathsome?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "personality-1",
+          "name": "Adaptable Persona",
+          "text": "Once per session, when you take an action using tags from this theme and get only Consequences, you may choose to Succeed as well.",
+          "page": 101
+        },
+        {
+          "id": "personality-2",
+          "name": "Big Personality",
+          "text": "When you burn power tags from this theme for Power, they add 4 Power instead of 3.",
+          "page": 101
+        },
+        {
+          "id": "personality-3",
+          "name": "Infectious Personality",
+          "text": "When you camp or sojourn, you may give another Hero a story tag describing an aspect of your Personality (expiring any previous tag created this way).",
+          "page": 101
+        },
+        {
+          "id": "personality-4",
+          "name": "Lasting Impression",
+          "text": "Once per scene, when you take a social action and Succeed, you may give a lasting impression to everyone you affect with this action.",
+          "page": 101
+        },
+        {
+          "id": "personality-5",
+          "name": "Unshakeable",
+          "text": "Once per scene, when you react to lessen social or emotional Consequences and get a total result of 7 or above, you may spend all your Power to completely avoid all Consequence Effects.",
+          "page": 101
+        }
+      ]
+    },
+    {
+      "id": "skill",
+      "name": "Умение или ремесло",
+      "originalName": "Skill or Trade",
+      "page": 102,
+      "might": "origin",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What Skill or Trade are you good at?"
+        },
+        {
+          "letter": "B",
+          "text": "What specific technique within this Skill set is your specialty?"
+        },
+        {
+          "letter": "C",
+          "text": "What tool, equipment, or outfit is a staple of your Trade?"
+        },
+        {
+          "letter": "D",
+          "text": "Who most respects, values, or requires your abilities?"
+        },
+        {
+          "letter": "E",
+          "text": "What unusual or inventive application have you found for your Skill?"
+        },
+        {
+          "letter": "F",
+          "text": "In what conditions can you work with the most confidence and efficiency?"
+        },
+        {
+          "letter": "G",
+          "text": "How do you reduce the risk of failure, harm, or poor outcome?"
+        },
+        {
+          "letter": "H",
+          "text": "What are you more aware of or know about, thanks to your Skill?"
+        },
+        {
+          "letter": "I",
+          "text": "Who assists you in practicing your Skill or Trade?"
+        },
+        {
+          "letter": "J",
+          "text": "What conviction or emotion motivates you to practice your Skill?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What challenge or feat is quite beyond your everyday ability?"
+        },
+        {
+          "letter": "B",
+          "text": "What conditions make it harder for you to practice your Skill or Trade?"
+        },
+        {
+          "letter": "C",
+          "text": "How does your practice or talent bias your perceptions or interactions?"
+        },
+        {
+          "letter": "D",
+          "text": "Where or when are those of your Trade unwelcome or unwilling to work?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "skill-1",
+          "name": "Deft Remedy",
+          "text": "Once per session, when you use tags from this theme and roll a total of 6 or less, you may reroll the dice and take the new result instead.",
+          "page": 103
+        },
+        {
+          "id": "skill-2",
+          "name": "Learn from My Mistakes",
+          "text": "Once per scene, when you act using tags from this theme and don’t Succeed, mark Improve on this theme.",
+          "page": 103
+        },
+        {
+          "id": "skill-3",
+          "name": "Practice Makes Perfect",
+          "text": "Choose a helpful status reflecting your use of your expertise such as alert or well-off. You may burn a tag from this theme at any time to gain that status at tier 3.",
+          "page": 103
+        },
+        {
+          "id": "skill-4",
+          "name": "Rehearsed Technique",
+          "text": "When you choose this Special, choose a power tag from this theme. Whenever you burn that tag for Power, you gain 3 Power as normal and may also forgo rolling the dice and treat the dice roll total as 7 (before adding Power).",
+          "page": 103
+        },
+        {
+          "id": "skill-5",
+          "name": "Resourceful",
+          "text": "When you camp or sojourn, if you dedicate your time to preparing or crafting something using your skill, you may create an extra story tag in addition to the usual benefits.",
+          "page": 103
+        }
+      ]
+    },
+    {
+      "id": "trait",
+      "name": "Черта",
+      "originalName": "Trait",
+      "page": 104,
+      "might": "origin",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What is your most defining Trait?"
+        },
+        {
+          "letter": "B",
+          "text": "What is a specific or common way you put this Trait to use?"
+        },
+        {
+          "letter": "C",
+          "text": "How is this Trait helping you keep safe?"
+        },
+        {
+          "letter": "D",
+          "text": "What item or ally helps you get the most of your Trait?"
+        },
+        {
+          "letter": "E",
+          "text": "What can you do that only those with this Trait can?"
+        },
+        {
+          "letter": "F",
+          "text": "In which situation is this Trait especially useful to you?"
+        },
+        {
+          "letter": "G",
+          "text": "What skill have you developed to make the most of this gift?"
+        },
+        {
+          "letter": "H",
+          "text": "What do you notice, sense, or understand that most other people cannot?"
+        },
+        {
+          "letter": "I",
+          "text": "How can you perform, show off, or be creative with your Trait?"
+        },
+        {
+          "letter": "J",
+          "text": "How do you hide this Trait, when you need to?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What happens when you overuse your Trait?"
+        },
+        {
+          "letter": "B",
+          "text": "Who around you resents, covets, or mocks your Trait?"
+        },
+        {
+          "letter": "C",
+          "text": "What is the most obvious vulnerability or misuse of this Trait?"
+        },
+        {
+          "letter": "D",
+          "text": "When is your Trait utterly useless?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "trait-1",
+          "name": "Innate Sense",
+          "text": "Once per session, you can ask the Narrator for one important detail that you can intuit thanks to your Trait.",
+          "page": 105
+        },
+        {
+          "id": "trait-2",
+          "name": "Made for This",
+          "text": "Choose a hindering status that your Trait helps you overcome. Once per scene, you may ignore this status when you act.",
+          "page": 105
+        },
+        {
+          "id": "trait-3",
+          "name": "Moment to Shine",
+          "text": "Once per session, when you act using tags from this theme, you may ignore being Imperiled, or treat being Extremely Imperiled as being Imperiled.",
+          "page": 105
+        },
+        {
+          "id": "trait-4",
+          "name": "Pull Through",
+          "text": "Once per session, when you roll with tags from this theme, you may ignore any negative physical or emotional status of tier 3 or lower.",
+          "page": 105
+        },
+        {
+          "id": "trait-5",
+          "name": "Wild Blood",
+          "text": "Your Trait manifests in unusual ways. Choose and gain a Special Improvement from the Uncanny Being themebook.",
+          "page": 105
+        }
+      ]
+    },
+    {
+      "id": "duty",
+      "name": "Долг",
+      "originalName": "Duty",
+      "page": 106,
+      "might": "adventure",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What is the task, goal, or ideal you have taken on so dutifully?"
+        },
+        {
+          "letter": "B",
+          "text": "What quality of character is crucial in taking up this Duty?"
+        },
+        {
+          "letter": "C",
+          "text": "How do you proclaim your Duty or convince others of its importance?"
+        },
+        {
+          "letter": "D",
+          "text": "Who or what is at your beck and call thanks to your commitment?"
+        },
+        {
+          "letter": "E",
+          "text": "What useful resource or tool is needed for the fulfillment of this Duty?"
+        },
+        {
+          "letter": "F",
+          "text": "What legal or social privileges or exceptions apply to you?"
+        },
+        {
+          "letter": "G",
+          "text": "What are the arms, armor, or trappings of your Duty?"
+        },
+        {
+          "letter": "H",
+          "text": "Where do you patrol, hold office, or carry your Duties?"
+        },
+        {
+          "letter": "I",
+          "text": "How do you interact favorably with the patron(s) of this Duty?"
+        },
+        {
+          "letter": "J",
+          "text": "What keeps you on the right track when you despair or falter?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "Who or what opposes you on this task?"
+        },
+        {
+          "letter": "B",
+          "text": "What personal failing sets you back on the path to fulfill your Duty?"
+        },
+        {
+          "letter": "C",
+          "text": "Who is your rival or challenger for this responsibility?"
+        },
+        {
+          "letter": "D",
+          "text": "What negative emotion does your Duty bring up?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "duty-1",
+          "name": "Dutiful Anticipation",
+          "text": "Once per scene, you may ask the Narrator to reveal the closest or next danger standing in your way to fulfilling your Quest. The Narrator will point you at a danger you can perceive or provide a vague clue if you cannot.",
+          "page": 107
+        },
+        {
+          "id": "duty-2",
+          "name": "Grim Determination",
+          "text": "Once per session, when you act to advance this theme’s Quest and suffer Consequences, you may gain determined-2 before your reaction.",
+          "page": 107
+        },
+        {
+          "id": "duty-3",
+          "name": "Painful Lessons",
+          "text": "Once per session, when you act using tags from this theme and suffer Consequences, you may mark Improve on this theme.",
+          "page": 107
+        },
+        {
+          "id": "duty-4",
+          "name": "Driven by Shame",
+          "text": "Once per scene, when you act using tags from this theme, you may add Power to your roll equal to Abandon currently marked on this theme.",
+          "page": 107
+        },
+        {
+          "id": "duty-5",
+          "name": "Unstoppable",
+          "text": "Once per scene, when you take an action to pursue this theme’s Quest using tags from this theme and get both a Success and Consequences, you may choose not to take the Consequences.",
+          "page": 107
+        }
+      ]
+    },
+    {
+      "id": "influence",
+      "name": "Влияние",
+      "originalName": "Influence",
+      "page": 108,
+      "might": "adventure",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What gives you power and Influence over others?"
+        },
+        {
+          "letter": "B",
+          "text": "What is the most common task or service people do for you?"
+        },
+        {
+          "letter": "C",
+          "text": "Who are your followers, servants, foot soldiers, or agents?"
+        },
+        {
+          "letter": "D",
+          "text": "What is the most potent way in which you exert Influence?"
+        },
+        {
+          "letter": "E",
+          "text": "In what domain is your Influence the strongest?"
+        },
+        {
+          "letter": "F",
+          "text": "What assets or benefits have you gained thanks to your Influence?"
+        },
+        {
+          "letter": "G",
+          "text": "Who is the most susceptible to your Influence?"
+        },
+        {
+          "letter": "H",
+          "text": "How do you grow the reach of your Influence?"
+        },
+        {
+          "letter": "I",
+          "text": "How do you dismantle others’ resistance?"
+        },
+        {
+          "letter": "J",
+          "text": "How do you protect yourself from others’ influence?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "Who resists, ignores, or is immune to your Influence?"
+        },
+        {
+          "letter": "B",
+          "text": "What do you do that undermines your own power?"
+        },
+        {
+          "letter": "C",
+          "text": "Who does your Influence cause you to clash with?"
+        },
+        {
+          "letter": "D",
+          "text": "What lies outside of your sphere of Influence?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "influence-1",
+          "name": "Follow Me!",
+          "text": "Once per session, when you roll to recruit, muster, or rally someone under your Influence and Succeed, you may create multiple single-use story tags (page 165) for 1 Power each.",
+          "page": 109
+        },
+        {
+          "id": "influence-2",
+          "name": "Friends Everywhere",
+          "text": "When you enter a settlement for the first time, you gain a useful contact there. You may name them and define their relationship with you at the Narrator’s discretion.",
+          "page": 109
+        },
+        {
+          "id": "influence-3",
+          "name": "Long Reach",
+          "text": "Once per session, you can have a representative of your Influence be present anywhere they could conceivably be, and then take action as that character using tags from this theme.",
+          "page": 109
+        },
+        {
+          "id": "influence-4",
+          "name": "Overextend",
+          "text": "Whenever you roll with tags from this theme and suffer a status as a Consequence, you may increase the tier of that status by 1 and gain 2 more Power to spend on Effects.",
+          "page": 109
+        },
+        {
+          "id": "influence-5",
+          "name": "Read Between the Lines",
+          "text": "Whenever you roll a reaction using tags from this theme to lessen a social or influence-related Consequence, you receive one valuable detail about the source of the Consequence.",
+          "page": 109
+        }
+      ]
+    },
+    {
+      "id": "knowledge",
+      "name": "Знание",
+      "originalName": "Knowledge",
+      "page": 110,
+      "might": "adventure",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What special Knowledge do you possess?"
+        },
+        {
+          "letter": "B",
+          "text": "What subject do you specialize in within your body of Knowledge?"
+        },
+        {
+          "letter": "C",
+          "text": "What can be understood, analyzed, or explained with your Knowledge?"
+        },
+        {
+          "letter": "D",
+          "text": "What is a practical application of your Knowledge?"
+        },
+        {
+          "letter": "E",
+          "text": "What advantage do you have over those lacking your Knowledge?"
+        },
+        {
+          "letter": "F",
+          "text": "How do you protect, store, or preserve your Knowledge?"
+        },
+        {
+          "letter": "G",
+          "text": "What have you learned that is adjacent to your Knowledge?"
+        },
+        {
+          "letter": "H",
+          "text": "What do you always carry with you, because of what you know?"
+        },
+        {
+          "letter": "I",
+          "text": "What is your method of collection, discovery, or research?"
+        },
+        {
+          "letter": "J",
+          "text": "What is a new frontier of Knowledge you are beginning to explore?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What are the biggest holes in your body of Knowledge?"
+        },
+        {
+          "letter": "B",
+          "text": "What is beyond fathom, obscured, or confusing to you?"
+        },
+        {
+          "letter": "C",
+          "text": "Who seeks to steal, take, or deny this Knowledge from you?"
+        },
+        {
+          "letter": "D",
+          "text": "What hurdles stand in your way when you attempt to apply your Knowledge?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "knowledge-1",
+          "name": "A Known Expert",
+          "text": "People seek your advice. Once per session, you may gain an audience with any NPC interested in your Knowledge (Narrator’s call), without rolling, or remove from them up to 3 status tiers representing hostility or resistance.",
+          "page": 111
+        },
+        {
+          "id": "knowledge-2",
+          "name": "Always Thinking",
+          "text": "You’re used to contemplating while doing other things. When you camp or sojourn, you may take an action in the third period using only tags from this theme without automatically suffering Consequences (if you choose to roll, you may still suffer Consequences).",
+          "page": 111
+        },
+        {
+          "id": "knowledge-3",
+          "name": "Applied Expertise",
+          "text": "Once per session, when you spend Power to discover a valuable detail after rolling with tags from this theme, you may gain a free story tag representing a practical application of your discovery.",
+          "page": 111
+        },
+        {
+          "id": "knowledge-4",
+          "name": "Inventive Stroke",
+          "text": "Whenever you invoke this theme’s title tag while applying your Knowledge to a practical task in a way you never have before, you get 2 Power from the tag instead of 1.",
+          "page": 111
+        },
+        {
+          "id": "knowledge-5",
+          "name": "Flashes of Insight",
+          "text": "Whenever you encounter for the first time a place, object, creature or phenomenon that your Knowledge applies to, you may ask the Narrator to give you one valuable detail about it.",
+          "page": 111
+        }
+      ]
+    },
+    {
+      "id": "prodigious",
+      "name": "Выдающаяся способность",
+      "originalName": "Prodigious Ability",
+      "page": 112,
+      "might": "adventure",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What do you call someone who has your Prodigious Ability?"
+        },
+        {
+          "letter": "B",
+          "text": "What is a secondary skill or characteristic of this ability?"
+        },
+        {
+          "letter": "C",
+          "text": "What incredible technique or stunt can you pull off?"
+        },
+        {
+          "letter": "D",
+          "text": "How can you use your ability to impress and amaze?"
+        },
+        {
+          "letter": "E",
+          "text": "What emotion unleashes your potential?"
+        },
+        {
+          "letter": "F",
+          "text": "What is the chief tool you use when practicing your ability?"
+        },
+        {
+          "letter": "G",
+          "text": "How do you prevent failure or regain the advantage with your ability?"
+        },
+        {
+          "letter": "H",
+          "text": "What signature move or unique slant did you add to your repertoire?"
+        },
+        {
+          "letter": "I",
+          "text": "What do you know, sense, or discern that a beginner wouldn’t?"
+        },
+        {
+          "letter": "J",
+          "text": "What nearly (or truly) miraculous thing can you accomplish?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What is a flaw or weakness of your ability you are still refining?"
+        },
+        {
+          "letter": "B",
+          "text": "What bad habits or behaviors have you developed due to your ability?"
+        },
+        {
+          "letter": "C",
+          "text": "Under what conditions is your ability less effective, even with your proficiency?"
+        },
+        {
+          "letter": "D",
+          "text": "Who resents or harasses you because of your ability?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "prodigious-1",
+          "name": "Improved Counter",
+          "text": "When you react to lessen a Consequence with tags from this theme and roll a total of 10 or higher, you may, in addition to any other benefit, keep the spotlight to counterattack and may double dip tags already used in this spotlight.",
+          "page": 113
+        },
+        {
+          "id": "prodigious-2",
+          "name": "Create An Opening",
+          "text": "Once per session, when you use tags from this theme and Succeed, you may create a free tier-2 status representing an opportunity you create for an ally through your action.",
+          "page": 113
+        },
+        {
+          "id": "prodigious-3",
+          "name": "Discerning Eye",
+          "text": "Once per session, when you have time and access to observe someone’s action or work, you may learn three valuable details about them through your Ability.",
+          "page": 113
+        },
+        {
+          "id": "prodigious-4",
+          "name": "Masterpiece",
+          "text": "With the necessary time and resources, you can create a grand work (art, text, tool, weapon, etc.). Gain a story theme (3 positive tags, 1 negative tag) and mark a Milestone.",
+          "page": 113
+        },
+        {
+          "id": "prodigious-5",
+          "name": "Practiced Maneuver",
+          "text": "Describe a maneuver you perform regularly. Once per session, when you perform it with tags from this theme and get only Consequences, you may Succeed as well.",
+          "page": 113
+        }
+      ]
+    },
+    {
+      "id": "relic",
+      "name": "Реликвия",
+      "originalName": "Relic",
+      "page": 114,
+      "might": "adventure",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What powerful or mysterious item do you possess?"
+        },
+        {
+          "letter": "B",
+          "text": "What is its most potent power or ability?"
+        },
+        {
+          "letter": "C",
+          "text": "What is another aspect or part of its magic?"
+        },
+        {
+          "letter": "D",
+          "text": "What do you feel when you hold, wear, or use it?"
+        },
+        {
+          "letter": "E",
+          "text": "When does your Relic come to life or becomes stronger?"
+        },
+        {
+          "letter": "F",
+          "text": "What skill is required to best handle the Relic?"
+        },
+        {
+          "letter": "G",
+          "text": "Who or what was your Relic made to affect the most?"
+        },
+        {
+          "letter": "H",
+          "text": "What is revealed to you through the use of your Relic?"
+        },
+        {
+          "letter": "I",
+          "text": "What is a secret feature of the Relic that no one else knows about?"
+        },
+        {
+          "letter": "J",
+          "text": "What does your Relic unlock or unleash?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What is the most troublesome shortcoming of your Relic?"
+        },
+        {
+          "letter": "B",
+          "text": "What can interfere with the powers of your Relic?"
+        },
+        {
+          "letter": "C",
+          "text": "What can damage or destroy your Relic?"
+        },
+        {
+          "letter": "D",
+          "text": "What has changed in you for the worse because of your Relic?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "relic-1",
+          "name": "Eternal Bond",
+          "text": "You can scratch a power tag from this theme to immediately retrieve your Relic from anywhere in the world. You can mark Abandon on this theme to immediately remove all statuses from your Relic or reform it.",
+          "page": 115
+        },
+        {
+          "id": "relic-2",
+          "name": "Momentary Bearer",
+          "text": "Once per session, you can let another player use power tags from this theme, provided they can access and use your Relic for their action.",
+          "page": 115
+        },
+        {
+          "id": "relic-3",
+          "name": "Reckless Discharge",
+          "text": "Once per session, when you act using tags from this theme, you may treat the theme as if it was one level of Might higher than it is. Mark Abandon on this theme.",
+          "page": 115
+        },
+        {
+          "id": "relic-4",
+          "name": "Sentinel",
+          "text": "Choose a tier-2 status that describes how your Relic protects you, such as watchful-2, parrying-2, warded-2, or cover-2. You may gain it once per session, when you are in imminent danger.",
+          "page": 115
+        },
+        {
+          "id": "relic-5",
+          "name": "Signature Move",
+          "text": "Choose a power tag from this theme and an appropriate tier-2 status that you can give using this tag. Once per session, when you use this tag in an action and Succeed, you may give this status in addition to (and after applying) the normal outcome.",
+          "page": 115
+        }
+      ]
+    },
+    {
+      "id": "uncanny",
+      "name": "Сверхъестественное существо",
+      "originalName": "Uncanny Being",
+      "page": 116,
+      "might": "adventure",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What manner of fantastical being are you?"
+        },
+        {
+          "letter": "B",
+          "text": "What can you do that a human never could?"
+        },
+        {
+          "letter": "C",
+          "text": "What other magic or supernatural ability do you possess?"
+        },
+        {
+          "letter": "D",
+          "text": "What unusual shape, feature, or trait do you have or can assume?"
+        },
+        {
+          "letter": "E",
+          "text": "What do you know or sense that mundane beings cannot?"
+        },
+        {
+          "letter": "F",
+          "text": "How do you gain sustenance, draw strength, or recover?"
+        },
+        {
+          "letter": "G",
+          "text": "What aura, miasma, or other unique essence do you possess or exude?"
+        },
+        {
+          "letter": "H",
+          "text": "What is your natural or preferred habitat, territory, or range?"
+        },
+        {
+          "letter": "I",
+          "text": "Who or what is a common ally or prey to creatures such as you?"
+        },
+        {
+          "letter": "J",
+          "text": "How does your kind interact with mortal and mundane beings?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What repels or harms your kind?"
+        },
+        {
+          "letter": "B",
+          "text": "How can mortal creatures bind or manipulate you?"
+        },
+        {
+          "letter": "C",
+          "text": "What is a shortcoming of your physical or magical nature?"
+        },
+        {
+          "letter": "D",
+          "text": "Who hunts or antagonizes you?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "uncanny-1",
+          "name": "Expressive Form",
+          "text": "Choose a status that describes your form such as terrifying-2, eerie-2, or welcoming-2. You may gain it at any point once per session.",
+          "page": 117
+        },
+        {
+          "id": "uncanny-2",
+          "name": "Repel Witchery",
+          "text": "You are unusually resistant to magic. Once per scene, when you react to lessen magical Consequences with tags from this theme and roll 6 or less, you may still spend your Power to lessen the Effects.",
+          "page": 117
+        },
+        {
+          "id": "uncanny-3",
+          "name": "Self Discovery",
+          "text": "Once per session, when you discover a new detail about your origin, your qualities, or your abilities, mark Improve on this theme.",
+          "page": 117
+        },
+        {
+          "id": "uncanny-4",
+          "name": "Shifting Form",
+          "text": "Once per session, you may replace one of this theme’s power tags (except the theme tag) with a new tag that represents a change in your natural abilities and qualities.",
+          "page": 117
+        },
+        {
+          "id": "uncanny-5",
+          "name": "Strive to Belong",
+          "text": "You follow the example of your more earthly companions. Once per session, when you watch another Hero perform a mundane action, you may gain a story tag describing your imitation or understanding them.",
+          "page": 117
+        }
+      ]
+    },
+    {
+      "id": "destiny",
+      "name": "Судьба",
+      "originalName": "Destiny",
+      "page": 118,
+      "might": "greatness",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What Destiny will you fulfill?"
+        },
+        {
+          "letter": "B",
+          "text": "How does fate help you out when you are in danger?"
+        },
+        {
+          "letter": "C",
+          "text": "What useful resource has Destiny provided you with?"
+        },
+        {
+          "letter": "D",
+          "text": "Who believes in your Destiny and will do anything to help fulfill it?"
+        },
+        {
+          "letter": "E",
+          "text": "What quality is the reason you were chosen for this fate?"
+        },
+        {
+          "letter": "F",
+          "text": "How has your fate made your life much easier than that of others?"
+        },
+        {
+          "letter": "G",
+          "text": "What useful possession of yours seems tied to your fate?"
+        },
+        {
+          "letter": "H",
+          "text": "What signs, advice, intuition, or prophecy helps guide you?"
+        },
+        {
+          "letter": "I",
+          "text": "What do you need most to fulfill your Destiny?"
+        },
+        {
+          "letter": "J",
+          "text": "How does fate abruptly alter reality to keep you on your path?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "Who is determined to thwart your Destiny?"
+        },
+        {
+          "letter": "B",
+          "text": "What essential piece are you missing to fulfill your Destiny?"
+        },
+        {
+          "letter": "C",
+          "text": "What problem are you destined to face at every turn?"
+        },
+        {
+          "letter": "D",
+          "text": "How has your Destiny gone to your head?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "destiny-1",
+          "name": "As Foretold",
+          "text": "Once per session, you may declare an action by you or another Hero as pivotal in the fulfillment of your Destiny. Count Power normally and, instead of rolling, treat the result as a Success with Consequences.",
+          "page": 119
+        },
+        {
+          "id": "destiny-2",
+          "name": "Meet It Head-On",
+          "text": "Once per session, when you act against something preventing you from fulfilling your Destiny, you first gain a story tag or a tier-2 status that represents your readiness.",
+          "page": 119
+        },
+        {
+          "id": "destiny-3",
+          "name": "Not How It Ends",
+          "text": "Once per session, when you take Consequences that would hinder you on the way to your Destiny (despaired, tired, cursed, etc.), you may avoid these Consequences completely.",
+          "page": 119
+        },
+        {
+          "id": "destiny-4",
+          "name": "Reincarnation",
+          "text": "When your Destiny finally manifests, you may remove any harmful status on you, including tier-6 statuses. This theme evolves, and you can replace any number of your other themes. You gain Promise as usual for all themes.",
+          "page": 119
+        },
+        {
+          "id": "destiny-5",
+          "name": "Pull of Destiny",
+          "text": "Once per session, you may ask the Narrator what the best way to pursue your Destiny is, and get one valuable detail.",
+          "page": 119
+        }
+      ]
+    },
+    {
+      "id": "dominion",
+      "name": "Владычество",
+      "originalName": "Dominion",
+      "page": 120,
+      "might": "greatness",
+      "power": [
+        {
+          "letter": "A",
+          "text": "State your title, or what you rule over."
+        },
+        {
+          "letter": "B",
+          "text": "What is the most common or useful use of your authority?"
+        },
+        {
+          "letter": "C",
+          "text": "Who is your closest confidant, advisor, or servant?"
+        },
+        {
+          "letter": "D",
+          "text": "What underlings serve you in droves?"
+        },
+        {
+          "letter": "E",
+          "text": "What valuable resources does your Dominion produce regularly?"
+        },
+        {
+          "letter": "F",
+          "text": "What special quality or circumstance serves you as a ruler?"
+        },
+        {
+          "letter": "G",
+          "text": "Where or when is your Dominion at its strongest?"
+        },
+        {
+          "letter": "H",
+          "text": "What group within your Dominion supports you most?"
+        },
+        {
+          "letter": "I",
+          "text": "What ways have you devised to hold on to your power?"
+        },
+        {
+          "letter": "J",
+          "text": "What is your favored tactic or strategy during conflict?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "Who seeks to usurp your power or dethrone you?"
+        },
+        {
+          "letter": "B",
+          "text": "What problem plagues your Dominion?"
+        },
+        {
+          "letter": "C",
+          "text": "What personal flaw have you become known for?"
+        },
+        {
+          "letter": "D",
+          "text": "What dark secret do you hide?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "dominion-1",
+          "name": "Embodiment of the Realm",
+          "text": "You are connected to your Dominion in more than title. Any status on your Dominion is considered to apply to you as well, and any status on you is considered to apply to your Dominion.",
+          "page": 121
+        },
+        {
+          "id": "dominion-2",
+          "name": "Good Help Is Hard to Find",
+          "text": "Name an advisor, craftsman, or assistant NPC that comes with your position. Once per session, you may gain a story tag they produce for you.",
+          "page": 121
+        },
+        {
+          "id": "dominion-3",
+          "name": "My Word Is Absolute",
+          "text": "Once per session, you may gain a story tag representing a decree you have made in your Dominion (expiring any previous tag created this way). White it exists, it holds true throughout your Dominion, although it can be scratched.",
+          "page": 121
+        },
+        {
+          "id": "dominion-4",
+          "name": "Regalia",
+          "text": "Choose a physical symbol of your position. Once per scene, when you wear, wield, or are in the presence of this symbol, you may gain majestic-2.",
+          "page": 121
+        },
+        {
+          "id": "dominion-5",
+          "name": "Untarnished Glory",
+          "text": "Once per session, you may remove 2 tiers of a negative status on your Dominion or recover a scratched tag in this theme.",
+          "page": 121
+        }
+      ]
+    },
+    {
+      "id": "mastery",
+      "name": "Мастерство",
+      "originalName": "Mastery",
+      "page": 122,
+      "might": "greatness",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What skill, ability, or field have you come to Master?"
+        },
+        {
+          "letter": "B",
+          "text": "What supplementary skills have you become equally proficient at?"
+        },
+        {
+          "letter": "C",
+          "text": "What can you do that no other practitioner can?"
+        },
+        {
+          "letter": "D",
+          "text": "How can your Mastery change the world?"
+        },
+        {
+          "letter": "E",
+          "text": "What specially-made tools or expert assistants are at your disposal?"
+        },
+        {
+          "letter": "F",
+          "text": "What is the name of your legendary workshop, library, forge, or the like?"
+        },
+        {
+          "letter": "G",
+          "text": "What can you do with incredible effectiveness, speed, or magnitude?"
+        },
+        {
+          "letter": "H",
+          "text": "What is your most well-practiced technique or best-studied subject?"
+        },
+        {
+          "letter": "I",
+          "text": "What awe-striking feat can you perform at your whim?"
+        },
+        {
+          "letter": "J",
+          "text": "What special privileges or material benefits come with your Mastery?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What are the inherent repercussions of practicing at your level?"
+        },
+        {
+          "letter": "B",
+          "text": "How has your Mastery affected your disposition or lifestyle for the worse?"
+        },
+        {
+          "letter": "C",
+          "text": "What do you ignore, because you no longer notice such trivial things?"
+        },
+        {
+          "letter": "D",
+          "text": "Who feels jealous of your Mastery?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "mastery-1",
+          "name": "Always Prepared",
+          "text": "Once per scene, when a broad tag from this theme is indirectly relevant to your action, you may use it as directly relevant instead, skipping the required prep action.",
+          "page": 123
+        },
+        {
+          "id": "mastery-2",
+          "name": "Calculated Sacrifice",
+          "text": "Before Making a Sacrifice at the Grave sacrifice level related to your Mastery, replace a theme other than this one that is dearest to you. You may then treat a 7-9 roll as a 10 or more result. If you Succeed, you don’t need to replace another theme – you already paid that price.",
+          "page": 123
+        },
+        {
+          "id": "mastery-3",
+          "name": "Foresee the Outcome",
+          "text": "Once per session, you may declare that an action in which you rolled a total of 9 or less (including Power) was only a prediction of an unwanted outcome and did not actually happen. Disregard the action and take a different action instead.",
+          "page": 123
+        },
+        {
+          "id": "mastery-4",
+          "name": "Lifelong Insight",
+          "text": "When you replace this theme, you may keep one of the Special Improvements you chose (except for this one) and add it to the new theme.",
+          "page": 123
+        },
+        {
+          "id": "mastery-5",
+          "name": "Second Wind",
+          "text": "Once per session, you may restore two scratched tags in this theme, at the cost of scratching one tag on another theme.",
+          "page": 123
+        }
+      ]
+    },
+    {
+      "id": "monstrosity",
+      "name": "Чудовищность",
+      "originalName": "Monstrosity",
+      "page": 124,
+      "might": "greatness",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What magnificent or terrifying creature are you?"
+        },
+        {
+          "letter": "B",
+          "text": "What is your most prominent physical feature?"
+        },
+        {
+          "letter": "C",
+          "text": "What innate magical ability do you most often wield?"
+        },
+        {
+          "letter": "D",
+          "text": "What feature, move, or power enables you to affect many at once?"
+        },
+        {
+          "letter": "E",
+          "text": "How do you defend yourself with magic or size?"
+        },
+        {
+          "letter": "F",
+          "text": "What unique offensive capability do you possess?"
+        },
+        {
+          "letter": "G",
+          "text": "What powerful emotion drives you or is rooted in your core?"
+        },
+        {
+          "letter": "H",
+          "text": "What arcane truth is revealed to you that mere mortals cannot sense?"
+        },
+        {
+          "letter": "I",
+          "text": "Who serves you?"
+        },
+        {
+          "letter": "J",
+          "text": "What about you commands respect from lesser creatures?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What is your blind spot, that you miss due to your size or power?"
+        },
+        {
+          "letter": "B",
+          "text": "What can counteract your magic or weaken you?"
+        },
+        {
+          "letter": "C",
+          "text": "What is your one weak spot or bane?"
+        },
+        {
+          "letter": "D",
+          "text": "Who seeks out your destruction?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "monstrosity-1",
+          "name": "Display of Force",
+          "text": "Once per session, when you act using tags from this theme and Succeed without Consequences, your incredible display gives a tier-3 status of your choice representing amazement, respect, or fear to a crowd of impressionable onlookers or one observer not easily impressed.",
+          "page": 125
+        },
+        {
+          "id": "monstrosity-2",
+          "name": "Fine Control",
+          "text": "You learned how to better control your form’s unique abilities. Choose and gain a Special Improvement from the Mastery themebook.",
+          "page": 125
+        },
+        {
+          "id": "monstrosity-3",
+          "name": "Invulnerability",
+          "text": "Choose a power tag in this theme representing a type of physical or magical protection. You ignore all Consequences that this protection is relevant to, as long as this tag is unscratched.",
+          "page": 125
+        },
+        {
+          "id": "monstrosity-4",
+          "name": "Magical Trace",
+          "text": "At the end of a scene, you may leave behind a magical trace (expiring any previous tag created this way). You may scratch this tag to take an action using tags from this theme as if you were at the tag’s location.",
+          "page": 125
+        },
+        {
+          "id": "monstrosity-5",
+          "name": "Surge of Power",
+          "text": "Once per session, when burning a tag from this theme for Power, you may add 5 Power to the roll instead of 3. After the roll is resolved, you take exhausted-2. You cannot lessen this status.",
+          "page": 125
+        }
+      ]
+    },
+    {
+      "id": "companion",
+      "name": "Спутник",
+      "originalName": "Companion",
+      "page": 126,
+      "might": "variable",
+      "power": [
+        {
+          "letter": "A",
+          "text": "Who is regularly at your side, supporting you?"
+        },
+        {
+          "letter": "B",
+          "text": "What is your Companion’s most handy quality or skill?"
+        },
+        {
+          "letter": "C",
+          "text": "How does your Companion get you out of a jam?"
+        },
+        {
+          "letter": "D",
+          "text": "What activity do you and your Companion do well together?"
+        },
+        {
+          "letter": "E",
+          "text": "Where do you and your Companion go to relax or to get things done?"
+        },
+        {
+          "letter": "F",
+          "text": "What is your Companion’s signature move, trick, or ability?"
+        },
+        {
+          "letter": "G",
+          "text": "What useful item does your Companion always have at the ready?"
+        },
+        {
+          "letter": "H",
+          "text": "How does your Companion help you improve or recover, or vice versa?"
+        },
+        {
+          "letter": "I",
+          "text": "What is a useful physical characteristic of your Companion?"
+        },
+        {
+          "letter": "J",
+          "text": "What is your Companion’s outlook or modus operandi?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "How does your Companion get you into trouble or danger?"
+        },
+        {
+          "letter": "B",
+          "text": "What is your Companion’s most annoying quality?"
+        },
+        {
+          "letter": "C",
+          "text": "What causes your Companion to become unavailable?"
+        },
+        {
+          "letter": "D",
+          "text": "In what situation is your Companion least useful?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "companion-1",
+          "name": "Everyone’s Best Friend",
+          "text": "Once per session, when your Companion helps another member of your Fellowship, you may invoke only tags from this theme, forgo rolling, and get a Success without Consequences.",
+          "page": 127
+        },
+        {
+          "id": "companion-2",
+          "name": "Here For You",
+          "text": "Once per session, when you or your Companion take action to heal one another or help the other recover, mark Improve on this theme. This does not apply while camping.",
+          "page": 127
+        },
+        {
+          "id": "companion-3",
+          "name": "Perfect Positioning",
+          "text": "Once per session, you can declare your Companion is positioned anywhere in the scene as long as they could get there, and give them a tier-2 status representing their advantageous position.",
+          "page": 127
+        },
+        {
+          "id": "companion-4",
+          "name": "Reliable Ally",
+          "text": "Once per session, when you act alongside your Companion and get only Consequences, you may scratch a tag in this theme to Succeed as well.",
+          "page": 127
+        },
+        {
+          "id": "companion-5",
+          "name": "Retaliation",
+          "text": "Whenever anyone gives your Companion a harmful or hindering tag or status, you gain provoked-2, which helps actions to retaliate against the offender.",
+          "page": 127
+        }
+      ]
+    },
+    {
+      "id": "magic",
+      "name": "Магия",
+      "originalName": "Magic",
+      "page": 128,
+      "might": "variable",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What is your magical nature, art, or expression?"
+        },
+        {
+          "letter": "B",
+          "text": "What category, field, or type of Magic do you specialize in?"
+        },
+        {
+          "letter": "C",
+          "text": "What specific magical ability, maneuver, or spell do you use regularly?"
+        },
+        {
+          "letter": "D",
+          "text": "What is different, better, or special about the way you use Magic?"
+        },
+        {
+          "letter": "E",
+          "text": "Which personal style or flourish have you added to your Magic?"
+        },
+        {
+          "letter": "F",
+          "text": "What knowledge or lore related to this form of Magic did you acquire?"
+        },
+        {
+          "letter": "G",
+          "text": "In which conditions is your Magic most powerful?"
+        },
+        {
+          "letter": "H",
+          "text": "What item or material do you use to empower your Magic?"
+        },
+        {
+          "letter": "I",
+          "text": "What skill related to your Magic have you developed?"
+        },
+        {
+          "letter": "J",
+          "text": "What social skill, trait, or benefit do you have thanks to your Magic?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What conditions, uses, or targets are unfavorable for your Magic?"
+        },
+        {
+          "letter": "B",
+          "text": "What does your Magic require in order to function well?"
+        },
+        {
+          "letter": "C",
+          "text": "What are the side effects of having or using your Magic?"
+        },
+        {
+          "letter": "D",
+          "text": "How does having Magic make your life harder?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "magic-1",
+          "name": "Scholar of Magic",
+          "text": "Once per scene, when you see someone practicing magic of the same kind you practice, you may ask the Narrator for one valuable detail about the magic they’re performing.",
+          "page": 129
+        },
+        {
+          "id": "magic-2",
+          "name": "Ward Breaker",
+          "text": "Once per session, when you act against someone warded against your Magic and Succeed, you may scratch a tag or reduce by two tiers a status representing their defense, in addition to the normal outcome.",
+          "page": 129
+        },
+        {
+          "id": "magic-3",
+          "name": "Rote Technique",
+          "text": "Once per session, when you use your Magic in a way you’ve used it before and get only Consequences, you may Succeed as well.",
+          "page": 129
+        },
+        {
+          "id": "magic-4",
+          "name": "Reputation Precedes",
+          "text": "Choose a tier-2 status representing a reaction to your magic. Whenever you meet a character for the first time, you may give them this status, at the Narrator’s discretion.",
+          "page": 129
+        },
+        {
+          "id": "magic-5",
+          "name": "Inspired Ingenuity",
+          "text": "Once per session, when you use your Magic to achieve a goal in a way you never have before, you may mark Improve on this theme.",
+          "page": 129
+        }
+      ]
+    },
+    {
+      "id": "possessions",
+      "name": "Владения",
+      "originalName": "Possessions",
+      "page": 130,
+      "might": "variable",
+      "power": [
+        {
+          "letter": "A",
+          "text": "What is your most important Possession or material resource?"
+        },
+        {
+          "letter": "B",
+          "text": "What useful characteristic or feature does it have?"
+        },
+        {
+          "letter": "C",
+          "text": "What supplemental or related item or set do you possess?"
+        },
+        {
+          "letter": "D",
+          "text": "What is the most common way you use your Possession?"
+        },
+        {
+          "letter": "E",
+          "text": "What surprising secret or trick use does this item have?"
+        },
+        {
+          "letter": "F",
+          "text": "What situations or conditions was this item designed for?"
+        },
+        {
+          "letter": "G",
+          "text": "How do you handle, repair, or maintain your Possessions?"
+        },
+        {
+          "letter": "H",
+          "text": "What emotion or memory does this Possession evoke in you?"
+        },
+        {
+          "letter": "I",
+          "text": "How do you keep your Possession safe or concealed?"
+        },
+        {
+          "letter": "J",
+          "text": "What is the make, style, design, or quality standard of this item?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What is a flaw or downside of your Possession?"
+        },
+        {
+          "letter": "B",
+          "text": "What causes your Possession to need repair or maintenance?"
+        },
+        {
+          "letter": "C",
+          "text": "How do you overuse or abuse your Possession?"
+        },
+        {
+          "letter": "D",
+          "text": "What is beyond the capabilities or standards of your Possession?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "possessions-1",
+          "name": "Durable",
+          "text": "Choose a tag from this theme. Once per session, you can prevent Consequence Effects that would scratch it or give it a status of tier 3 or less.",
+          "page": 131
+        },
+        {
+          "id": "possessions-2",
+          "name": "Favorite Piece",
+          "text": "Choose a power tag in this theme. Once per session, you may burn this tag for Power without scratching it.",
+          "page": 131
+        },
+        {
+          "id": "possessions-3",
+          "name": "I’m Keeping This",
+          "text": "Choose one of your backpack tags and move it to this theme; it becomes a power tag. Once per session, you may return this tag to your backpack and pick a different one to move to this theme.",
+          "page": 131
+        },
+        {
+          "id": "possessions-4",
+          "name": "Just The Thing",
+          "text": "Once per session, you may gain a story tag that represents something useful you have on you or that you have access to, or a new use for your items.",
+          "page": 131
+        },
+        {
+          "id": "possessions-5",
+          "name": "Quartermaster",
+          "text": "Choose a power tag from this theme representing an item. Members of your Fellowship may treat it as if it were in their backpack, as long as it is possible for you to hand it to them and let them use it. (It retains the Might of this theme.)",
+          "page": 131
+        }
+      ]
+    },
+    {
+      "id": "fellowship",
+      "name": "Братство",
+      "originalName": "Fellowship",
+      "page": 140,
+      "might": "variable",
+      "power": [
+        {
+          "letter": "A",
+          "text": "Who are you, as a group?"
+        },
+        {
+          "letter": "B",
+          "text": "Where do you meet, work, rest, or prepare for action?"
+        },
+        {
+          "letter": "C",
+          "text": "What do you do well together?"
+        },
+        {
+          "letter": "D",
+          "text": "Who mentors you, aids you, or is sympathetic to your goals?"
+        },
+        {
+          "letter": "E",
+          "text": "What helps you travel from one place to the next?"
+        },
+        {
+          "letter": "F",
+          "text": "In what environments or situations are you most comfortable?"
+        },
+        {
+          "letter": "G",
+          "text": "What special sources of information do you have?"
+        },
+        {
+          "letter": "H",
+          "text": "What sort of reputation or name have you made for yourselves?"
+        },
+        {
+          "letter": "I",
+          "text": "How do you help, assist, or support one another?"
+        },
+        {
+          "letter": "J",
+          "text": "What kind of special gear, resource, or power is at your disposal?"
+        }
+      ],
+      "weakness": [
+        {
+          "letter": "A",
+          "text": "What is flawed or lacking in the way you work together?"
+        },
+        {
+          "letter": "B",
+          "text": "How do you get into trouble?"
+        },
+        {
+          "letter": "C",
+          "text": "Who or what threatens your Fellowship or shared goals?"
+        },
+        {
+          "letter": "D",
+          "text": "What places or situations do you find tough to handle?"
+        }
+      ],
+      "improvements": [
+        {
+          "id": "fellowship-1",
+          "name": "Campfire Stories",
+          "text": "Whenever you camp or sojourn, between the first and second activities, one of the Heroes may share a story from their past. Each member of the Fellowship may then remove one tier of a harmful status, at the Narrator’s discretion.",
+          "page": 141
+        },
+        {
+          "id": "fellowship-2",
+          "name": "One Of Us",
+          "text": "Choose an NPC accompanying the Fellowship – a person, animal, or any other thing that feels. All members of the Fellowship may write an additional Fellowship relationship tag with this character on their Hero cards.",
+          "page": 141
+        },
+        {
+          "id": "fellowship-3",
+          "name": "Sacrifice",
+          "text": "When two or more of you suffer the same Consequences, a Hero who can reasonably defend another Hero may spend Power from their own reaction to lessen their ally’s Consequences.",
+          "page": 141
+        },
+        {
+          "id": "fellowship-4",
+          "name": "Teamwork",
+          "text": "When two or more Heroes take the same action while camping or sojourning, they all get 1 more Power for this action.",
+          "page": 141
+        },
+        {
+          "id": "fellowship-5",
+          "name": "United by the Cause",
+          "text": "Once per session, when the entire Fellowship cooperates in a single scene while aligned with this theme’s Quest, each member of the Fellowship may unscratch a Fellowship theme tag.",
+          "page": 141
+        }
+      ]
+    }
+  ],
+  "quintessences": [
+    {
+      "id": "quint-1",
+      "name": "Beyond Luck",
+      "text": "You no longer automatically miss when you roll double ones.",
+      "page": 194
+    },
+    {
+      "id": "quint-2",
+      "name": "Canny One",
+      "text": "Once per session, when the Narrator delivers Consequences or activates a Challenge’s ability, you may treat them as a Threat instead, take the spotlight, and take a single action, even if you just acted. Your action must address the Threat and could even nullify it.",
+      "page": 194
+    },
+    {
+      "id": "quint-3",
+      "name": "Dark Horse",
+      "text": "When you die for any reason, you may narrate your death scene, and in the process, describe any one change to your immediate surroundings or to a character present, as big and dramatic as you want it to be. Any change is subject to the approval of the Narrator and the player of any affected character. If agreed on, this change counts as a tier-6 status that cannot be lessened or reduced in any way.",
+      "page": 194
+    },
+    {
+      "id": "quint-4",
+      "name": "Diligent Drudge",
+      "text": "From now on, the Improve track on all of your themes has 5 boxes instead of 3. Whenever you mark Improve for the 5th time on a theme, you gain two improvements and reset the Improve track.",
+      "page": 194
+    },
+    {
+      "id": "quint-5",
+      "name": "Fumbling Master",
+      "text": "Whenever one of your weakness tags is invoked in a roll (regardless of who invoked it), you may choose to lose 2 Power and mark 2 Improve (instead of 1).",
+      "page": 194
+    },
+    {
+      "id": "quint-6",
+      "name": "Jack of Many Lives",
+      "text": "Once per scene, you may gain as a story tag any non-item power tag you previously had in a theme you evolved or replaced. It expires at the end of the scene.",
+      "page": 194
+    },
+    {
+      "id": "quint-7",
+      "name": "Larger Than Life",
+      "text": "When your action is Imperiled due having lower Might, you lose only 2 Power instead of 3, and status Consequences against you are increased by only 2 tiers instead of 3 (tag statuses are still increased by 1 tag).",
+      "page": 194
+    },
+    {
+      "id": "quint-8",
+      "name": "Loyal Companion",
+      "text": "Once per scene, when you are directly helping another Hero, you may ignore being Imperiled, or treat being Extremely Imperiled as being Imperiled.",
+      "page": 194
+    },
+    {
+      "id": "quint-9",
+      "name": "Lucky Bastard",
+      "text": "Once per session, when you roll a 6 or less, you may treat it as a 7, as long as you didn’t roll double ones.",
+      "page": 195
+    },
+    {
+      "id": "quint-10",
+      "name": "Magus Magnificent",
+      "text": "Whenever you take action to prepare magic (at camp or otherwise) and gain Power to spend, you may keep your Power in your backpack instead of spending it. If you still have unspent saved Power from before, it expires. You may later spend this kept Power at any time to create magic ability tags on the fly (they must relate to your preparation).",
+      "page": 195
+    },
+    {
+      "id": "quint-11",
+      "name": "Master of Craft",
+      "text": "Whenever you take a crafting action while camping or sojourning, you may ignore being Imperiled by the Might of the task, or treat an Extremely Imperiled action as Imperiled.",
+      "page": 195
+    },
+    {
+      "id": "quint-12",
+      "name": "Master of the Little Things",
+      "text": "Choose one of your Adventure or Greatness themes. When its Might would be used against you, you may tell the Narrator to treat it as one level of Might lower than it is. If you evolve or replace this theme, you may choose a new one to bear this Quintessence.",
+      "page": 195
+    },
+    {
+      "id": "quint-13",
+      "name": "Nine Lives",
+      "text": "When you take a status that exceeds your Limit (usually tier-6), you may reduce it to your Limit at the beginning of the next scene, explaining how you escaped certain death or irreversible transformation. After you do this three times, remove this Quintessence.",
+      "page": 195
+    },
+    {
+      "id": "quint-14",
+      "name": "Old Hand",
+      "text": "Choose 7 Special Improvements across all your themes.",
+      "page": 195
+    },
+    {
+      "id": "quint-15",
+      "name": "Pillar of Wisdom",
+      "text": "Once per scene, when you offer valuable guidance to another Hero in an action, they may ignore being Imperiled, or treat being Extremely Imperiled as being Imperiled.",
+      "page": 195
+    },
+    {
+      "id": "quint-16",
+      "name": "The Bearer",
+      "text": "Whenever you take action to pack (at camp or otherwise) and gain Power to spend, you may keep your Power in your backpack instead of spending it. If you still have unspent saved Power from before, it expires. You may later spend it at any time to create item tags on the fly (they must relate to your packing).",
+      "page": 195
+    },
+    {
+      "id": "quint-17",
+      "name": "The Common Hero",
+      "text": "Choose one of your Origin or Adventure themes. When using tags from this theme, you may tell the Narrator to treat it as one level of Might higher than it is. If you evolve or replace this theme, you may choose a new one to bear this Quintessence.",
+      "page": 195
+    },
+    {
+      "id": "quint-18",
+      "name": "Virtuoso",
+      "text": "Once per session, when you roll a 7-9, you may treat it as a 10.",
+      "page": 195
+    }
+  ]
+}

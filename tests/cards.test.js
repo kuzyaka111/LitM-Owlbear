@@ -36,44 +36,35 @@ test('v1 migration preserves name, notes, marks, selected inventory and all old 
   assert.equal(clean({ cards: [], notes: '' }, 'sheet').cards.length, 0);
 });
 
-test('four tabs retain notes and support keyboard navigation', () => {
-  const { root: r, event, store, dom } = ui();
-  assert.deepEqual([...r.querySelectorAll('[role=tab]')].map(x => x.textContent), ['Персонаж', 'Братство', 'Рюкзак', 'Заметки']);
-  assert(!r.querySelector('#panel-character').hidden); assert(r.querySelector('#panel-notes').hidden);
-  r.querySelector('#tab-notes').click(); const notes = r.querySelector('#mt-notes-text'); notes.value = 'Не удалять'; notes.dispatchEvent(event('input'));
-  r.querySelector('#tab-bag').click(); r.querySelector('#tab-notes').click(); assert.equal(notes.value, 'Не удалять'); assert.equal(store.load().notes, 'Не удалять');
-  r.querySelector('#tab-notes').dispatchEvent(new dom.window.KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
-  assert.equal(r.querySelector('#tab-character').getAttribute('aria-selected'), 'true'); assert.equal(r.querySelectorAll('[role=tab][tabindex="0"]').length, 1);
+test('three tabs preserve notes and support keyboard navigation', () => {
+  const {root:r,event,store,dom}=ui();
+  assert.deepEqual([...r.querySelectorAll('[role=tab]')].map(x=>x.textContent),['Персонаж и Братство','Темы','Заметки']);
+  r.querySelector('#tab-notes').click();const notes=r.querySelector('#mt-notes-text');notes.value='Не удалять';notes.dispatchEvent(event('input'));
+  r.querySelector('#tab-themes').click();r.querySelector('#tab-notes').click();assert.equal(store.load().notes,'Не удалять');
+  r.querySelector('#tab-notes').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));assert.equal(r.querySelector('#tab-party').getAttribute('aria-selected'),'true');
 });
 
-test('both card types can be edited, removed, undone and reopened', () => {
-  const { root: r, event, store } = ui(); r.querySelector('#tab-bag').click();
-  r.querySelector('.mt-add-backpack').click(); r.querySelector('.mt-add-theme').click(); assert.equal(store.load().cards.length, 3);
-  const card = r.querySelector('.mt-bag-cards').lastElementChild, title = card.querySelector('.mt-card-title textarea');
-  title.value = 'Верный спутник'; title.dispatchEvent(event('input'));
-  const input = card.querySelector('.mt-add-card-item input'); input.value = 'Чуткий слух'; card.querySelector('form').dispatchEvent(event('submit'));
-  card.querySelector('[data-tag="Чуткий слух"]').click(); assert(r.querySelector('.mt-selected-text').textContent.includes('Чуткий слух'));
-  card.querySelector('.mt-track button').click(); assert.equal(store.load().cards.at(-1).improve, 1);
-  card.querySelector('.mt-theme-head button').click(); assert.equal(store.load().cards.length, 2); assert(!r.querySelector('.mt-selected-text').textContent.includes('Чуткий слух'));
-  r.querySelector('.mt-undo button').click(); assert.equal(store.load().cards.length, 3); assert.equal(store.load().cards.at(-1).title, 'Верный спутник'); assert(r.querySelector('.mt-selected-text').textContent.includes('Чуткий слух'));
-  const reopened = ui(store); assert.equal(reopened.root.querySelectorAll('.mt-inventory-card').length, 3);
-  assert.equal(reopened.store.load().cards.at(-1).items[0].text, 'Чуткий слух');
+test('every theme has all Might choices, fixed slots and editable questions', async () => {
+  const {root:r,event,store}=ui();r.querySelector('.mt-add-theme').click();
+  for(const card of r.querySelectorAll('.mt-theme-card')){
+    assert.equal(card.querySelectorAll('[data-kind=power]').length,7);assert.equal(card.querySelectorAll('[data-kind=weakness]').length,3);
+    assert.deepEqual([...card.querySelector('.mt-might').options].map(o=>o.value),['origin','adventure','greatness']);
+  }
+  let c=r.querySelector('.mt-hero-theme');let select=c.querySelector('.mt-might');select.value='greatness';select.dispatchEvent(event('change'));await settle();assert.equal(store.load().heroThemes[0].might,'greatness');
+  c=r.querySelector('.mt-hero-theme');c.querySelector('.mt-question').click();assert.equal(r.querySelectorAll('.mt-question-option').length,10);r.querySelectorAll('.mt-question-option')[9].click();await settle();assert.equal(store.load().heroThemes[0].power[0].q,'J');
 });
 
-test('card item identity keeps identical names on different cards independent', () => {
-  const store = makeStore(storage(), {}, 'sheet'), data = store.load(); const card = newCard('bag');
-  card.items = [{ id: 'rope', text: 'Верёвка' }]; data.cards.push(card); store.save(data);
-  const { root: r } = ui(store); const ropes = r.querySelectorAll('[data-tag="Верёвка"]'); assert.equal(ropes.length, 2);
-  ropes[0].click(); assert.equal(ropes[1].getAttribute('aria-pressed'), 'false');
+test('tags edit, scratch, select weakness and track milestones with persistence', async () => {
+  const {root:r,event,store,dom}=ui();let c=r.querySelector('.mt-hero-theme');
+  c.querySelector('[data-kind=weakness] .mt-tag-text').click();assert.equal(r.querySelectorAll('.mt-action-list[data-kind=weakness] .mt-action-tag').length,1);
+  c.querySelector('[data-kind=weakness] .mt-scratch').click();await settle();assert.equal(store.load().heroThemes[0].weakness[0].scratched,true);assert.equal(store.load().selected.length,0);
+  c=r.querySelector('.mt-hero-theme');c.querySelector('.mt-tag-text').dispatchEvent(new dom.window.MouseEvent('dblclick',{bubbles:true}));r.querySelector('dialog textarea').value='Новое имя';r.querySelector('dialog form').dispatchEvent(event('submit'));await settle();assert.equal(store.load().heroThemes[0].power[0].text,'Новое имя');
+  r.querySelector('.mt-hero-theme [aria-label="Вехи 2"]').click();await settle();assert.equal(store.load().heroThemes[0].milestone,2);
 });
 
-test('character card saves relationships, player, promise and quintessences', () => {
-  const { root: r, store, event } = ui();
-  r.querySelector('.mt-add-relationship').click(); const inputs = r.querySelectorAll('.mt-relationship input');
-  inputs[0].value = 'Элла'; inputs[0].dispatchEvent(event('input')); inputs[1].value = 'Доверие'; inputs[1].dispatchEvent(event('input'));
-  r.querySelectorAll('.mt-promise button')[3].click(); assert.equal(store.load().promise, 4);
-  const p = r.querySelector('#mt-player-name'); p.value = 'Кузя'; p.dispatchEvent(event('input'));
-  assert.equal(store.load().playerName, 'Кузя'); assert.equal(store.load().relationships[0].tag, 'Доверие');
+test('extra cards delete and undo without losing theme data', async () => {
+ const {root:r,store}=ui();r.querySelector('.mt-add-backpack').click();r.querySelector('.mt-add-theme').click();assert.equal(store.load().cards.length,3);
+ r.querySelector('.mt-inventory-host .mt-delete-card').click();assert.equal(store.load().cards.length,2);r.querySelector('.mt-undo button').click();assert.equal(store.load().cards.length,3);assert.equal(ui(store).root.querySelectorAll('.mt-inventory-host .mt-card-slot').length,3);
 });
 
 test('two clients share fellowship across scene-independent room metadata and preserve unrelated keys', async () => {
@@ -102,20 +93,24 @@ test('metadata size and failed writes report failure without changing shared dat
   room.fail(true); await assert.rejects(client.update({ name: 'X' }), /Не удалось сохранить/); client.dispose();
 });
 
-test('fellowship editor retains unsaved fields during remote updates and after a failed save', async () => {
-  const room = sharedRoom(), a = makeFellowshipStore(room), b = makeFellowshipStore(room);
-  const { root: r, event } = ui(undefined, a); await b.start(); await settle();
-  const form = r.querySelector('.mt-fellowship-form'), name = form.querySelector('input'); name.value = 'Мой черновик'; name.dispatchEvent(event('input'));
-  await b.update({ name: 'Имя другого игрока', quest: 'Общая цель' }); assert.equal(name.value, 'Мой черновик');
-  room.fail(true); form.dispatchEvent(event('submit')); await settle(); assert.equal(name.value, 'Мой черновик'); assert(r.querySelector('.mt-fellowship-status').classList.contains('mt-error'));
-  room.fail(false); form.dispatchEvent(event('submit')); await settle();
-  assert.equal((await room.getMetadata())[FELLOWSHIP_PREFIX + 'name'], 'Мой черновик'); assert.equal((await room.getMetadata())[FELLOWSHIP_PREFIX + 'quest'], 'Общая цель');
-  assert.equal(r.querySelector('.mt-fellowship-form button').disabled, true); a.dispose(); b.dispose();
+test('shared editor retains draft through remote updates and failed writes', async () => {
+ const room=sharedRoom(),a=makeFellowshipStore(room),b=makeFellowshipStore(room);const {root:r,event}=ui(undefined,a);await b.start();await settle();
+ r.querySelector('.mt-fellowship-host .mt-edit-tag').click();const input=r.querySelector('dialog textarea');input.value='Мой черновик';
+ await b.update({name:'Другое имя',quest:'Общая цель',might:'greatness',power6:'Шестой',weakness2:'Третья',question6:'J'});assert.equal(input.value,'Мой черновик');
+ room.fail(true);r.querySelector('dialog form').dispatchEvent(event('submit'));await settle();assert.equal(input.value,'Мой черновик');assert(r.querySelector('.mt-dialog-error').textContent);
+ room.fail(false);r.querySelector('dialog form').dispatchEvent(event('submit'));await settle();const m=await room.getMetadata();assert.equal(m[FELLOWSHIP_PREFIX+'name'],'Мой черновик');assert.equal(m[FELLOWSHIP_PREFIX+'quest'],'Общая цель');assert.equal(m[FELLOWSHIP_PREFIX+'power6'],'Шестой');assert.equal(m[FELLOWSHIP_PREFIX+'question6'],'J');a.dispose();b.dispose();
 });
 
-test('new local card text and shared fellowship text cannot inject HTML', async () => {
-  const room = sharedRoom({ [FELLOWSHIP_PREFIX + 'name']: '<img src=x onerror=alert(1)>' }), service = makeFellowshipStore(room);
-  const { root: r, event } = ui(undefined, service); await settle();
-  const title = r.querySelector('.mt-card-title textarea'); title.value = '<img src=x>'; title.dispatchEvent(event('input'));
-  assert.equal(r.querySelectorAll('img').length, 0); assert(r.querySelector('.mt-fellowship-card h3').textContent.includes('<img')); service.dispose();
+test('shared text is not executable HTML', async () => {
+ const room=sharedRoom({[FELLOWSHIP_PREFIX+'name']:'<img src=x onerror=alert(1)>'}),service=makeFellowshipStore(room);const {root:r}=ui(undefined,service);await settle();assert.equal(r.querySelectorAll('img').length,0);assert(r.querySelector('.mt-fellowship-host').textContent.includes('<img'));service.dispose();
+});
+
+test('changing themebook preserves chosen Might and undo restores all fields',async()=>{
+ const {root:r,event,store}=ui();const get=()=>r.querySelector('.mt-hero-theme');let might=get().querySelector('.mt-might');might.value='greatness';might.dispatchEvent(event('change'));await settle();
+ const before=store.load().heroThemes[0];get().querySelector('.mt-book-picker').click();r.querySelector('dialog select').value='skill';r.querySelector('dialog form').dispatchEvent(event('submit'));await settle();assert.equal(store.load().heroThemes[0].might,'greatness');assert.deepEqual(store.load().heroThemes[0].power,before.power);
+ get().querySelector('.mt-undo-theme').click();assert.deepEqual(store.load().heroThemes[0],before);
+});
+
+test('manual action tags can be cleared without accumulating hidden entries',()=>{
+ const {root:r,event,store}=ui();const form=r.querySelector('.mt-add-action-tag');form.querySelector('input').value='Дождь';form.dispatchEvent(event('submit'));assert.equal(store.load().actionExtras.power.length,1);r.querySelector('.mt-clear').click();assert.equal(store.load().actionExtras.power.length,0);
 });

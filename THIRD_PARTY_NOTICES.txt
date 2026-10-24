@@ -159,3 +159,12 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Legend in the Mist rule reference
+================================
+Themebook questions, Special Improvements and Quintessences in
+src/themebooks.json are drawn from the user-supplied Legend in the Mist,
+Volume I: The Hero (2025), pages 92–131, 140–141, 194–195.
+Original game text belongs to its respective rights holders and is not
+covered by the Lucide ISC license above. This is an unofficial extension.
+Russian themebook labels are working UI translations.

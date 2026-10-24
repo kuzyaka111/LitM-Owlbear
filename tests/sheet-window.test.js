@@ -7,7 +7,7 @@ const tick = () => new Promise(resolve => setTimeout(resolve, 0));
 test('sheet opens a compact transparent popover below toolbar from the project path', async () => {
   let result;
   await openSheet({ viewport, popover: { open: async args => { result = args; } } }, 'https://example.github.io/LitM-Owlbear/index.html');
-  assert.deepEqual(result, { id: SHEET_POPOVER_ID, url: 'https://example.github.io/LitM-Owlbear/index.html?surface=sheet', width:964,height:650,anchorReference:'POSITION',anchorPosition:{left:16,top:96},anchorOrigin:{horizontal:'LEFT',vertical:'TOP'},transformOrigin:{horizontal:'LEFT',vertical:'TOP'},marginThreshold:0,hidePaper:true,disableClickAway:true });
+  assert.deepEqual(result, { id: SHEET_POPOVER_ID, url: 'https://example.github.io/LitM-Owlbear/index.html?surface=sheet', width:728,height:650,anchorReference:'POSITION',anchorPosition:{left:16,top:96},anchorOrigin:{horizontal:'LEFT',vertical:'TOP'},transformOrigin:{horizontal:'LEFT',vertical:'TOP'},marginThreshold:0,hidePaper:true,disableClickAway:true });
 });
 
 test('extension button opens sheet once, closes launcher and supports reopening', async () => {

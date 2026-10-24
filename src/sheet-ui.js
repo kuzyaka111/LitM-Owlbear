@@ -5,7 +5,7 @@ import { fellowshipTheme, fellowshipPatch } from './fellowship-model.js';
 import { editorTools, renderTheme } from './editor-ui.js';
 
 export function mountSheet(root,state,save,actions) {
-  const tools=editorTools(root),{doc,el,btn,dialog,inlineText}=tools;
+  const tools=editorTools(root),{doc,el,btn,dialog,inlineText,scratchButton}=tools;
   const q=s=>root.querySelector(s),qa=s=>[...root.querySelectorAll(s)];
   const selected=new Set(state.selected),expanded=new Map();
   let activeTab='party',shared=fellowshipDefaults(),sharedReady=false,sharedBusy=false,sharedStatus='Подключаем братство…';
@@ -31,6 +31,7 @@ export function mountSheet(root,state,save,actions) {
       if(!list.childElementCount)list.append(el('p','mt-empty-action',kind==='power'?'Выбери подходящие теги силы':'Выбери мешающие теги слабости'));
     }
     q('.mt-clear').disabled=!selected.size;state.selected=[...selected];
+    const panel=q('.mt-action-card'),visible=[...selected].some(key=>tags.has(key)),changed=panel.hidden===visible;panel.hidden=!visible;q('.mt-stage').classList.toggle('mt-with-selection',visible);if(changed)fit();
   }
   function select(key){if(selected.has(key)){selected.delete(key);if(key.startsWith('extra:'))for(const kind of ['power','weakness'])state.actionExtras[kind]=state.actionExtras[kind].filter(x=>`extra:${kind}:${x.id}`!==key);}else selected.add(key);refreshSelection();localSave();}
   function preserveReplace(host,node){if(host.querySelector('.mt-inline-editor')){host._pendingCard=node;return;}const previous=host.querySelector('.mt-theme'),scroll=previous?.scrollTop||0;host.replaceChildren(node);node.scrollTop=scroll;}
@@ -86,7 +87,7 @@ export function mountSheet(root,state,save,actions) {
       if(card.type==='theme'){drawLocal(card.theme,host,false,card);continue;}
       const article=el('article','mt-theme mt-backpack-card'),head=el('div','mt-theme-head');head.append(el('span','','Рюкзак'),btn('×','mt-remove-card',()=>removeCard(card),'Удалить карточку '+card.title));article.append(head);
       const title=btn(card.title||'Рюкзак','mt-backpack-title',()=>{});const editTitle=()=>inlineText(title,card.title,async value=>{card.title=value;drawInventory();localSave();},80,'Название рюкзака');title.addEventListener('dblclick',editTitle);article.append(title);
-      const items=el('div','mt-backpack-items');for(const item of card.items){const row=el('div','mt-item-row'+(item.scratched?' mt-scratched':''));const key=`card:${card.id}:${item.id}`;let timer;const text=btn(item.text,'mt-tag-text',()=>{});text.dataset.key=key;text.title=item.text;const edit=()=>inlineText(text,item.text,async value=>{item.text=value;drawInventory();refreshSelection();localSave();},160,'Тег рюкзака');text.addEventListener('click',()=>{clearTimeout(timer);timer=setTimeout(()=>{if(text.isConnected&&!item.scratched)select(key);},230);});text.addEventListener('dblclick',()=>{clearTimeout(timer);edit();});row.append(text,btn(item.scratched?'↶':'╱','mt-scratch',()=>{item.scratched=!item.scratched;drawInventory();refreshSelection();localSave();},'Зачеркнуть '+item.text),btn('×','mt-remove-item',()=>{card.items=card.items.filter(x=>x!==item);drawInventory();refreshSelection();localSave();},'Удалить тег '+item.text));items.append(row);}article.append(items);
+      const items=el('div','mt-backpack-items');for(const item of card.items){const row=el('div','mt-item-row'+(item.scratched?' mt-scratched':''));const key=`card:${card.id}:${item.id}`;let timer;const text=btn(item.text,'mt-tag-text',()=>{});text.dataset.key=key;text.title=item.text;const edit=()=>inlineText(text,item.text,async value=>{item.text=value;drawInventory();refreshSelection();localSave();},160,'Тег рюкзака');text.addEventListener('click',()=>{clearTimeout(timer);timer=setTimeout(()=>{if(text.isConnected&&!item.scratched)select(key);},230);});text.addEventListener('dblclick',()=>{clearTimeout(timer);edit();});row.append(text,scratchButton(item.scratched,()=>{item.scratched=!item.scratched;drawInventory();refreshSelection();localSave();},(item.scratched?'Восстановить ':'Зачеркнуть ')+item.text),btn('×','mt-remove-item',()=>{card.items=card.items.filter(x=>x!==item);drawInventory();refreshSelection();localSave();},'Удалить тег '+item.text));items.append(row);}article.append(items);
       const form=el('form','mt-add-card-item'),input=el('input');input.maxLength=160;input.required=true;input.placeholder='Новый тег';input.setAttribute('aria-label','Новый тег рюкзака');const add=el('button','','+');add.type='submit';add.setAttribute('aria-label','Добавить тег рюкзака');form.append(input,add);form.addEventListener('submit',e=>{e.preventDefault();if(input.value.trim()&&card.items.length<50){card.items.push({id:makeId(),text:input.value.trim(),scratched:false});drawInventory();refreshSelection();localSave();}});article.append(form);
       const notes=el('details','mt-details mt-backpack-notes');notes.append(el('summary','','Записи'),field('Записи рюкзака',card.notes,v=>{card.notes=v;localSave();},2000,true).label);article.append(notes);host.append(article);
     }
@@ -101,6 +102,6 @@ export function mountSheet(root,state,save,actions) {
   q('.mt-close-sheet').addEventListener('click',()=>Promise.resolve().then(actions.close).catch(report));
   const tabs=qa('[role=tab]');function switchTab(button){activeTab=button.dataset.sheetTab;tabs.forEach(b=>{const active=b===button;b.setAttribute('aria-selected',String(active));b.setAttribute('aria-pressed',String(active));b.tabIndex=active?0:-1;q('#'+b.getAttribute('aria-controls')).hidden=!active;});fit();}
   tabs.forEach((b,i)=>{b.addEventListener('click',()=>switchTab(b));b.addEventListener('keydown',e=>{const n=e.key==='ArrowRight'?(i+1)%3:e.key==='ArrowLeft'?(i+2)%3:e.key==='Home'?0:e.key==='End'?2:null;if(n!==null){e.preventDefault();switchTab(tabs[n]);tabs[n].focus();}});});
-  function fit(){actions.fitWindow?.(activeTab==='themes'?4:activeTab==='notes'?1:2+state.cards.length);}
+  function fit(){actions.fitWindow?.(activeTab==='themes'?4:activeTab==='notes'?1:2+state.cards.length,!q('.mt-action-card').hidden);}
   refreshSelection();fit();
 }

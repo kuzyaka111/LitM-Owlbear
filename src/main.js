@@ -34,7 +34,7 @@ async function start(inOwlbear) {
   const fellowship = view === 'sheet' ? (inOwlbear ? makeFellowshipStore(OBR.room) : makePreviewFellowship(storage)) : null;
   if (fellowship) window.addEventListener('pagehide', () => fellowship.dispose(), { once: true });
   let resizeQueue = Promise.resolve();
-  const fitWindow = count => { if (!inOwlbear || view !== 'sheet') return; resizeQueue = resizeQueue.then(async () => { const size = await sheetBounds(OBR, count); await OBR.popover.setWidth(SHEET_POPOVER_ID, size.width); await OBR.popover.setHeight(SHEET_POPOVER_ID, size.height); }).catch(console.error); };
+  const fitWindow = (count, hasSelection) => { if (!inOwlbear || view !== 'sheet') return; resizeQueue = resizeQueue.then(async () => { const size = await sheetBounds(OBR, count, hasSelection); await OBR.popover.setWidth(SHEET_POPOVER_ID, size.width); await OBR.popover.setHeight(SHEET_POPOVER_ID, size.height); }).catch(console.error); };
   mountUI(root, view, view === 'gm' ? gmTemplate : sheetTemplate, makeStore(storage, scope, view), {
     close, fellowship, fitWindow, preview: !inOwlbear,
     openSheet: async () => { if (inOwlbear) { await OBR.modal.close(MODAL_ID); await openSheet(OBR, window.location.href); } else window.location.href = new URL('./index.html', window.location.href).href; },

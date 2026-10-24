@@ -1,3 +1,4 @@
+import { clawIcon } from './icons.js';
 import { themebooks, getBook, mightNames, improvementById, tagKey } from './theme-model.js';
 export function editorTools(root) {
   const doc = root.ownerDocument;
@@ -27,10 +28,11 @@ export function editorTools(root) {
     });
     resize();input.focus();input.select();return input;
   }
-  return {doc,el,btn,dialog,inlineText};
+  const scratchButton=(scratched,fn,label)=>{const b=btn('','mt-scratch',fn,label);b.append(clawIcon(doc));b.setAttribute('aria-pressed',String(scratched));return b;};
+  return {doc,el,btn,dialog,inlineText,scratchButton};
 }
 export function renderTheme(theme, ctx, tools) {
-  const {el,btn,dialog,inlineText}=tools, book=getBook(theme.bookId),story=theme.bookId==='story';
+  const {el,btn,dialog,inlineText,scratchButton}=tools, book=getBook(theme.bookId),story=theme.bookId==='story';
   const card=el('article','mt-theme mt-theme-card');card.dataset.themeId=theme.id;
   if(ctx.core)card.classList.add('mt-hero-theme');
   const change = async patch => { await ctx.change(patch); };
@@ -51,7 +53,7 @@ export function renderTheme(theme, ctx, tools) {
     text.setAttribute('aria-pressed',String(ctx.isSelected(key)));text.setAttribute('aria-label',(isTitle?'Название темы':kind==='power'?'Тег силы':'Тег слабости')+' '+index+': '+(slot.text||'пусто'));
     text.addEventListener('click',e=>{if(!slot.text)return;if(e.detail===0){if(!slot.scratched)ctx.select(key);return;}clearTimeout(pending);pending=setTimeout(()=>{if(text.isConnected&&!slot.scratched)ctx.select(key);},230);});
     text.addEventListener('dblclick',e=>{e.preventDefault();clearTimeout(pending);edit();});
-    const scratch=btn(slot.scratched?'↶':'╱','mt-scratch',safely(()=>change({kind,index,field:'scratched',value:!slot.scratched})),(slot.scratched?'Восстановить':'Зачеркнуть')+' '+(slot.text||'тег'));scratch.disabled=!slot.text;
+    const scratch=scratchButton(slot.scratched,safely(()=>change({kind,index,field:'scratched',value:!slot.scratched})),(slot.scratched?'Восстановить':'Зачеркнуть')+' '+(slot.text||'тег'));scratch.disabled=!slot.text;
     r.append(letter,text,scratch);return r;
   }
   const head=el('div','mt-theme-head');const bookButton=btn(book.name,'mt-book-picker',()=>{

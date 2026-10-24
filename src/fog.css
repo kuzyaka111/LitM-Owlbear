@@ -124,3 +124,9 @@ body[data-view="sheet"]::before{display:none}
 #mist-table-design .mt-v4 .mt-inline-editor[aria-invalid=true]{border-color:#a33}
 
 #mist-table-design .mt-v4 .mt-tag-text,#mist-table-design .mt-v4 .mt-improvement-title{touch-action:manipulation}
+
+#mist-table-design .mt-v4 .mt-stage:not(.mt-with-selection){grid-template-columns:minmax(0,1fr);min-width:0}
+#mist-table-design .mt-v4 .mt-action-card{height:auto;min-height:0;max-height:min(560px,calc(100dvh - 50px));align-self:start;flex:none}
+#mist-table-design .mt-v4 .mt-action-card>section{flex:none;overflow:visible;min-height:0}
+#mist-table-design .mt-v4 .mt-scratch .mt-claw-icon{display:block;width:17px;height:20px}
+#mist-table-design .mt-v4 .mt-scratch[aria-pressed=true]{color:#a04f3b}

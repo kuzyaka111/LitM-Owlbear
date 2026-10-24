@@ -127,3 +127,10 @@ test('book improvements and quintessences are prefilled inactive rows that toggl
  card().querySelector('.mt-improvement-toggle').click();await settle();assert.equal(store.load().heroThemes[0].improvements.length,1);assert.equal(card().querySelector('.mt-improvement-toggle').textContent,'◆');card().querySelector('.mt-improvement-toggle').click();await settle();assert.equal(store.load().heroThemes[0].improvements.length,0);
  assert.equal(r.querySelectorAll('.mt-quintessences .mt-improvement-row').length,18);r.querySelector('.mt-quintessences .mt-improvement-toggle').click();assert.equal(store.load().quintessenceIds.length,1);
 });
+
+test('selection panel hides when empty and after the final tag is scratched or cleared',async()=>{
+ const {root:r,store}=ui(),panel=r.querySelector('.mt-action-card');assert(panel.hidden);
+ r.querySelector('.mt-hero-theme .mt-tag-text').click();assert(!panel.hidden);assert(r.querySelector('.mt-stage').classList.contains('mt-with-selection'));
+ r.querySelector('.mt-hero-theme .mt-scratch').click();await settle();assert(panel.hidden);assert.equal(store.load().selected.length,0);
+ r.querySelectorAll('.mt-hero-theme')[1].querySelector('.mt-tag-text').click();assert(!panel.hidden);r.querySelector('.mt-clear').click();assert(panel.hidden);assert(!r.querySelector('.mt-stage').classList.contains('mt-with-selection'));
+});

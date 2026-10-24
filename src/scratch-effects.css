@@ -1,6 +1,6 @@
 #mist-table-design .mt-v4 .mt-tag-text{position:relative}
-#mist-table-design .mt-v4 .mt-scratched .mt-tag-text{text-decoration:none}
-#mist-table-design .mt-v4 .mt-scratched .mt-tag-text::after{content:"";position:absolute;pointer-events:none;left:0;right:0;top:calc(50% - 7px);height:14px;background:url('./scratch-tear.svg') center/100% 100% no-repeat;transform:rotate(-1deg);clip-path:inset(0)}
+#mist-table-design .mt-v4 .mt-scratched .mt-tag-text{text-decoration:none;color:#6d6251}
+#mist-table-design .mt-v4 .mt-scratched .mt-tag-text::after{content:"";position:absolute;pointer-events:none;left:0;right:0;top:calc(50% - 3px);height:6px;background:url('./scratch-tear.svg') center/100% 100% no-repeat;transform:rotate(-1deg);clip-path:inset(0)}
 #mist-table-design .mt-v4 .mt-scratched.mt-scratch-reveal .mt-tag-text::after{animation:mt-tear-reveal 220ms ease-out both}
 @keyframes mt-tear-reveal{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0)}}
 @media(prefers-reduced-motion:reduce){#mist-table-design .mt-v4 .mt-scratched.mt-scratch-reveal .mt-tag-text::after{animation:none}}

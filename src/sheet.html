@@ -3,11 +3,13 @@
   <nav class="mt-tabs" aria-label="Разделы листа" role="tablist">
     <button id="tab-party" role="tab" data-sheet-tab="party" aria-selected="true" aria-controls="panel-party">Персонаж и Братство</button>
     <button id="tab-themes" role="tab" data-sheet-tab="themes" aria-selected="false" aria-controls="panel-themes" tabindex="-1">Темы</button>
+    <button id="tab-statuses" role="tab" data-sheet-tab="statuses" aria-selected="false" aria-controls="panel-statuses" tabindex="-1">Статусы</button>
     <button id="tab-notes" role="tab" data-sheet-tab="notes" aria-selected="false" aria-controls="panel-notes" tabindex="-1">Заметки</button>
     <button id="tab-settings" role="tab" data-sheet-tab="settings" aria-selected="false" aria-controls="panel-settings" tabindex="-1">Настройки</button>
     <button type="button" class="mt-close-sheet" aria-label="Закрыть лист">×</button>
   </nav>
   <div class="mt-row-actions"><button type="button" class="mt-add-backpack">+ Хранилище</button><button type="button" class="mt-add-theme">+ Тема</button></div>
+  <div class="mt-status-actions mt-row-actions" hidden><button type="button" data-add-status="numeric">+ Числовой</button><button type="button" data-add-status="status">+ Статус</button><button type="button" data-add-status="story">+ Сюжетный тег</button></div>
   </div>
   <div class="mt-stage">
     <div class="mt-main-cards">
@@ -19,6 +21,7 @@
         </div>
       </section>
       <section id="panel-themes" role="tabpanel" aria-labelledby="tab-themes" hidden><div class="mt-themes mt-card-row" tabindex="0" aria-label="Четыре темы персонажа"></div></section>
+      <section id="panel-statuses" role="tabpanel" aria-labelledby="tab-statuses" hidden><div class="mt-card-row mt-status-cards" tabindex="0" aria-label="Статусы и сюжетные теги"></div></section>
       <section id="panel-notes" role="tabpanel" aria-labelledby="tab-notes" hidden><div class="mt-card-row mt-notes-cards" aria-label="Карточки заметок"></div></section>
       <section id="panel-settings" role="tabpanel" aria-labelledby="tab-settings" hidden><div class="mt-card-row mt-settings-cards"><article class="mt-theme mt-settings-card"><div class="mt-theme-head"><span>Настройки</span></div><div class="mt-settings-list"></div></article></div></section>
     </div>

@@ -13,7 +13,7 @@ export function createActionPanel(panel,onVisibility){
   const body=panel.querySelector('.mt-scroll-body');
   const from=panel.hidden?0:body?.getBoundingClientRect().height||0;
   animation?.cancel();
-  const reduced=immediate||panel.closest('[data-scroll-animation=off]')||win.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const reduced=immediate||panel.closest('[data-scroll-animation=off],[data-entrance-animation=off]')||win.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   let resized;
   if(next){panel.hidden=false;panel.inert=false;resized=onVisibility(true);}
   else panel.inert=true;
@@ -41,7 +41,7 @@ export function createActionTagList(list,renderRow,emptyText){
  function animate(entry,removing){
   entry.animations?.forEach(a=>a.cancel());const revision=++entry.revision;
   entry.removing=removing;entry.row.inert=removing;
-  const letters=[...entry.text.children],reduced=win.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const letters=[...entry.text.children],reduced=list.closest('[data-text-animation=off],[data-scroll-animation=off]')||win.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   const finish=()=>{
    if(revision!==entry.revision)return;
    entry.animations?.forEach(a=>a.cancel());entry.animations=[];

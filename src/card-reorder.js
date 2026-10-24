@@ -7,6 +7,7 @@ export function createCardReorder(root,{getOrder,setOrder,beforeDrag=()=>{}}){
   if(item.dataset.cardId)return 'card:'+item.dataset.cardId;
   if(item.matches('.mt-notes-compendium'))return 'notes-library';
   if(item.dataset.noteId)return 'note:'+item.dataset.noteId;
+  if(item.dataset.statusId)return 'status:'+item.dataset.statusId;
   const theme=item.querySelector('[data-theme-id]');return theme?'theme:'+theme.dataset.themeId:null;
  }
  function items(row){return [...row.querySelectorAll('.mt-card-slot,:scope > .mt-scroll-frame')].filter(item=>identify(item));}
@@ -15,7 +16,7 @@ export function createCardReorder(root,{getOrder,setOrder,beforeDrag=()=>{}}){
   root.querySelectorAll('.mt-card-row').forEach(row=>{
    const cards=items(row),saved=getOrder(tab(row))||[];
    cards.sort((a,b)=>{const ai=saved.indexOf(identify(a)),bi=saved.indexOf(identify(b));return (ai<0?saved.length:ai)-(bi<0?saved.length:bi);});
-   cards.forEach((item,i)=>{item.style.order=String(i);const head=item.querySelector('.mt-scroll-top');if(head){head.classList.add('mt-reorder-handle');head.tabIndex=0;head.title='Перетащите за шапку для перестановки · Alt + ← / →';}});
+   cards.forEach((item,i)=>{item.style.order=String(i);const head=item.querySelector('.mt-scroll-top');if(head){head.classList.add('mt-reorder-handle');head.tabIndex=0;head.title=(item.dataset.statusId?'Двойное нажатие — перевернуть и очистить · ':'')+'Перетащите за шапку для перестановки · Alt + ← / →';}});
   });
  }
  function arrange(cards){
@@ -54,7 +55,7 @@ export function createCardReorder(root,{getOrder,setOrder,beforeDrag=()=>{}}){
  }
  const up=e=>finish(e),cancelDrag=e=>finish(e,true);
  root.addEventListener('pointerdown',e=>{
-  if(e.button!==0||drag||e.target.closest('select,input,textarea,.mt-delete-card,.mt-remove-card,.mt-note-close,.mt-clear'))return;
+  if(e.button!==0||drag||e.target.closest('select,input,textarea,.mt-delete-card,.mt-remove-card,.mt-note-close,.mt-clear,.mt-status-flipping'))return;
   const head=e.target.closest('.mt-reorder-handle'),card=head?.closest('.mt-scroll-frame'),row=card?.closest('.mt-card-row');if(!row)return;
   const item=items(row).find(item=>item===card||item.contains(card));if(!item)return;
   drag={head,item,row,pointerId:e.pointerId,startX:e.clientX,x:e.clientX,offset:e.clientX-item.getBoundingClientRect().left,translation:0,transform:item.style.transform,original:ordered(row),active:false};

@@ -6,7 +6,7 @@ export function createScratchEffects(root){
   root.querySelectorAll('.mt-tag-text[data-key]').forEach(text=>{
    const key=text.dataset.key,row=text.closest('.mt-tag-row,.mt-item-row');if(!row)return;
    const scratched=row.classList.contains('mt-scratched');present.add(key);
-   if(scratched&&states.get(key)===false&&!win.matchMedia?.('(prefers-reduced-motion: reduce)').matches)row.classList.add('mt-scratch-reveal');
+   if(scratched&&states.get(key)===false&&!root.querySelector('[data-text-animation=off],[data-scroll-animation=off]')&&!win.matchMedia?.('(prefers-reduced-motion: reduce)').matches)row.classList.add('mt-scratch-reveal');
    states.set(key,scratched);
   });
   for(const key of states.keys())if(!present.has(key))states.delete(key);

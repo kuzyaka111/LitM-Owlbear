@@ -6,6 +6,8 @@ import {dressScroll} from './scroll-view.js';
 import {createScrollMotion} from './scroll-motion.js';
 import {createCardReorder} from './card-reorder.js';
 import {mountNotes} from './notes-ui.js';
+import {mountStatuses} from './status-ui.js';
+import {mountAnimationSettings,syncAnimationSettings} from './animation-settings.js';
 import packageInfo from '../package.json' with { type: 'json' };
 import { newCard, makeId } from './storage.js';
 import { makeTheme, getBook, quintessences, improvementById, tagKey } from './theme-model.js';
@@ -22,7 +24,7 @@ export function mountSheet(root,state,save,actions) {
   const selected=new Set(state.selected),expanded=new Map();
   let specialAction=null,rollModifier=0,rolling=false,currentRoll=0,resizePending,selectionSequence=0;
   state.settings??={scrollAnimation:true,diceAnimation:true};
-  q('.mt-v4').dataset.scrollAnimation=state.settings.scrollAnimation?'on':'off';
+  syncAnimationSettings(root,state.settings);let settingsCardCount=()=>1;
   let panelLayoutSequence=0;
   const actionPanel=createActionPanel(q('.mt-action-card'),visible=>{
     const sequence=++panelLayoutSequence,stage=q('.mt-stage');
@@ -63,7 +65,7 @@ export function mountSheet(root,state,save,actions) {
     q('.mt-action-power-value').textContent=result.power===null?'—':result.power;
     q('.mt-action-roll-value').textContent=(result.roll>0?'+':'')+result.roll;
     qa('[data-special]').forEach(button=>{const active=specialAction===button.dataset.special;button.setAttribute('aria-pressed',String(active));button.querySelector('span').textContent=active?'◆':'◇';button.disabled=false;});
-    const hideForTab=activeTab==='notes'||activeTab==='settings';actionPanel.show(chosen.length>0&&!hideForTab,hideForTab,pendingRemovals.length?Promise.allSettled(pendingRemovals):undefined);
+    const hideForTab=['notes','settings','statuses'].includes(activeTab);actionPanel.show(chosen.length>0&&!hideForTab,hideForTab,pendingRemovals.length?Promise.allSettled(pendingRemovals):undefined);
   }
   function select(key){
     if(selected.has(key)){selected.delete(key);if(key.startsWith('extra:'))for(const kind of ['power','weakness'])state.actionExtras[kind]=state.actionExtras[kind].filter(x=>`extra:${kind}:${x.id}`!==key);}else selected.add(key);
@@ -153,11 +155,9 @@ export function mountSheet(root,state,save,actions) {
   q('.mt-add-backpack').addEventListener('click',()=>addCard('bag'));q('.mt-add-theme').addEventListener('click',()=>addCard('theme'));
   drawInventory();
   const layoutNotes=mountNotes(root,state,localSave,fit,tools);
+  const layoutStatuses=mountStatuses(root,state,localSave,fit,tools);
   qa('.mt-add-action-tag').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input'),kind=form.dataset.kind;if(input.value.trim()&&state.actionExtras[kind].length<30){const item={id:makeId(),text:input.value.trim()};state.actionExtras[kind].push(item);selected.add(`extra:${kind}:${item.id}`);input.value='';refreshSelection();localSave();}}));
-  for(const [key,label] of [['scrollAnimation','Анимация свитков'],['diceAnimation','Анимация бросков']]){
-    const button=btn('','mt-setting',()=>{state.settings[key]=!state.settings[key];sync();q('.mt-v4').dataset.scrollAnimation=state.settings.scrollAnimation?'on':'off';motion.stop();localSave();});
-    function sync(){button.replaceChildren(el('span','',state.settings[key]?'◆':'◇'),el('span','',label));button.setAttribute('aria-pressed',String(state.settings[key]));}sync();q('.mt-settings-list').append(button);
-  }
+  settingsCardCount=mountAnimationSettings(root,state,localSave,fit,motion,tools);
   dressScroll(q('.mt-settings-card'));
   q('.mt-roll-dice').addEventListener('click',async()=>{
     if(rolling)return;rolling=true;const button=q('.mt-roll-dice');button.disabled=true;
@@ -172,7 +172,7 @@ export function mountSheet(root,state,save,actions) {
   q('.mt-close-sheet').addEventListener('click',()=>Promise.resolve().then(actions.close).catch(report));
   let switchSequence=0;
   function reveal(panel){const sequence=++switchSequence;motion.stop();panel.style.visibility='hidden';Promise.resolve(fit()).then(()=>new Promise(resolve=>{const win=root.ownerDocument.defaultView;if(win.requestAnimationFrame)win.requestAnimationFrame(()=>win.requestAnimationFrame(resolve));else resolve();})).then(()=>{if(sequence!==switchSequence)return;motion.play(panel);panel.style.visibility='';}).catch(error=>{if(sequence===switchSequence)panel.style.visibility='';report(error);});}
-  const tabs=qa('[role=tab]');function switchTab(button){const changed=activeTab!==button.dataset.sheetTab;activeTab=button.dataset.sheetTab;tabs.forEach(b=>{const active=b===button;b.setAttribute('aria-selected',String(active));b.setAttribute('aria-pressed',String(active));b.tabIndex=active?0:-1;q('#'+b.getAttribute('aria-controls')).hidden=!active;});q('.mt-row-actions').hidden=activeTab!=='party';refreshSelection();if(activeTab==='notes')layoutNotes();if(changed)reveal(q('#panel-'+activeTab));}
+  const tabs=qa('[role=tab]');function switchTab(button){const changed=activeTab!==button.dataset.sheetTab;activeTab=button.dataset.sheetTab;tabs.forEach(b=>{const active=b===button;b.setAttribute('aria-selected',String(active));b.setAttribute('aria-pressed',String(active));b.tabIndex=active?0:-1;q('#'+b.getAttribute('aria-controls')).hidden=!active;});q('.mt-row-actions').hidden=activeTab!=='party';q('.mt-status-actions').hidden=activeTab!=='statuses';refreshSelection();if(activeTab==='notes')layoutNotes();if(activeTab==='statuses')layoutStatuses();if(changed)reveal(q('#panel-'+activeTab));}
   tabs.forEach((b,i)=>{b.addEventListener('click',()=>switchTab(b));b.addEventListener('keydown',e=>{const n=e.key==='ArrowRight'?(i+1)%tabs.length:e.key==='ArrowLeft'?(i+tabs.length-1)%tabs.length:e.key==='Home'?0:e.key==='End'?tabs.length-1:null;if(n!==null){e.preventDefault();switchTab(tabs[n]);tabs[n].focus();}});});
   function fit(){
     if(rolling)return;
@@ -180,7 +180,7 @@ export function mountSheet(root,state,save,actions) {
     if(!q('.mt-action-card').hidden&&q('.mt-action-card .mt-scroll-toggle[aria-expanded=true]'))openCards.push(q('.mt-action-card'));
     const requestedHeight=Math.max(650,...openCards.map(card=>card.querySelector('.mt-scroll-main').scrollHeight+card.querySelector('.mt-scroll-extension-inner').scrollHeight+78+toolbar.getBoundingClientRect().height+44));
     const minimumWidth=Math.max(480,q('.mt-tabs').scrollWidth+16);
-    return resizePending=actions.fitWindow?.(activeTab==='themes'?4:activeTab==='settings'?1:activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden,requestedHeight,minimumWidth);
+    return resizePending=actions.fitWindow?.(activeTab==='themes'?4:activeTab==='settings'?settingsCardCount():activeTab==='statuses'?Math.max(1,state.statusCards.length):activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden,requestedHeight,minimumWidth);
   }
   qa('[role=tabpanel]').forEach(panel=>{const version=el('div','mt-sheet-version','v'+packageInfo.version);panel.querySelector('.mt-card-row').after(version);});
   dressScroll(q('.mt-action-card'),{extensionLabel:'Особые действия',onExpand:fit});refreshSelection();createScratchEffects(root);

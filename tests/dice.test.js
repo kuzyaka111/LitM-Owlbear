@@ -7,7 +7,9 @@ test('d6 rejects the incomplete modulo bucket and includes both endpoints',()=>{
  assert.equal(rollD6(crypto),1);assert.equal(rollD6(crypto),6);
 });
 test('animation preferences survive normalization and old sheets default to enabled',()=>{
- assert.deepEqual(defaults('sheet').settings,{scrollAnimation:true,diceAnimation:true});
- assert.deepEqual(clean({settings:{scrollAnimation:false,diceAnimation:false}},'sheet').settings,{scrollAnimation:false,diceAnimation:false});
- assert.deepEqual(clean({},'sheet').settings,{scrollAnimation:true,diceAnimation:true});
+ const enabled={scrollAnimation:true,diceAnimation:true,disableSway:false,disableEntrance:false,disableTextAnimation:false};
+ assert.deepEqual(defaults('sheet').settings,enabled);
+ assert.deepEqual(clean({settings:{scrollAnimation:false,diceAnimation:false}},'sheet').settings,{...enabled,scrollAnimation:false,diceAnimation:false});
+ assert.deepEqual(clean({},'sheet').settings,enabled);
+ assert.equal(clean({settings:{disableSway:true,disableTextAnimation:true}},'sheet').settings.disableTextAnimation,true);
 });

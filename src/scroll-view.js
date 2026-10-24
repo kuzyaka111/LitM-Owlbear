@@ -17,7 +17,7 @@ export function dressScroll(card,{expanded=false,onExpand,extensionLabel='Осо
   toggle.addEventListener('click',()=>{
    const from=extension.getBoundingClientRect().height;unfolding?.cancel();expanded=!expanded;
    extension.classList.toggle('is-open',expanded);extension.inert=!expanded;extension.setAttribute('aria-hidden',String(!expanded));sync();onExpand?.(expanded);
-   const reduced=card.closest('[data-scroll-animation=off]')||doc.defaultView.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+   const reduced=card.closest('[data-scroll-animation=off],[data-entrance-animation=off]')||doc.defaultView.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
    if(!reduced&&typeof extension.animate==='function')unfolding=extension.animate([{height:from+'px'},{height:(expanded?inner.scrollHeight:0)+'px'}],{duration:360,easing:'cubic-bezier(.22,.7,.25,1)'});
   });sync();foot.append(label,toggle);
  }else{foot.classList.add('mt-scroll-bottom-plain');foot.setAttribute('aria-hidden','true');}

@@ -1,0 +1,16 @@
+<section class="mt-sheet" aria-label="Лист персонажа">
+      <header class="mt-windowbar"><span><i data-lucide="feather" aria-hidden="true"></i> Лист персонажа</span><span class="mt-save-state" aria-live="polite"></span><button class="mt-close-sheet mt-icon cursor-interaction" aria-label="Закрыть лист"><i data-lucide="x" aria-hidden="true"></i></button></header>
+      <div class="mt-hero">
+        <div class="mt-portrait"><i data-lucide="user-round" aria-hidden="true"></i></div>
+        <div class="mt-hero-text"><span class="mt-eyebrow">ИСТОРИЯ ОДНОГО ГЕРОЯ</span><h2><input class="mt-editor-name" maxlength="80" aria-label="Имя героя" value="Эрин из Вересковой долины"></h2><p>Следопыт, который однажды обещал вернуться</p></div>
+        <div class="mt-branch"><i data-lucide="sprout" aria-hidden="true"></i></div>
+      </div>
+      <nav class="mt-tabs" aria-label="Разделы листа"><button data-sheet-tab="themes" aria-pressed="true" class="cursor-interaction">Темы</button><button data-sheet-tab="bag" aria-pressed="false" class="cursor-interaction">Рюкзак</button><button data-sheet-tab="notes" aria-pressed="false" class="cursor-interaction">Заметки</button></nav>
+      <div class="mt-sheet-content">
+        <div class="mt-themes"></div>
+        <div class="mt-bag" hidden=""><div class="mt-paper-panel"><span class="mt-eyebrow">В ДОРОГУ</span><h3>Рюкзак</h3><div class="mt-bag-items"></div><form class="mt-add-item"><label for="mt-item-name">Новый предмет</label><div><input id="mt-item-name" maxlength="60" placeholder="Название тега предмета" required=""><button type="submit" class="cursor-interaction">Добавить</button></div></form></div></div>
+        <div class="mt-notes" hidden=""><label for="mt-notes-text">Заметки героя</label><textarea id="mt-notes-text" rows="8">У старого моста нас должен ждать мельник. Он знает, кто видел пропавший караван последним.</textarea></div>
+      </div>
+      <div class="mt-status-strip"><span class="mt-eyebrow">СОСТОЯНИЕ</span><span class="mt-status">Усталость · 1</span></div>
+      <footer class="mt-selection" aria-live="polite"><div><span class="mt-eyebrow">ВЫБРАННЫЕ ТЕГИ</span><p class="mt-selected-text">Выбери подходящие теги на карточках</p></div><button class="mt-clear cursor-interaction" disabled="">Снять выбор</button></footer>
+    </section>

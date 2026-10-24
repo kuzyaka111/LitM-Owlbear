@@ -1,3 +1,4 @@
+import {rollD6,animateDice} from './dice.js';
 import {createActionPanel,calculateAction} from './action-panel.js';
 import {createScratchEffects} from './scratch-effects.js';
 import {appendAutoSlot} from './auto-slots.js';
@@ -18,7 +19,9 @@ export function mountSheet(root,state,save,actions) {
   const win=doc.defaultView,toolbar=q('.mt-toolbar'),sizeToolbar=()=>q('.mt-v4').style.setProperty('--toolbar-height',toolbar.getBoundingClientRect().height+'px');
   if(win.ResizeObserver){const observer=new win.ResizeObserver(sizeToolbar);observer.observe(toolbar);win.addEventListener('pagehide',()=>observer.disconnect(),{once:true});}sizeToolbar();
   const selected=new Set(state.selected),expanded=new Map();
-  let specialAction=null,rollModifier=0;
+  let specialAction=null,rollModifier=0,rolling=false,currentRoll=0;
+  state.settings??={scrollAnimation:true,diceAnimation:true};
+  q('.mt-v4').dataset.scrollAnimation=state.settings.scrollAnimation?'on':'off';
   const actionPanel=createActionPanel(q('.mt-action-card'),visible=>{q('.mt-stage').classList.toggle('mt-with-selection',visible);fit();});
   let activeTab='party',shared=fellowshipDefaults(),sharedReady=false,sharedBusy=false;
   const service=actions.fellowship;
@@ -46,11 +49,11 @@ export function mountSheet(root,state,save,actions) {
     const chosen=[...selected].map(key=>tags.get(key)).filter(Boolean);
     const base=chosen.reduce((n,t)=>n+(t.kind==='power'?1:-1),0);
     if(!chosen.length){specialAction=null;rollModifier=0;q('.mt-roll-modifier').value='0';}
-    if((specialAction==='caution'&&base>2)||(specialAction==='hedge'&&base<2))specialAction=null;
-    const result=calculateAction(base,specialAction,rollModifier);
+
+    const result=calculateAction(base,specialAction,rollModifier);currentRoll=result.roll;
     q('.mt-action-power-value').textContent=result.power===null?'—':result.power;
     q('.mt-action-roll-value').textContent=(result.roll>0?'+':'')+result.roll;
-    qa('[data-special]').forEach(button=>{const active=specialAction===button.dataset.special;button.setAttribute('aria-pressed',String(active));button.querySelector('span').textContent=active?'◆':'◇';button.disabled=(button.dataset.special==='caution'&&base>2)||(button.dataset.special==='hedge'&&base<2);});
+    qa('[data-special]').forEach(button=>{const active=specialAction===button.dataset.special;button.setAttribute('aria-pressed',String(active));button.querySelector('span').textContent=active?'◆':'◇';button.disabled=false;});
     actionPanel.show(chosen.length>0);
   }
   function select(key){if(selected.has(key)){selected.delete(key);if(key.startsWith('extra:'))for(const kind of ['power','weakness'])state.actionExtras[kind]=state.actionExtras[kind].filter(x=>`extra:${kind}:${x.id}`!==key);}else selected.add(key);refreshSelection();localSave();}
@@ -123,6 +126,20 @@ export function mountSheet(root,state,save,actions) {
   drawInventory();
   const layoutNotes=mountNotes(root,state,localSave,fit,tools);
   qa('.mt-add-action-tag').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input'),kind=form.dataset.kind;if(input.value.trim()&&state.actionExtras[kind].length<30){const item={id:makeId(),text:input.value.trim()};state.actionExtras[kind].push(item);selected.add(`extra:${kind}:${item.id}`);input.value='';refreshSelection();localSave();}}));
+  for(const [key,label] of [['scrollAnimation','Анимация свитков'],['diceAnimation','Анимация бросков']]){
+    const button=btn('','mt-setting',()=>{state.settings[key]=!state.settings[key];sync();q('.mt-v4').dataset.scrollAnimation=state.settings.scrollAnimation?'on':'off';motion.stop();localSave();});
+    function sync(){button.replaceChildren(el('span','',state.settings[key]?'◆':'◇'),el('span','',label));button.setAttribute('aria-pressed',String(state.settings[key]));}sync();q('.mt-settings-list').append(button);
+  }
+  dressScroll(q('.mt-settings-card'));
+  q('.mt-roll-dice').addEventListener('click',async()=>{
+    if(rolling)return;rolling=true;const button=q('.mt-roll-dice');button.disabled=true;
+    const values=[rollD6(),rollD6()],bonus=currentRoll,total=values[0]+values[1]+bonus;
+    selected.clear();state.actionExtras={power:[],weakness:[]};refreshSelection();localSave();
+    try{
+      if(state.settings.diceAnimation&&!win.matchMedia?.('(prefers-reduced-motion: reduce)').matches)await animateDice(doc,values);
+      dialog('Результат броска',form=>{form.append(el('p','mt-roll-result',String(total)),el('p','',values.join(' + ')+(bonus<0?' − '+Math.abs(bonus):' + '+bonus)+' = '+total));});
+    }catch(error){report(error);}finally{rolling=false;button.disabled=false;fit();}
+  });
   qa('[data-special]').forEach(button=>button.addEventListener('click',()=>{specialAction=specialAction===button.dataset.special?null:button.dataset.special;refreshSelection();}));
   q('.mt-roll-modifier').addEventListener('input',e=>{rollModifier=Math.max(-99,Math.min(99,Math.trunc(Number(e.target.value)||0)));refreshSelection();});
   q('.mt-clear').addEventListener('click',()=>{selected.clear();state.actionExtras={power:[],weakness:[]};refreshSelection();localSave();});
@@ -130,8 +147,8 @@ export function mountSheet(root,state,save,actions) {
   let switchSequence=0;
   function reveal(panel){const sequence=++switchSequence;motion.stop();panel.style.visibility='hidden';Promise.resolve(fit()).then(()=>new Promise(resolve=>{const win=root.ownerDocument.defaultView;if(win.requestAnimationFrame)win.requestAnimationFrame(()=>win.requestAnimationFrame(resolve));else resolve();})).then(()=>{if(sequence!==switchSequence)return;motion.play(panel);panel.style.visibility='';}).catch(error=>{if(sequence===switchSequence)panel.style.visibility='';report(error);});}
   const tabs=qa('[role=tab]');function switchTab(button){const changed=activeTab!==button.dataset.sheetTab;activeTab=button.dataset.sheetTab;tabs.forEach(b=>{const active=b===button;b.setAttribute('aria-selected',String(active));b.setAttribute('aria-pressed',String(active));b.tabIndex=active?0:-1;q('#'+b.getAttribute('aria-controls')).hidden=!active;});q('.mt-row-actions').hidden=activeTab!=='party';if(activeTab==='notes')layoutNotes();if(changed)reveal(q('#panel-'+activeTab));}
-  tabs.forEach((b,i)=>{b.addEventListener('click',()=>switchTab(b));b.addEventListener('keydown',e=>{const n=e.key==='ArrowRight'?(i+1)%3:e.key==='ArrowLeft'?(i+2)%3:e.key==='Home'?0:e.key==='End'?2:null;if(n!==null){e.preventDefault();switchTab(tabs[n]);tabs[n].focus();}});});
-  function fit(){return actions.fitWindow?.(activeTab==='themes'?4:activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden);}
+  tabs.forEach((b,i)=>{b.addEventListener('click',()=>switchTab(b));b.addEventListener('keydown',e=>{const n=e.key==='ArrowRight'?(i+1)%tabs.length:e.key==='ArrowLeft'?(i+tabs.length-1)%tabs.length:e.key==='Home'?0:e.key==='End'?tabs.length-1:null;if(n!==null){e.preventDefault();switchTab(tabs[n]);tabs[n].focus();}});});
+  function fit(){if(rolling)return;return actions.fitWindow?.(activeTab==='themes'?4:activeTab==='settings'?1:activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden);}
   qa('[role=tabpanel]').forEach(panel=>{const version=el('div','mt-sheet-version','v'+packageInfo.version);panel.querySelector('.mt-card-row').after(version);});
   dressScroll(q('.mt-action-card'),{extensionLabel:'Особые действия'});refreshSelection();createScratchEffects(root);reveal(q('#panel-party'));
 }

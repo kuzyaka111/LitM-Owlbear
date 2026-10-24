@@ -6,6 +6,7 @@ import './scrolls.css';
 import './fonts/fonts.css';
 import './typography.css';
 import './scratch-effects.css';
+import './dice.css';
 import rollImage from './scroll-roll.svg';
 import paperImage from './parchment.svg';
 import brownRoll from './scroll-roll-brown.svg';

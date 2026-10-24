@@ -97,3 +97,8 @@ SVG состоит из одного полупрозрачного углова
 ## 0.7.6 — consistent card headings
 - Internal labels, counters, character field labels and section summaries use Alegreya SC 13px, matching card headers. Notes heading font overrides corrected; calculator entry/empty text uses Bad Script.
 - 47 tests pass. Chromium screenshot reviewed at 1280 × 820; theme and calculator headings have the expected computed font/size, counter labels do not overflow, no page errors.
+
+## 0.7.7 — dice and animation preferences
+- 49 tests pass: inclusive unbiased d6 sampling, persisted preferences/default migration, manual trades and additive modifier, four-tab keyboard navigation.
+- Chromium checks: stored scroll/dice toggles survive reload; disabled scroll motion has no active animations; 1 tag + 3 modifier gives Power 4; caution can be selected; fixed dice 1 and 6 produce the correct instant/animated totals; tags clear; no result before animation completes; overlay is removed; no page errors.
+- Reviewed screenshots of centered numeric control/dice icon, moving 3D dice, final result and settings card. Animation respects the extension viewport. Actual Owlbear/mobile host interaction remains a user-side check.

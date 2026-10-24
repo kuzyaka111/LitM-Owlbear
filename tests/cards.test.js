@@ -36,12 +36,13 @@ test('v1 migration preserves name, notes, marks, selected inventory and all old 
   assert.equal(clean({ cards: [], notes: '' }, 'sheet').cards[0].id, 'original-backpack');
 });
 
-test('three tabs preserve notes and support keyboard navigation', () => {
+test('four tabs preserve notes and support keyboard navigation', () => {
   const {root:r,event,store,dom}=ui();
-  assert.deepEqual([...r.querySelectorAll('[role=tab]')].map(x=>x.textContent),['Персонаж и Братство','Темы','Заметки']);
+  assert.deepEqual([...r.querySelectorAll('[role=tab]')].map(x=>x.textContent),['Персонаж и Братство','Темы','Заметки','Настройки']);
   r.querySelector('#tab-notes').click();const notes=r.querySelector('#mt-notes-text');notes.value='Не удалять';notes.dispatchEvent(event('input'));
   r.querySelector('#tab-themes').click();r.querySelector('#tab-notes').click();assert.equal(store.load().notes,'Не удалять');
-  r.querySelector('#tab-notes').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));assert.equal(r.querySelector('#tab-party').getAttribute('aria-selected'),'true');
+  r.querySelector('#tab-notes').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));assert.equal(r.querySelector('#tab-settings').getAttribute('aria-selected'),'true');
+  r.querySelector('#tab-settings').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));assert.equal(r.querySelector('#tab-party').getAttribute('aria-selected'),'true');
 });
 
 test('every theme has all Might choices, fixed slots and editable questions', async () => {

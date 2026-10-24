@@ -16,6 +16,7 @@ export function defaults(view) {
   return {
     name: 'Эрин из Вересковой долины', playerName: '', concept: 'Следопыт, который однажды обещал вернуться',
     relationships: [], promise: 0, quintessences: '', quintessenceIds: [], selected: [], marks: [], heroThemes: initialThemes(), actionExtras: { power: [], weakness: [] }, schemaVersion: 4,
+    settings:{scrollAnimation:true,diceAnimation:true},
     noteCards: legacyNotes('У старого моста нас должен ждать мельник. Он знает, кто видел пропавший караван последним.'),
     notes: 'У старого моста нас должен ждать мельник. Он знает, кто видел пропавший караван последним.',
     cards: [{ id: 'original-backpack', type: 'bag', title: 'Дорожный рюкзак', typeLabel: '',
@@ -72,6 +73,7 @@ export function clean(value, view) {
     promise: count(value.promise, 5), quintessences: text(value.quintessences, '', 2000),
     schemaVersion: 4, heroThemes, quintessenceIds: Array.isArray(value.quintessenceIds) ? [...new Set(value.quintessenceIds.filter(id => quintessences.some(q => q.id === id)))] : [],
     actionExtras: Object.fromEntries(['power','weakness'].map(kind => [kind, Array.isArray(value.actionExtras?.[kind]) ? value.actionExtras[kind].filter(x => x && typeof x.text === 'string').slice(0,30).map((x,i) => ({ id: id(x.id, 'extra-'+i), text: text(x.text, '', 160) })) : []])),
+    settings:{scrollAnimation:value.settings?.scrollAnimation!==false,diceAnimation:value.settings?.diceAnimation!==false},
     cards, selected, marks: Array.isArray(value.marks) ? [...new Set(value.marks.filter(x => Number.isInteger(x) && x >= 0 && x < 24))] : [],
     noteCards: cleanNoteCards(value.noteCards,text(value.notes,d.notes)),
     notes: text(value.notes, d.notes),

@@ -4,6 +4,7 @@
     <button id="tab-party" role="tab" data-sheet-tab="party" aria-selected="true" aria-controls="panel-party">Персонаж и Братство</button>
     <button id="tab-themes" role="tab" data-sheet-tab="themes" aria-selected="false" aria-controls="panel-themes" tabindex="-1">Темы</button>
     <button id="tab-notes" role="tab" data-sheet-tab="notes" aria-selected="false" aria-controls="panel-notes" tabindex="-1">Заметки</button>
+    <button id="tab-settings" role="tab" data-sheet-tab="settings" aria-selected="false" aria-controls="panel-settings" tabindex="-1">Настройки</button>
     <button type="button" class="mt-close-sheet" aria-label="Закрыть лист">×</button>
   </nav>
   <div class="mt-row-actions"><button type="button" class="mt-add-backpack">+ Хранилище</button><button type="button" class="mt-add-theme">+ Тема</button></div>
@@ -19,10 +20,11 @@
       </section>
       <section id="panel-themes" role="tabpanel" aria-labelledby="tab-themes" hidden><div class="mt-themes mt-card-row" tabindex="0" aria-label="Четыре темы персонажа"></div></section>
       <section id="panel-notes" role="tabpanel" aria-labelledby="tab-notes" hidden><div class="mt-card-row mt-notes-cards" aria-label="Карточки заметок"></div></section>
+      <section id="panel-settings" role="tabpanel" aria-labelledby="tab-settings" hidden><div class="mt-card-row mt-settings-cards"><article class="mt-theme mt-settings-card"><div class="mt-theme-head"><span>Настройки</span></div><div class="mt-settings-list"></div></article></div></section>
     </div>
     <aside class="mt-action-card mt-theme" aria-label="Подсчёт Силы" hidden>
       <div class="mt-theme-head"><span>Подсчёт Силы</span><button type="button" class="mt-clear">Очистить</button></div>
-      <div class="mt-action-total"><label>Сила Действия: <output class="mt-action-power-value" title="Сила для эффектов при успехе (минимум 1). При жертве эффекты определяет ведущий.">0</output></label><input class="mt-roll-modifier" type="number" step="1" value="0" min="-99" max="99" aria-label="Дополнительный модификатор броска" title="Дополнительный модификатор броска"><small>Бонус броска: <output class="mt-action-roll-value">0</output></small></div>
+      <div class="mt-action-total"><label>Сила Действия: <output class="mt-action-power-value" title="Сила для эффектов при успехе (минимум 1). При жертве эффекты определяет ведущий.">0</output></label><input class="mt-roll-modifier" type="number" step="1" value="0" min="-99" max="99" aria-label="Дополнительный модификатор броска" title="Дополнительный модификатор броска"><button type="button" class="mt-roll-dice" aria-label="Бросить 2д6" title="Бросить 2д6"><svg viewBox="0 0 36 36" aria-hidden="true"><g fill="currentColor" stroke="#583c26" stroke-width="1"><rect x="3" y="3" width="21" height="21" rx="4" transform="rotate(-12 13 13)"/><rect x="14" y="14" width="20" height="20" rx="4" transform="rotate(10 24 24)"/></g><g fill="#583c26"><circle cx="8" cy="9" r="1.7"/><circle cx="17" cy="17" r="1.7"/><circle cx="12.5" cy="13" r="1.7"/><circle cx="20" cy="20" r="1.7"/><circle cx="28" cy="28" r="1.7"/><circle cx="24" cy="24" r="1.7"/><circle cx="28" cy="20" r="1.7"/><circle cx="20" cy="28" r="1.7"/></g></svg></button><small>Бонус броска: <output class="mt-action-roll-value">0</output></small></div>
       <section class="mt-action-power"><h3>Теги силы</h3><div class="mt-action-list" data-kind="power"></div><form class="mt-add-action-tag" data-kind="power"><input maxlength="160" aria-label="Дополнительный тег силы" placeholder="Добавить тег"><button aria-label="Добавить силу">+</button></form></section>
       <section class="mt-action-weakness"><h3>Теги слабости</h3><div class="mt-action-list" data-kind="weakness"></div><form class="mt-add-action-tag" data-kind="weakness"><input maxlength="160" aria-label="Дополнительный тег слабости" placeholder="Добавить тег"><button aria-label="Добавить слабость">+</button></form></section>
       <div class="mt-improvements mt-special-actions">

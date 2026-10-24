@@ -4,7 +4,7 @@ export function createScrollMotion(root){
  let running=[],rows=[];
  function stop(){running.forEach(a=>a.cancel());running=[];rows.forEach(({row,height})=>{row.classList.remove('mt-scroll-entering');row.style.minHeight=height;});rows=[];}
  function play(panel){
-  stop();if(media?.matches)return;
+  stop();if(media?.matches||root.querySelector('[data-scroll-animation=off]'))return;
   // Measure the entire layout before applying any animation.
   const cards=[...panel.querySelectorAll('.mt-scroll-frame')].map(card=>({card,rect:card.getBoundingClientRect(),body:card.querySelector(':scope > .mt-scroll-body')})).filter(x=>x.rect.width);
   const measured=cards.map(x=>({...x,height:x.body.getBoundingClientRect().height}));

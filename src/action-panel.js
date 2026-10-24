@@ -1,8 +1,8 @@
 // A sacrifice is a Quick outcome, so it has no spendable effect Power.
 export function calculateAction(base,mode,modifier=0){
  if(mode==='sacrifice')return {power:null,roll:modifier};
- const trade=mode==='caution'&&base<=2?1:mode==='hedge'&&base>=2?-1:0;
- return {power:Math.max(1,base+trade),roll:base-trade+modifier};
+ const trade=mode==='caution'?1:mode==='hedge'?-1:0;
+ return {power:Math.max(1,base+modifier+trade),roll:base-trade+modifier};
 }
 export function createActionPanel(panel,onVisibility){
  const win=panel.ownerDocument.defaultView;
@@ -13,7 +13,7 @@ export function createActionPanel(panel,onVisibility){
   const body=panel.querySelector('.mt-scroll-body');
   const from=panel.hidden?0:body?.getBoundingClientRect().height||0;
   animation?.cancel();
-  const reduced=win.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const reduced=panel.closest('[data-scroll-animation=off]')||win.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   if(next){panel.hidden=false;panel.inert=false;onVisibility(true);}
   else panel.inert=true;
   const finish=()=>{if(token!==sequence)return;animation?.cancel();animation=null;if(!next){panel.hidden=true;panel.inert=false;onVisibility(false);}};

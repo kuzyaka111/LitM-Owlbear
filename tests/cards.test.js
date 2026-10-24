@@ -22,9 +22,9 @@ test('selecting the last card keeps it in the row after the calculator resizes t
  root.querySelector('#tab-themes').click();pending.splice(0).forEach(resolve=>resolve());await settle();
  const panel=root.querySelector('#panel-themes'),row=panel.querySelector('.mt-card-row'),card=[...panel.querySelectorAll('.mt-theme')].at(-1),body=card.querySelector('.mt-scroll-body');
  row.getBoundingClientRect=()=>({left:0,right:708});card.getBoundingClientRect=()=>({left:716,right:940});body.scrollTop=40;
- card.querySelector('.mt-tag-text').click();assert.equal(row.scrollLeft,0);
+ card.querySelector('.mt-tag-text').click();assert.equal(row.scrollLeft,0);assert.equal(root.querySelector('.mt-stage').classList.contains('mt-with-selection'),false);
  pending.at(-1)();await settle();await settle();
- assert.equal(row.scrollLeft,240);assert.equal(body.scrollTop,40);assert.equal(card.hidden,false);assert.equal(card.querySelector('.mt-tag-text').getAttribute('aria-pressed'),'true');
+ assert.equal(root.querySelector('.mt-stage').classList.contains('mt-with-selection'),true);assert.equal(row.scrollLeft,240);assert.equal(body.scrollTop,40);assert.equal(card.hidden,false);assert.equal(card.querySelector('.mt-tag-text').getAttribute('aria-pressed'),'true');
 });
 function sharedRoom(initial = {}) {
   let metadata = { ...initial }; const listeners = new Set(); let failure = false;

@@ -94,3 +94,5 @@ html:has(body[data-view="sheet"]),body[data-view="sheet"]{overflow:hidden;overfl
 #mist-table-design .mt-v4 .mt-tag-row:has(.mt-tag-text[aria-pressed=true])::before{opacity:1}
 #mist-table-design .mt-v4 .mt-tag-row .mt-tag-text[aria-pressed=true]{background-image:none}
 #mist-table-design .mt-v4 .mt-tag-row:has(.mt-tag-text[aria-pressed=true]) .mt-question span{background:transparent}
+#mist-table-design .mt-v4 .mt-backpack-items{padding:9px 0 0}
+#mist-table-design .mt-v4 .mt-backpack-items .mt-item-row{height:30px;min-height:30px;align-items:center;padding:0 5px;border-bottom-color:#ac916f35}

@@ -1,4 +1,5 @@
 import {dressScroll} from './scroll-view.js';
+import {renderedScale} from './sheet-scale.js';
 import { clawIcon } from './icons.js';
 import { themebooks, getBook, mightNames, improvementById, tagKey } from './theme-model.js';
 export function editorTools(root) {
@@ -20,9 +21,9 @@ export function editorTools(root) {
     const input=el('textarea','mt-inline-editor');input.value=value;input.maxLength=max;input.rows=1;input.setAttribute('aria-label',label);input.title='Нажмите вне поля, чтобы сохранить';
     const host=button.closest('.mt-card-slot');let saving=false;
     // Keep the original field's box and typography, including small companion labels.
-    const rect=button.getBoundingClientRect(),style=doc.defaultView.getComputedStyle(button);
+    const rect=button.getBoundingClientRect(),style=doc.defaultView.getComputedStyle(button),scale=renderedScale(root);
     for(const property of ['fontFamily','fontSize','fontWeight','fontStyle','lineHeight','letterSpacing','textAlign','color','paddingTop','paddingRight','paddingBottom','paddingLeft','marginTop','marginRight','marginBottom','marginLeft','alignSelf','order'])input.style[property]=style[property];
-    Object.assign(input.style,{boxSizing:'border-box',flex:'0 0 auto',width:rect.width?rect.width+'px':style.width,height:rect.height?rect.height+'px':style.height,minWidth:'0',minHeight:'0',maxWidth:'none',maxHeight:'none',border:'0',outline:'none',boxShadow:'none',overflow:'auto'});
+    Object.assign(input.style,{boxSizing:'border-box',flex:'0 0 auto',width:rect.width?rect.width/scale+'px':style.width,height:rect.height?rect.height/scale+'px':style.height,minWidth:'0',minHeight:'0',maxWidth:'none',maxHeight:'none',border:'0',outline:'none',boxShadow:'none',overflow:'auto'});
     button.replaceWith(input);
     input.addEventListener('blur',async()=>{
       if(saving)return;saving=true;input.disabled=true;

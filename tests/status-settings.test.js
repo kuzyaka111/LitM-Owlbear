@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import {JSDOM} from 'jsdom';
 import {makeStore} from '../src/storage.js';
 import {mountUI} from '../src/ui.js';
-import {newStatus,cleanStatuses,flipStatus} from '../src/status-model.js';
+import {newStatus,cleanStatuses,flipStatus,nextTear,TEAR_VARIANTS} from '../src/status-model.js';
 import {createScrollMotion} from '../src/scroll-motion.js';
 import {createActionTagList} from '../src/action-panel.js';
 const template=fs.readFileSync(new URL('../src/sheet.html',import.meta.url),'utf8');
@@ -39,6 +39,30 @@ test('double pressing the header flips and clears a numeric status, then restore
 test('status normalization rejects invalid data and preserves unique identifiers',()=>{
  const cards=cleanStatuses([{id:'same',kind:'numeric',name:'x',marks:[true,'true',1]},{id:'same',kind:'oops',scratched:true},null]);assert.notEqual(cards[0].id,cards[1].id);assert.deepEqual(cards[0].marks,[true,false,false,false,false,false]);assert.equal(cards[1].kind,'status');assert.equal(cards[1].scratched,false);
  const item=newStatus('status');item.name='text';flipStatus(item);assert.equal(item.kind,'story');assert.equal(item.name,'');
+});
+
+test('all five tears are available and creation or flipping cannot repeat the previous tear',()=>{
+ assert.equal(TEAR_VARIANTS,5);
+ assert.deepEqual(Array.from({length:5},(_,i)=>nextTear(undefined,()=>i/5)),[0,1,2,3,4]);
+ for(let previous=0;previous<5;previous++){
+  const choices=Array.from({length:4},(_,i)=>nextTear(previous,()=>i/4));
+  assert.deepEqual(choices,[0,1,2,3,4].filter(i=>i!==previous));
+  const item=newStatus('numeric',previous);assert.notEqual(item.tear,previous);
+  const old=item.tear;flipStatus(item);assert.notEqual(item.tear,old);
+  assert.equal(cleanStatuses([item])[0].tear,item.tear);
+ }
+ const legacy=[{id:'old-status',kind:'status',name:'Existing'}];
+ assert.deepEqual(cleanStatuses(cleanStatuses(legacy)),cleanStatuses(legacy));
+ for(const invalid of [-1,5,1.5,'2',null]){const item=cleanStatuses([{...legacy[0],tear:invalid}])[0];assert(Number.isInteger(item.tear)&&item.tear>=0&&item.tear<5);}
+});
+
+test('created status renders its saved tear and changes it on flipping',async()=>{
+ const {root,store,dom}=ui();root.querySelector('#tab-statuses').click();
+ root.querySelector('[data-add-status=status]').click();const initial=store.load().statusCards[0].tear;
+ assert.equal(root.querySelector('.mt-status-scroll').dataset.tear,String(initial));
+ root.querySelector('[data-add-status=story]').click();assert.notEqual(store.load().statusCards[1].tear,initial);
+ root.querySelector('.mt-status-scroll .mt-scroll-top').dispatchEvent(new dom.window.MouseEvent('dblclick',{bubbles:true}));await settle();
+ const flipped=store.load().statusCards[0].tear;assert.notEqual(flipped,initial);assert.equal(root.querySelector('.mt-status-scroll').dataset.tear,String(flipped));
 });
 
 test('sway and entrance switches control separate animation phases',()=>{

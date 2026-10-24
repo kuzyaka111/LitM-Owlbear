@@ -1,3 +1,4 @@
+import {SHEET_SCALE} from './sheet-scale.js';
 export const TOOL_ID = 'io.github.kuzyaka111.legend-mist/gm-tool';
 export const MODAL_ID = 'io.github.kuzyaka111.legend-mist/gm-window';
 
@@ -71,10 +72,10 @@ export function watchGMTool(obr, base) {
 export const SHEET_MODAL_ID = 'io.github.kuzyaka111.legend-mist/sheet-window';
 
 export const SHEET_POPOVER_ID = SHEET_MODAL_ID;
-export async function sheetBounds(obr, count = 4, hasSelection = false, requestedHeight = 650, minimumWidth = 480) {
+export async function sheetBounds(obr, count = 4, hasSelection = false, requestedHeight = 650*SHEET_SCALE, minimumWidth = 480*SHEET_SCALE) {
   const [width, height] = await Promise.all([obr.viewport.getWidth(), obr.viewport.getHeight()]);
   const cards = count + (hasSelection ? 1 : 0);
-  return { width: Math.max(240, Math.min(Math.max(minimumWidth, cards * 224 + (cards - 1) * 12 + 32 + (hasSelection ? 12 : 0)), width - 32)), height: Math.max(160, Math.min(requestedHeight, height - 116)) };
+  return { width: Math.max(240, Math.min(Math.max(minimumWidth, (cards * 224 + (cards - 1) * 12 + 32 + (hasSelection ? 12 : 0))*SHEET_SCALE), width - 32)), height: Math.max(160, Math.min(requestedHeight, height - 116)) };
 }
 export async function openSheet(obr, base) {
   const url = new URL('./index.html', base); url.searchParams.set('surface', 'sheet');

@@ -13,10 +13,17 @@
 #mist-table-design .mt-v4[data-text-animation=off] .mt-tag-row::before{transition:none}
 #mist-table-design .mt-v4[data-text-animation=off] .mt-tag-text::after,#mist-table-design .mt-v4[data-text-animation=off] .mt-status-name,#mist-table-design .mt-v4[data-text-animation=off] .mt-status-mark::after{animation:none!important}
 #mist-table-design .mt-v4[data-entrance-animation=off] .mt-scroll-toggle svg{transition:none}
-#mist-table-design .mt-v4 .mt-status-scroll{max-height:calc(100dvh - var(--toolbar-height,34px) - 44px)}
+#mist-table-design .mt-v4{--sheet-scale:1.25;zoom:var(--sheet-scale);width:auto}
+#mist-table-design .mt-v4 .mt-theme.mt-scroll-frame{max-height:calc(100dvh / var(--sheet-scale) - var(--toolbar-height,34px) - 44px)}
+#mist-table-design .mt-v4 .mt-status-cards{flex-flow:column wrap;align-content:flex-start;height:calc(100dvh / var(--sheet-scale) - var(--toolbar-height,34px) - 32px);gap:12px}
+#mist-table-design .mt-v4 .mt-status-cards>.mt-status-scroll{flex:0 0 auto}
 #mist-table-design .mt-v4 .mt-status-scroll .mt-scroll-main{min-height:0;padding:12px 10px 18px}
 #mist-table-design .mt-v4 .mt-status-scroll .mt-scroll-bottom{display:none}
-#mist-table-design .mt-v4 .mt-status-scroll .mt-scroll-body{box-shadow:1px 3px 5px #30291c30;clip-path:polygon(.7% 0,99.4% 0,100% 18%,99.2% 42%,100% 70%,99.3% 94%,94% 99%,87% 96%,81% 100%,75% 97%,66% 100%,60% 97%,52% 100%,44% 97%,36% 99%,28% 96%,20% 100%,12% 97%,5% 100%,0 95%,.5% 60%,0 28%)}
+#mist-table-design .mt-v4 .mt-status-scroll{filter:drop-shadow(1px 3px 3px #17120d30);--tear-mask:url('./paper-tears/tear-0-mask.svg');--tear-edge:url('./paper-tears/tear-0-edge.svg')}
+#mist-table-design .mt-v4 .mt-status-scroll .mt-scroll-body{box-shadow:none;clip-path:none;mask-image:linear-gradient(#000,#000),var(--tear-mask);mask-size:100% calc(100% - 20px),100% 21.333px;mask-position:center top,center bottom;mask-repeat:no-repeat;mask-composite:add}
+#mist-table-design .mt-v4 .mt-status-scroll .mt-scroll-body::before{content:'';position:absolute;inset:0;pointer-events:none;background:url('./paper-tears/grain.svg') repeat;mix-blend-mode:multiply;opacity:.6}
+#mist-table-design .mt-v4 .mt-status-scroll .mt-scroll-body::after{content:'';position:absolute;left:0;right:0;bottom:0;height:21.333px;pointer-events:none;background:var(--tear-edge) center bottom/100% 100% no-repeat}
+#mist-table-design .mt-v4 .mt-status-scroll .mt-scroll-main{position:relative;padding-bottom:28px}
 #mist-table-design .mt-v4 .mt-status-scroll:not([data-status-kind=story]) .mt-scroll-body{background-image:linear-gradient(110deg,#7b4c282e,#b18a4b18 40%,#5d391f29),url('./parchment.svg'),radial-gradient(ellipse at 25% 30%,#d8bb88,#c5a174 80%,#a58058);background-color:#ccb087}
 #mist-table-design .mt-v4 .mt-status-kind{font:500 13px/1.1 var(--font-heading);flex:1;min-width:0}
 #mist-table-design .mt-v4 .mt-status-scroll .mt-note-close{width:16px;min-width:16px;flex:0 0 16px;text-align:center}
@@ -30,7 +37,14 @@
 #mist-table-design .mt-v4 .mt-status-marks{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin-top:8px}
 #mist-table-design .mt-v4 .mt-status-mark{position:relative;min-height:29px;padding:2px 0;border:1px solid #795d3a75;border-radius:1px;background:#f9e4bf24;color:#503b24;font:15px/22px var(--font-heading)}
 #mist-table-design .mt-v4 .mt-status-mark.is-marked{color:#8b7254}
-#mist-table-design .mt-v4 .mt-status-mark.is-marked::after{content:'';position:absolute;pointer-events:none;left:1px;right:1px;top:calc(50% - 3px);height:6px;background:url('./scratch-tear.svg') center/100% 100% no-repeat}
+#mist-table-design .mt-v4 .mt-status-mark.is-marked::after{content:'';position:absolute;pointer-events:none;inset:3px 2px;background:url('./status-strike.svg') center/100% 100% no-repeat;transform:rotate(-3deg);opacity:.9}
+#mist-table-design .mt-v4 .mt-status-mark.is-marked:nth-child(2n)::after{transform:rotate(5deg) scale(.94,1.06)}
+#mist-table-design .mt-v4 .mt-status-mark.is-marked:nth-child(3n)::after{transform:rotate(-7deg) scale(1.04,.91)}
 #mist-table-design .mt-v4 .mt-status-mark-reveal::after{animation:mt-tear-reveal 220ms ease-out both}
 #mist-table-design .mt-v4 .mt-status-flipping{pointer-events:none;transform-origin:center center}
 @media(prefers-reduced-motion:reduce){#mist-table-design .mt-v4 .mt-status-mark::after,#mist-table-design .mt-v4 .mt-status-name{animation:none!important}}
+
+#mist-table-design .mt-v4 .mt-status-scroll[data-tear="1"]{--tear-mask:url('./paper-tears/tear-1-mask.svg');--tear-edge:url('./paper-tears/tear-1-edge.svg')}
+#mist-table-design .mt-v4 .mt-status-scroll[data-tear="2"]{--tear-mask:url('./paper-tears/tear-2-mask.svg');--tear-edge:url('./paper-tears/tear-2-edge.svg')}
+#mist-table-design .mt-v4 .mt-status-scroll[data-tear="3"]{--tear-mask:url('./paper-tears/tear-3-mask.svg');--tear-edge:url('./paper-tears/tear-3-edge.svg')}
+#mist-table-design .mt-v4 .mt-status-scroll[data-tear="4"]{--tear-mask:url('./paper-tears/tear-4-mask.svg');--tear-edge:url('./paper-tears/tear-4-edge.svg')}

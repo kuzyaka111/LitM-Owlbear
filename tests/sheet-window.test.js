@@ -6,7 +6,7 @@ const tick = () => new Promise(resolve => setTimeout(resolve, 0));
 
 test('one-card tabs reserve space for the entire navigation within the room viewport',async()=>{
  const obr={viewport};
- assert.equal((await sheetBounds(obr,1)).width,480);
+ assert.equal((await sheetBounds(obr,1)).width,600);
  assert.equal((await sheetBounds(obr,1,false,650,530)).width,530);
  const narrow={viewport:{getWidth:async()=>390,getHeight:async()=>700}};
  assert.equal((await sheetBounds(narrow,1,false,650,530)).width,358);
@@ -16,14 +16,14 @@ test('expanded cards grow the host window within the room viewport and collapse 
  const obr={viewport:{getWidth:async()=>1280,getHeight:async()=>1200}};
  assert.equal((await sheetBounds(obr,4,false,950)).height,950);
  assert.equal((await sheetBounds(obr,4,false,1400)).height,1084);
- assert.equal((await sheetBounds(obr)).height,650);
+ assert.equal((await sheetBounds(obr)).height,812.5);
 });
 
 test('sheet opens a compact transparent popover below toolbar from the project path', async () => {
   let result;
   await openSheet({ viewport, popover: { open: async args => { result = args; } } }, 'https://example.github.io/LitM-Owlbear/index.html');
   const openedUrl=new URL(result.url);assert(openedUrl.searchParams.has('opened'));openedUrl.searchParams.delete('opened');result.url=openedUrl.href;
-  assert.deepEqual(result, { id: SHEET_POPOVER_ID, url: 'https://example.github.io/LitM-Owlbear/index.html?surface=sheet', width:728,height:650,anchorReference:'POSITION',anchorPosition:{left:16,top:96},anchorOrigin:{horizontal:'LEFT',vertical:'TOP'},transformOrigin:{horizontal:'LEFT',vertical:'TOP'},marginThreshold:0,hidePaper:true,disableClickAway:true });
+  assert.deepEqual(result, { id: SHEET_POPOVER_ID, url: 'https://example.github.io/LitM-Owlbear/index.html?surface=sheet', width:910,height:784,anchorReference:'POSITION',anchorPosition:{left:16,top:96},anchorOrigin:{horizontal:'LEFT',vertical:'TOP'},transformOrigin:{horizontal:'LEFT',vertical:'TOP'},marginThreshold:0,hidePaper:true,disableClickAway:true });
 });
 
 test('extension button opens sheet once, closes launcher and supports reopening', async () => {

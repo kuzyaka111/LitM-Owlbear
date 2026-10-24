@@ -1,3 +1,4 @@
+import {renderedScale} from './sheet-scale.js';
 // Move cards as one spaced row. Only the paper reveal is staggered.
 export function createScrollMotion(root,random=Math.random){
  const win=root.ownerDocument.defaultView,media=win.matchMedia?.('(prefers-reduced-motion: reduce)');
@@ -8,7 +9,7 @@ export function createScrollMotion(root,random=Math.random){
   if(media?.matches||root.querySelector('[data-scroll-animation=off],[data-entrance-animation=off]')||typeof body?.animate!=='function'){
    Promise.resolve(ready).then(()=>{if(card.isConnected)onReady?.();});return;
   }
-  const height=body.getBoundingClientRect().height,animation=body.animate([{height:'0px'},{height:height+'px'}],{duration:360,easing:'cubic-bezier(.22,.7,.25,1)',fill:'both'});
+  const height=body.getBoundingClientRect().height/renderedScale(root),animation=body.animate([{height:'0px'},{height:height+'px'}],{duration:360,easing:'cubic-bezier(.22,.7,.25,1)',fill:'both'});
   animation.pause();const animations=[animation];running=animations;
   Promise.resolve(ready).then(()=>{if(running!==animations||!card.isConnected)return;onReady?.();animation.play();},()=>{if(running===animations)stop();});
   Promise.allSettled([animation.finished]).then(()=>{if(running===animations)stop();});
@@ -18,10 +19,10 @@ export function createScrollMotion(root,random=Math.random){
   const entrance=!root.querySelector('[data-entrance-animation=off]'),sway=!root.querySelector('[data-sway-animation=off]');if(!entrance&&!sway)return;
   // Measure the entire layout before applying any animation.
   const cards=[...panel.querySelectorAll('.mt-scroll-frame:not(.mt-action-card)')].map(card=>({card,rect:card.getBoundingClientRect(),body:card.querySelector(':scope > .mt-scroll-body')})).filter(x=>x.rect.width);
-  const measured=cards.map(x=>({...x,height:x.body.getBoundingClientRect().height}));
+  const scale=renderedScale(root),measured=cards.map(x=>({...x,height:x.body.getBoundingClientRect().height/scale}));
   rows=entrance?[...panel.querySelectorAll('.mt-card-row')].map(row=>({row,height:row.style.minHeight})):[];
-  rows.forEach(({row})=>{row.style.minHeight=row.getBoundingClientRect().height+'px';row.classList.add('mt-scroll-entering');});
-  const x=-(Math.max(win.innerWidth,...measured.map(x=>x.rect.right))+32),animations=[];
+  rows.forEach(({row})=>{row.style.minHeight=row.getBoundingClientRect().height/scale+'px';row.classList.add('mt-scroll-entering');});
+  const x=-(Math.max(win.innerWidth,...measured.map(x=>x.rect.right))+32)/scale,animations=[];
   for(const [index,{card,body,height}] of measured.entries()){
    if(typeof card.animate!=='function')continue;
    // Same 344ms entrance; independently timed, damped settling thereafter.

@@ -1,3 +1,4 @@
+import {renderedScale} from './sheet-scale.js';
 // A sacrifice is a Quick outcome, so it has no spendable effect Power.
 export function calculateAction(base,mode,modifier=0){
  if(mode==='sacrifice')return {power:null,roll:modifier};
@@ -11,7 +12,7 @@ export function createActionPanel(panel,onVisibility){
   if(next===visible&&!immediate)return;
   visible=next;const token=++sequence;
   const body=panel.querySelector('.mt-scroll-body');
-  const from=panel.hidden?0:body?.getBoundingClientRect().height||0;
+  const from=panel.hidden?0:(body?.getBoundingClientRect().height||0)/renderedScale(panel);
   animation?.cancel();
   const reduced=immediate||panel.closest('[data-scroll-animation=off],[data-entrance-animation=off]')||win.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   let resized;

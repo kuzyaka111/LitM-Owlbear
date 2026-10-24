@@ -7,6 +7,7 @@ import {createScrollMotion} from './scroll-motion.js';
 import {createCardReorder} from './card-reorder.js';
 import {mountNotes} from './notes-ui.js';
 import {mountStatuses} from './status-ui.js';
+import {SHEET_SCALE,renderedScale} from './sheet-scale.js';
 import {mountAnimationSettings,syncAnimationSettings} from './animation-settings.js';
 import packageInfo from '../package.json' with { type: 'json' };
 import { newCard, makeId } from './storage.js';
@@ -19,12 +20,12 @@ export function mountSheet(root,state,save,actions) {
   const tools=editorTools(root),{doc,el,btn,dialog,inlineText,scratchButton}=tools;
   const q=s=>root.querySelector(s),qa=s=>[...root.querySelectorAll(s)];
   const motion=createScrollMotion(root);
-  const win=doc.defaultView,toolbar=q('.mt-toolbar'),sizeToolbar=()=>q('.mt-v4').style.setProperty('--toolbar-height',toolbar.getBoundingClientRect().height+'px');
+  const win=doc.defaultView,toolbar=q('.mt-toolbar'),sizeToolbar=()=>q('.mt-v4').style.setProperty('--toolbar-height',toolbar.getBoundingClientRect().height/SHEET_SCALE+'px');
   if(win.ResizeObserver){const observer=new win.ResizeObserver(sizeToolbar);observer.observe(toolbar);win.addEventListener('pagehide',()=>observer.disconnect(),{once:true});}sizeToolbar();
   const selected=new Set(state.selected),expanded=new Map();
   let specialAction=null,rollModifier=0,rolling=false,currentRoll=0,resizePending,selectionSequence=0;
   state.settings??={scrollAnimation:true,diceAnimation:true};
-  syncAnimationSettings(root,state.settings);let settingsCardCount=()=>1;
+  syncAnimationSettings(root,state.settings);let settingsCardCount=()=>1,statusColumnCount=()=>1;
   let panelLayoutSequence=0;
   const actionPanel=createActionPanel(q('.mt-action-card'),visible=>{
     const sequence=++panelLayoutSequence,stage=q('.mt-stage');
@@ -75,9 +76,9 @@ export function mountSheet(root,state,save,actions) {
     const keepVisible=()=>{
       if(sequence!==selectionSequence||panel.hidden)return;
       const tag=[...panel.querySelectorAll('.mt-tag-text[data-key]')].find(node=>node.dataset.key===key),card=tag?.closest('.mt-scroll-frame'),row=card?.closest('.mt-card-row');
-      if(!row)return;const bounds=card.getBoundingClientRect(),viewport=row.getBoundingClientRect();
-      if(bounds.right>viewport.right-8)row.scrollLeft+=bounds.right-viewport.right+8;
-      else if(bounds.left<viewport.left+8)row.scrollLeft+=bounds.left-viewport.left-8;
+      if(!row)return;const bounds=card.getBoundingClientRect(),viewport=row.getBoundingClientRect(),scale=renderedScale(root),margin=8*scale;
+      if(bounds.right>viewport.right-margin)row.scrollLeft+=(bounds.right-viewport.right+margin)/scale;
+      else if(bounds.left<viewport.left+margin)row.scrollLeft+=(bounds.left-viewport.left-margin)/scale;
     };
     if(resizePending?.then)Promise.resolve(resizePending).then(()=>new Promise(resolve=>win.requestAnimationFrame?win.requestAnimationFrame(()=>win.requestAnimationFrame(resolve)):resolve())).then(keepVisible).catch(report);
     else keepVisible();
@@ -156,6 +157,7 @@ export function mountSheet(root,state,save,actions) {
   drawInventory();
   const layoutNotes=mountNotes(root,state,localSave,fit,tools);
   const layoutStatuses=mountStatuses(root,state,localSave,fit,tools);
+  statusColumnCount=layoutStatuses.columns;
   qa('.mt-add-action-tag').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input'),kind=form.dataset.kind;if(input.value.trim()&&state.actionExtras[kind].length<30){const item={id:makeId(),text:input.value.trim()};state.actionExtras[kind].push(item);selected.add(`extra:${kind}:${item.id}`);input.value='';refreshSelection();localSave();}}));
   settingsCardCount=mountAnimationSettings(root,state,localSave,fit,motion,tools);
   dressScroll(q('.mt-settings-card'));
@@ -178,12 +180,12 @@ export function mountSheet(root,state,save,actions) {
     if(rolling)return;
     const openCards=[...q('#panel-'+activeTab).querySelectorAll('.mt-scroll-frame:has(.mt-scroll-toggle[aria-expanded=true])')];
     if(!q('.mt-action-card').hidden&&q('.mt-action-card .mt-scroll-toggle[aria-expanded=true]'))openCards.push(q('.mt-action-card'));
-    const requestedHeight=Math.max(650,...openCards.map(card=>card.querySelector('.mt-scroll-main').scrollHeight+card.querySelector('.mt-scroll-extension-inner').scrollHeight+78+toolbar.getBoundingClientRect().height+44));
-    const minimumWidth=Math.max(480,q('.mt-tabs').scrollWidth+16);
-    return resizePending=actions.fitWindow?.(activeTab==='themes'?4:activeTab==='settings'?settingsCardCount():activeTab==='statuses'?Math.max(1,state.statusCards.length):activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden,requestedHeight,minimumWidth);
+    const requestedHeight=Math.max(650*SHEET_SCALE,...openCards.map(card=>(card.querySelector('.mt-scroll-main').scrollHeight+card.querySelector('.mt-scroll-extension-inner').scrollHeight+78+44)*SHEET_SCALE+toolbar.getBoundingClientRect().height));
+    const minimumWidth=Math.max(480,q('.mt-tabs').scrollWidth+16)*SHEET_SCALE;
+    return resizePending=actions.fitWindow?.(activeTab==='themes'?4:activeTab==='settings'?settingsCardCount():activeTab==='statuses'?statusColumnCount():activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden,requestedHeight,minimumWidth);
   }
   qa('[role=tabpanel]').forEach(panel=>{const version=el('div','mt-sheet-version','v'+packageInfo.version);panel.querySelector('.mt-card-row').after(version);});
   dressScroll(q('.mt-action-card'),{extensionLabel:'Особые действия',onExpand:fit});refreshSelection();createScratchEffects(root);
-  state.cardOrder??={};createCardReorder(root,{getOrder:key=>state.cardOrder[key],setOrder:(key,order)=>{state.cardOrder[key]=order;localSave();},beforeDrag:()=>motion.stop()});
+  state.cardOrder??={};createCardReorder(root,{getOrder:key=>state.cardOrder[key],setOrder:(key,order)=>{state.cardOrder[key]=order;localSave();fit();},beforeDrag:()=>motion.stop()});
   reveal(q('#panel-party'));
 }

@@ -1,3 +1,4 @@
+import {renderedScale} from './sheet-scale.js';
 let scrollId=0;
 export function dressScroll(card,{expanded=false,onExpand,extensionLabel='Особые улучшения'}={}){
  if(card.classList.contains('mt-scroll-frame'))return card;
@@ -15,7 +16,7 @@ export function dressScroll(card,{expanded=false,onExpand,extensionLabel='Осо
   function sync(){toggle.setAttribute('aria-expanded',String(expanded));toggle.setAttribute('aria-label',(expanded?'Свернуть ':'Развернуть ')+extensionLabel.toLowerCase());foot.classList.toggle('is-open',expanded);}
   let unfolding;
   toggle.addEventListener('click',()=>{
-   const from=extension.getBoundingClientRect().height;unfolding?.cancel();expanded=!expanded;
+   const from=extension.getBoundingClientRect().height/renderedScale(card);unfolding?.cancel();expanded=!expanded;
    extension.classList.toggle('is-open',expanded);extension.inert=!expanded;extension.setAttribute('aria-hidden',String(!expanded));sync();onExpand?.(expanded);
    const reduced=card.closest('[data-scroll-animation=off],[data-entrance-animation=off]')||doc.defaultView.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
    if(!reduced&&typeof extension.animate==='function')unfolding=extension.animate([{height:from+'px'},{height:(expanded?inner.scrollHeight:0)+'px'}],{duration:360,easing:'cubic-bezier(.22,.7,.25,1)'});

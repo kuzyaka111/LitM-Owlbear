@@ -42,7 +42,7 @@ async function start(inOwlbear) {
   createIcons({ icons: { Feather, X, UserRound, Sprout, BookOpen, ArrowUpRight } });
   if (!inOwlbear) {
     const p = root.querySelector('.mt-prototype-note');
-    p.textContent = 'Предпросмотр вне Owlbear · все данные, включая братство, здесь сохраняются только на этом устройстве.';
+    if(p)p.textContent = 'Предпросмотр вне Owlbear · все данные, включая братство, здесь сохраняются только на этом устройстве.';
   }
 }
 

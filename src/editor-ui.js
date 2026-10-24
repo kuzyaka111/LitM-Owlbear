@@ -73,7 +73,7 @@ export function renderTheme(theme, ctx, tools) {
   head.append(story?el('span','mt-story-type','Сюжетная тема'):bookButton,might);card.append(head,row('power',0,true));
   const powers=el('div','mt-power-slots');powers.append(el('span','mt-tag-label','СИЛА'));for(let i=1;i<7;i++)powers.append(row('power',i));
   const weaknesses=el('div','mt-weakness-slots');weaknesses.append(el('span','mt-tag-label','СЛАБОСТЬ'));for(let i=0;i<3;i++)weaknesses.append(row('weakness',i));card.append(powers,weaknesses);
-  const quest=el('div','mt-quest');const questText=btn(theme.quest||'Задать стремление','mt-quest-text',()=>{});questText.title=theme.quest+'\nДвойной клик — изменить';const editQuest=()=>inlineText(questText,theme.quest,value=>change({field:'quest',value}),ctx.sharedStatus?400:1000,'Стремление');questText.addEventListener('dblclick',editQuest);quest.append(el('span','mt-tag-label','СТРЕМЛЕНИЕ'),questText);card.append(quest);
+  const quest=el('div','mt-quest');const questText=btn(theme.quest||'Задать стремление','mt-quest-text',()=>{});questText.title=theme.quest+'\nДвойной клик — изменить';const editQuest=()=>inlineText(questText,theme.quest,value=>change({field:'quest',value}),ctx.shared?400:1000,'Стремление');questText.addEventListener('dblclick',editQuest);quest.append(el('span','mt-tag-label','СТРЕМЛЕНИЕ'),questText);card.append(quest);
   const tracks=el('div','mt-track');for(const [field,label]of [['improve','Развитие'],['abandon','Отказ'],['milestone','Вехи']]){const g=el('div','mt-track-group'),p=el('div','mt-pips');for(let i=1;i<=3;i++){const b=btn(i<=theme[field]?'◆':'◇','mt-pip',safely(()=>change({field,value:i===theme[field]?i-1:i})),label+' '+i);b.setAttribute('aria-pressed',String(i<=theme[field]));p.append(b);}g.append(p,el('span','',label));tracks.append(g);}card.append(tracks);
   const activeCount=story?theme.storyImprovements.filter(x=>x.active).length:theme.improvements.length;
   const details=el('details','mt-improvements');details.open=ctx.expanded||false;details.addEventListener('toggle',()=>ctx.onExpand?.(details.open));details.append(el('summary','','Особые улучшения · '+activeCount));
@@ -93,7 +93,6 @@ export function renderTheme(theme, ctx, tools) {
   }
   if(theme.notes){const n=el('details','mt-legacy-notes');n.append(el('summary','','Записи темы'),el('p','',theme.notes));details.append(n);}card.append(details);
   if(ctx.remove)card.append(btn('Удалить карточку','mt-delete-card',ctx.remove));
-  if(ctx.sharedStatus){const status=el('small','mt-fellowship-status',ctx.sharedStatus);status.setAttribute('role','status');card.append(status);}
   if(ctx.busy)card.querySelectorAll('button,select').forEach(x=>x.disabled=true);
   return card;
 }

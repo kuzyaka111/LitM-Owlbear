@@ -15,11 +15,11 @@ export function mountUI(root, view, template, store, actions) {
   const normalNote = view === 'sheet' && actions.preview ? 'Предпросмотр · все данные здесь сохраняются только на этом устройстве.' : view === 'sheet' ? 'Личный лист сохраняется на этом устройстве. Братство — общее для комнаты.' : 'Панель ведущего · заметки сохраняются только на этом устройстве.';
   const note = element(doc, 'div', 'mt-prototype-note', normalNote);
   const info = root.querySelector('.mt-storage-info');
-  if (info) info.append(note); else root.prepend(note);
+  if(view!=='sheet'){if (info) info.append(note); else root.prepend(note);}
   function save() {
     const saved = store.save(state);
+    if(view==='sheet'){if(!saved){const error=q('.mt-ui-message');error.hidden=false;error.textContent='Не удалось сохранить изменения на этом устройстве.';}return;}
     q('.mt-save-state').textContent = saved ? 'Сохранено' : 'Не сохранено';
-    if (!saved) { const current = root.querySelector('.mt-storage-details'); if (current) current.open = true; }
     note.classList.toggle('mt-error', !saved);
     note.textContent = saved ? normalNote : 'Браузер не разрешил сохранение. После закрытия окна изменения могут потеряться.';
   }

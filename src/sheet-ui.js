@@ -10,7 +10,7 @@ export function mountSheet(root,state,save,actions) {
   const tools=editorTools(root),{doc,el,btn,dialog,inlineText,scratchButton}=tools;
   const q=s=>root.querySelector(s),qa=s=>[...root.querySelectorAll(s)];
   const selected=new Set(state.selected),expanded=new Map();
-  let activeTab='party',shared=fellowshipDefaults(),sharedReady=false,sharedBusy=false,sharedStatus='Подключаем братство…';
+  let activeTab='party',shared=fellowshipDefaults(),sharedReady=false,sharedBusy=false;
   const service=actions.fellowship;
   const report=error=>{const node=q('.mt-ui-message');node.hidden=false;node.textContent=error?.message||String(error);};
   function localSave(){state.selected=[...selected];save();}
@@ -49,19 +49,19 @@ export function mountSheet(root,state,save,actions) {
 
   function drawShared(){
     const t=fellowshipTheme(shared);preserveReplace(q('.mt-fellowship-host'),renderTheme(t,{isSelected:key=>selected.has(key),select,report,busy:!sharedReady||sharedBusy,
-      expanded:expanded.get(t.id),onExpand:open=>expanded.set(t.id,open),sharedStatus,
-      change:async change=>{sharedBusy=true;sharedStatus='Сохраняем для всех…';drawShared();
-        try{await service.update(fellowshipPatch(change));sharedStatus=actions.preview?'Предпросмотр · сохранено на устройстве':'Общее для комнаты · сохранено';}
-        catch(e){sharedStatus='Не сохранено: '+e.message;throw e;}finally{sharedBusy=false;drawShared();refreshSelection();}
+      expanded:expanded.get(t.id),onExpand:open=>expanded.set(t.id,open),shared:true,
+      change:async change=>{sharedBusy=true;drawShared();
+        try{await service.update(fellowshipPatch(change));}
+        catch(e){throw e;}finally{sharedBusy=false;drawShared();refreshSelection();}
       }},tools));
   }
   drawShared();
-  if(service){service.subscribe((value,ready)=>{shared=value;sharedReady=ready;if(ready&&!sharedBusy)sharedStatus=actions.preview?'Братство · локальный предпросмотр':'Братство · общее для комнаты';drawShared();refreshSelection();});void service.start().catch(error=>{sharedStatus='Нет соединения';drawShared();report(error);const retry=btn('Повторить','mt-retry-shared',()=>{retry.disabled=true;void service.start().then(()=>retry.remove()).catch(e=>{report(e);retry.disabled=false;});});q('.mt-fellowship-host .mt-theme').append(retry);});}
-  else {sharedStatus='Нет подключения к комнате';drawShared();}
+  if(service){service.subscribe((value,ready)=>{shared=value;sharedReady=ready;drawShared();refreshSelection();});void service.start().catch(error=>{drawShared();report(error);const retry=btn('Повторить','mt-retry-shared',()=>{retry.disabled=true;void service.start().then(()=>retry.remove()).catch(e=>{report(e);retry.disabled=false;});});q('.mt-fellowship-host .mt-theme').append(retry);});}
+  else {drawShared();}
 
   function field(label,value,onInput,max=80,multi=false){const l=el('label','mt-field');l.append(el('span','',label));const input=el(multi?'textarea':'input');input.value=value;input.maxLength=max;if(multi)input.rows=2;input.addEventListener('input',()=>onInput(input.value));l.append(input);return {label:l,input};}
   function drawCharacter(){
-    const article=el('article','mt-theme mt-character-card');const head=el('div','mt-theme-head');head.append(el('span','','Персонаж'),el('span','mt-save-state',''));article.append(head);
+    const article=el('article','mt-theme mt-character-card');const head=el('div','mt-theme-head');head.append(el('span','','Персонаж'));article.append(head);
     const body=el('div','mt-character-body');const name=field('Имя героя',state.name,value=>{state.name=value;localSave();},80,true);name.input.className='mt-editor-name';body.append(name.label,field('Имя игрока',state.playerName,value=>{state.playerName=value;localSave();}).label);
     const about=el('details','mt-details');about.append(el('summary','','О персонаже'),field('Описание',state.concept,value=>{state.concept=value;localSave();},500,true).label);body.append(about);
     const relationships=el('details','mt-details mt-relationships');relationships.open=true;relationships.append(el('summary','','Отношения в братстве'));
@@ -78,7 +78,7 @@ export function mountSheet(root,state,save,actions) {
       const title=btn(item.name,'mt-improvement-title',()=>dialog(item.name,form=>form.append(el('p','',item.text),el('small','mt-source-note','The Hero · стр. '+item.page))));title.title=item.text;row.append(toggle,title);quint.append(row);
     }
     if(state.quintessences){const legacy=el('details','mt-details'),copy=el('p','',state.quintessences);copy.title='Двойное нажатие — изменить';copy.addEventListener('dblclick',()=>inlineText(copy,state.quintessences,async value=>{state.quintessences=value;drawCharacter();localSave();},2000,'Прежние записи о квинтэссенциях'));legacy.append(el('summary','','Прежние записи'),copy);quint.append(legacy);}growth.append(quint);article.append(growth);
-    const storage=el('details','mt-details mt-storage-details');storage.append(el('summary','','Сохранение · '+packageInfo.version));const info=el('div','mt-storage-info');const old=root.querySelector('.mt-prototype-note');if(old)info.append(old);storage.append(info);article.append(storage);preserveReplace(q('.mt-character-host'),article);
+    preserveReplace(q('.mt-character-host'),article);
   }
   drawCharacter();
 
@@ -107,5 +107,6 @@ export function mountSheet(root,state,save,actions) {
   const tabs=qa('[role=tab]');function switchTab(button){activeTab=button.dataset.sheetTab;tabs.forEach(b=>{const active=b===button;b.setAttribute('aria-selected',String(active));b.setAttribute('aria-pressed',String(active));b.tabIndex=active?0:-1;q('#'+b.getAttribute('aria-controls')).hidden=!active;});if(activeTab==='notes')layoutNotes();fit();}
   tabs.forEach((b,i)=>{b.addEventListener('click',()=>switchTab(b));b.addEventListener('keydown',e=>{const n=e.key==='ArrowRight'?(i+1)%3:e.key==='ArrowLeft'?(i+2)%3:e.key==='Home'?0:e.key==='End'?2:null;if(n!==null){e.preventDefault();switchTab(tabs[n]);tabs[n].focus();}});});
   function fit(){actions.fitWindow?.(activeTab==='themes'?4:activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden);}
+  qa('[role=tabpanel]').forEach(panel=>{const version=el('div','mt-sheet-version','v'+packageInfo.version);panel.querySelector('.mt-card-row').after(version);});
   refreshSelection();fit();
 }

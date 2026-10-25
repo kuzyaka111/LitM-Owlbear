@@ -1,0 +1,15 @@
+{
+  "name": "Легенда в Тумане — тест карточек",
+  "version": "0.7.23",
+  "manifest_version": 1,
+  "description": "Локальная проверка переноса карточек на поле.",
+  "icon": "http://localhost:5173/sheet.svg",
+  "background_url": "http://localhost:5173/background.html",
+  "action": {
+    "title": "Тест карточек",
+    "icon": "http://localhost:5173/sheet.svg",
+    "popover": "http://localhost:5173/index.html",
+    "width": 1000,
+    "height": 800
+  }
+}

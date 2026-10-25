@@ -1,1 +1,0 @@
-import{a as e,l as t}from"./bridge-B-eEPhwe.js";t.isAvailable&&t.onReady(()=>{let n=e(t,window.location.href);window.addEventListener(`pagehide`,()=>{n.dispose()},{once:!0})});

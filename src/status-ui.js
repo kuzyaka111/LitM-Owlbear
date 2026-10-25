@@ -26,7 +26,8 @@ export function mountStatuses(root,state,save,fit,tools){
   return dressScroll(article);
  }
  function layout(){host.querySelectorAll('.mt-status-name').forEach(input=>{if(input.offsetParent)size(input);});}
- layout.columns=()=>Math.max(1,new Set([...host.children].map(node=>node.offsetLeft)).size);
+ layout.draw=()=>{host.replaceChildren(...state.statusCards.map(card));layout();};
+ layout.columns=()=>Math.max(1,new Set([...host.children].filter(n=>n.dataset.onBoard!=='true').map(node=>node.offsetLeft)).size);
  if(win.ResizeObserver){let columns=1;const observer=new win.ResizeObserver(()=>{
   if(!host.offsetParent)return;layout();const next=layout.columns();if(next!==columns){columns=next;fit();}
  });observer.observe(host);win.addEventListener('pagehide',()=>observer.disconnect(),{once:true});}

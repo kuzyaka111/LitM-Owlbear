@@ -1,3 +1,5 @@
+import {mountBoardReturn} from './board-return.js';
+import {createSheetTransfer} from './sheet-transfer.js';
 import {openDiceTray} from './dice.js';
 import {createActionPanel,createActionTagList,calculateAction} from './action-panel.js';
 import {createScratchEffects} from './scratch-effects.js';
@@ -40,7 +42,7 @@ export function mountSheet(root,state,save,actions) {
   const sharedView=()=>Object.assign({},shared,...pendingShared.map(write=>write.patch));
   const service=actions.fellowship;
   const report=error=>{const node=q('.mt-ui-message');node.hidden=false;node.textContent=error?.message||String(error);};
-  function localSave(){state.selected=[...selected];save();}
+  function localSave(){state.selected=[...selected];save();void actions.board?.syncCharacter?.(state.name).catch(report);}
   function allTags(){
     const tags=new Map();const addTheme=t=>{for(const kind of ['power','weakness'])t[kind].forEach((slot,i)=>{if(slot.text&&!slot.scratched)tags.set(tagKey(t,kind,i),{text:slot.text,kind,source:getBook(t.bookId).name});});};
     state.heroThemes.forEach(addTheme);if(sharedReady)addTheme(fellowshipTheme(sharedView()));
@@ -190,10 +192,15 @@ export function mountSheet(root,state,save,actions) {
     const requestedHeight=Math.max(650*SHEET_SCALE,...openCards.map(card=>(card.querySelector('.mt-scroll-main').scrollHeight+card.querySelector('.mt-scroll-extension-inner').scrollHeight+78+44)*SHEET_SCALE+toolbar.getBoundingClientRect().height));
     const rowActions=[...toolbar.querySelectorAll('.mt-row-actions')].find(node=>!node.hidden);
     const minimumWidth=Math.max(480,q('.mt-tabs').scrollWidth+(rowActions?rowActions.scrollWidth+6:0)+16)*SHEET_SCALE;
-    return resizePending=actions.fitWindow?.(activeTab==='themes'?4:activeTab==='settings'?settingsCardCount():activeTab==='statuses'?statusColumnCount():activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:2+state.cards.length,!q('.mt-action-card').hidden,requestedHeight,minimumWidth);
+    return resizePending=actions.fitWindow?.(activeTab==='themes'?Math.max(1,[...q('.mt-themes').children].filter(n=>n.dataset.onBoard!=='true').length):activeTab==='settings'?settingsCardCount():activeTab==='statuses'?statusColumnCount():activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:Math.max(1,[...q('#panel-party').querySelectorAll('.mt-card-slot')].filter(n=>n.dataset.onBoard!=='true').length),!q('.mt-action-card').hidden,requestedHeight,minimumWidth);
   }
   qa('[role=tabpanel]').forEach(panel=>{const version=el('div','mt-sheet-version','v'+packageInfo.version);panel.querySelector('.mt-card-row').after(version);});
   dressScroll(q('.mt-action-card'),{extensionLabel:'Особые действия',onExpand:fit});refreshSelection();createScratchEffects(root);
-  state.cardOrder??={};createCardReorder(root,{getOrder:key=>state.cardOrder[key],setOrder:(key,order)=>{state.cardOrder[key]=order;localSave();fit();},beforeDrag:()=>motion.stop()});
+  let transfer;
+  if(actions.board)transfer=createSheetTransfer(root,state,save,{scene:actions.board,resize:actions.boardResize,toScene:actions.boardPoint,getShared:()=>sharedReady?sharedView():null,fit,report,
+   redraw:key=>{if(key==='character')drawCharacter();else if(key.startsWith('card:'))drawInventory();else if(key.startsWith('theme:')){const t=state.heroThemes.find(t=>'theme:'+t.id===key),host=[...q('.mt-themes').children].find(h=>h.querySelector('[data-theme-id]')?.dataset.themeId===t?.id);if(t&&host)drawLocal(t,host,true);}else if(key.startsWith('status:'))layoutStatuses.draw();else if(key.startsWith('note:'))layoutNotes.draw();refreshSelection();}
+  });
+  if(actions.board){const offReturn=mountBoardReturn(root,actions.board,{fit,report});win.addEventListener('pagehide',offReturn,{once:true});}
+  state.cardOrder??={};createCardReorder(root,{getOrder:key=>state.cardOrder[key],setOrder:(key,order)=>{state.cardOrder[key]=order;localSave();fit();},transfer,beforeDrag:()=>motion.stop()});
   reveal(q('#panel-party'));
 }

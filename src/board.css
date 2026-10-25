@@ -1,0 +1,28 @@
+/* Board exports use the existing card paints at a fixed logical size. */
+.mt-board-stage{position:fixed;left:-10000px;top:0;width:244px;pointer-events:none}
+#mist-table-design .mt-v4.mt-board-render{zoom:1!important;width:244px!important;min-width:0!important;padding:8px 10px!important;background:transparent!important}
+#mist-table-design .mt-board-render .mt-board-owner{font:500 13px/19px var(--font-heading);text-align:center;color:#f4e7c9;background:#3c291fdb;border-radius:3px;margin:0 4px 5px;padding:4px 6px;white-space:pre-wrap;overflow-wrap:anywhere}
+#mist-table-design .mt-board-render .mt-theme.mt-scroll-frame{max-height:none!important;overflow:visible!important}
+#mist-table-design .mt-board-render .mt-scroll-flow,#mist-table-design .mt-board-render .mt-scroll-body,#mist-table-design .mt-board-render .mt-scroll-main{max-height:none!important;overflow:visible!important;height:auto!important}
+#mist-table-design .mt-board-render .mt-scroll-main{min-height:0!important}
+#mist-table-design .mt-board-render .mt-scroll-extension{height:auto!important;overflow:visible!important}
+#mist-table-design .mt-board-render .mt-scroll-bottom{height:36px!important;min-height:36px!important}
+#mist-table-design .mt-board-render .mt-tag-text,#mist-table-design .mt-board-render .mt-improvement-title,#mist-table-design .mt-board-render .mt-note-text,#mist-table-design .mt-board-render .mt-note-title,#mist-table-design .mt-board-render .mt-editor-name{white-space:pre-wrap!important;overflow-wrap:anywhere!important;height:auto!important;max-height:none!important;overflow:visible!important}
+#mist-table-design .mt-board-render .mt-board-might{font:11px var(--font-heading);margin-left:auto}
+#mist-table-design .mt-board-render .mt-book-picker:disabled{opacity:1}
+#mist-table-design .mt-board-render .mt-status-name{flex:1}
+#mist-table-design .mt-board-render *{animation:none!important;transition:none!important}
+#mist-table-design [data-on-board=true]{display:none!important}
+body.mt-sheet-mini #mist-table-design{transform:scale(.3);transform-origin:0 0;width:var(--full-sheet-width);height:var(--full-sheet-height)}
+body.mt-sheet-mini #mist-table-design .mt-theme.mt-scroll-frame{max-height:calc(var(--full-sheet-height) / 1.25 - var(--toolbar-height,34px) - 44px)}
+body.mt-sheet-mini #mist-table-design .mt-status-cards{height:calc(var(--full-sheet-height) / 1.25 - var(--toolbar-height,34px) - 32px)}
+.mt-board-transfer-hint{position:fixed;inset:0;pointer-events:none;border:2px solid #d9be7c;border-radius:5px}
+
+body.mt-sheet-mini #mist-table-design.mt-board-stage{transform:none!important;width:244px!important;height:auto!important}
+
+#mist-table-design .mt-board-render .mt-tag-row{height:auto!important;min-height:30px;align-items:flex-start!important}
+#mist-table-design .mt-board-render .mt-tag-text{display:block!important;-webkit-line-clamp:unset!important;text-overflow:clip!important}
+
+.mt-board-return-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}.mt-board-return-list button{text-align:left;padding:8px 12px}
+
+body.mt-inline-editor-page{margin:0!important;padding:0!important;background:transparent!important;min-width:0!important;overflow:hidden}.mt-board-inline-editor{margin:0;padding:0;min-width:0}.mt-board-inline-editor textarea{display:block;box-sizing:border-box;width:100%;min-height:30px;resize:none;overflow:hidden;border:0;outline:1px solid #b69a62;outline-offset:-1px;border-radius:1px;margin:0;padding:0 2px;background:#f5e8c6;color:#433323;font:15px/24px "Bad Script",cursive}.mt-inline-error{margin:0;padding:5px;background:#f5e8c6;color:#972f24;font:12px/16px sans-serif}

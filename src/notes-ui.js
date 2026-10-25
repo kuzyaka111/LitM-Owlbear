@@ -31,5 +31,5 @@ export function mountNotes(root,state,save,fit,tools){
    const body=el('div','mt-note-body');for(const section of card.sections)body.append(sectionNode(section,card.sections));const addHeading=btn('+ Заголовок','mt-add-note-section',()=>{card.sections.push(newNoteHeading());persist();});addHeading.disabled=card.sections.length>=50;body.append(addHeading);article.append(head,body);host.append(dressScroll(article));
   }
  }
- draw();return layout;
+ layout.draw=draw;draw();return layout;
 }

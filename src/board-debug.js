@@ -1,0 +1,1 @@
+export function boardDebug(type,data){if(import.meta.env?.DEV)void fetch('/__board-debug',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type,data,at:Date.now()})}).catch(()=>{});}

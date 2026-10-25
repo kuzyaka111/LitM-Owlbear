@@ -164,3 +164,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 Three.js — MIT license, https://github.com/mrdoob/three.
 Rapier JavaScript compatibility bindings — Apache-2.0, https://github.com/dimforge/rapier.js.
 Copies are distributed in /licenses/. No Owlbear Dice source or assets are included.
+
+
+OpenType.js — MIT license, https://github.com/opentypejs/opentype.js. See /licenses/opentype-LICENSE.txt. Board font licenses: /board-assets/badscript-OFL.txt and /board-assets/alegreyasc-OFL.txt.

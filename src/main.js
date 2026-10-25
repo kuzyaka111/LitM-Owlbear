@@ -1,4 +1,4 @@
-import OBR from '@owlbear-rodeo/sdk';
+import OBR,{buildImage,buildPath} from '@owlbear-rodeo/sdk';
 import { createIcons, Feather, X, UserRound, Sprout, BookOpen, ArrowUpRight } from 'lucide';
 import './style.css';
 import './fog.css';
@@ -8,6 +8,8 @@ import './typography.css';
 import './scratch-effects.css';
 import './dice.css';
 import './status-settings.css';
+import './board.css';
+import {createBoardScene} from './board-scene.js';
 import rollImage from './scroll-roll.svg';
 import paperImage from './parchment.svg';
 import brownRoll from './scroll-roll-brown.svg';
@@ -47,12 +49,18 @@ async function start(inOwlbear) {
   };
   const fellowship = view === 'sheet' ? (inOwlbear ? makeFellowshipStore(OBR.room) : makePreviewFellowship(storage)) : null;
   if (fellowship) window.addEventListener('pagehide', () => fellowship.dispose(), { once: true });
-  let resizeQueue = Promise.resolve();
-  const fitWindow = (count, hasSelection, requestedHeight, minimumWidth) => { if (!inOwlbear || view !== 'sheet') return; resizeQueue = resizeQueue.then(async () => { const size = await sheetBounds(OBR, count, hasSelection, requestedHeight, minimumWidth); await OBR.popover.setWidth(SHEET_POPOVER_ID, size.width); await OBR.popover.setHeight(SHEET_POPOVER_ID, size.height); }).catch(console.error); return resizeQueue; };
-  mountUI(root, view, view === 'gm' ? gmTemplate : sheetTemplate, makeStore(storage, scope, view), {
-    close, fellowship, fitWindow, preview: !inOwlbear,
+  let resizeQueue = Promise.resolve(),miniature=false;
+  const store=makeStore(storage,scope,view);
+  const board=inOwlbear&&view==='sheet'?createBoardScene(OBR,{build:buildImage,buildPath,store,fellowship,upgrade:false,report:error=>{const node=root.querySelector('.mt-ui-message');if(node){node.hidden=false;node.textContent=error.message;}else console.error(error);}}):null;
+  const fitWindow = (count, hasSelection, requestedHeight, minimumWidth) => { if (!inOwlbear || view !== 'sheet'||miniature) return resizeQueue; resizeQueue = resizeQueue.then(async () => { if(miniature)return;const size = await sheetBounds(OBR, count, hasSelection, requestedHeight, minimumWidth); await OBR.popover.setWidth(SHEET_POPOVER_ID, size.width); await OBR.popover.setHeight(SHEET_POPOVER_ID, size.height); }).catch(console.error); return resizeQueue; };
+  if(board)await board.start();
+  mountUI(root, view, view === 'gm' ? gmTemplate : sheetTemplate, store, {
+    close, fellowship, fitWindow, preview: !inOwlbear,board,
+    boardResize:(mini,size)=>{miniature=mini;resizeQueue=resizeQueue.then(async()=>{await OBR.popover.setWidth(SHEET_POPOVER_ID,Math.round(size.width*(mini ? .3 : 1)));await OBR.popover.setHeight(SHEET_POPOVER_ID,Math.round(size.height*(mini ? .3 : 1)));});return resizeQueue;},
+    boardPoint:event=>OBR.viewport.inverseTransformPoint({x:16+event.clientX,y:96+event.clientY}),
     openSheet: async () => { if (inOwlbear) { await OBR.modal.close(MODAL_ID); await openSheet(OBR, window.location.href); } else window.location.href = new URL('./index.html', window.location.href).href; },
   });
+  if(board)window.addEventListener('pagehide',()=>board.dispose(),{once:true});
   createIcons({ icons: { Feather, X, UserRound, Sprout, BookOpen, ArrowUpRight } });
   if (!inOwlbear) {
     const p = root.querySelector('.mt-prototype-note');

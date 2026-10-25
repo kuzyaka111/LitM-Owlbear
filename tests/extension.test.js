@@ -90,8 +90,8 @@ test('user text is rendered as text, not HTML', () => {
 test('GM scene tags can be added and removed', () => {
   const { root: r, store, event } = ui('gm');
   r.querySelector('[data-gm-tab=scene]').click();
-  r.querySelector('#mt-scene-name').value = 'Дождь'; r.querySelector('.mt-add-scene').dispatchEvent(event('submit')); assert(store.load().scene.includes('Дождь'));
-  r.querySelector('[aria-label="Удалить тег Дождь"]').click(); assert(!store.load().scene.includes('Дождь'));
+  r.querySelector('[aria-label="Добавить: Теги сцены"]').click(); const tag=r.querySelectorAll('[aria-label="Название тега сцены"]');tag[tag.length-1].value='Дождь';tag[tag.length-1].dispatchEvent(event('input')); assert(store.load().scene.includes('Дождь'));
+  r.querySelector('[data-scene-effect=tags] .mt-gm-obstacle-row:last-of-type .mt-gm-remove-row').click(); assert(!store.load().scene.includes('Дождь'));
 });
 
 test('manifest URLs retain the GitHub project path even when resolved from the origin', () => {

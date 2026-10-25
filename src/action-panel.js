@@ -57,11 +57,11 @@ export function createActionTagList(list,renderRow,emptyText){
   for(const entry of rows.values())if(!present.has(entry.key)&&!entry.removing)animate(entry,true);
   for(const [key,item] of items){
    let entry=rows.get(key);
-   if(entry&&entry.value!==item.text){entry.animations?.forEach(a=>a.cancel());++entry.revision;entry.row.remove();rows.delete(key);entry=null;}
+   if(entry&&(entry.value!==item.text||entry.forced!==!!item.forced)){entry.animations?.forEach(a=>a.cancel());++entry.revision;entry.row.remove();rows.delete(key);entry=null;}
    if(!entry){
     const row=renderRow(key,item),text=row.firstElementChild;text.setAttribute('aria-label',item.text);
     text.replaceChildren(...Array.from(item.text,char=>{const span=doc.createElement('span');span.textContent=char;span.setAttribute('aria-hidden','true');return span;}));
-    entry={key,row,text,value:item.text,revision:0,removing:false,animations:[]};rows.set(key,entry);list.append(row);animate(entry,false);
+    entry={key,row,text,value:item.text,forced:!!item.forced,revision:0,removing:false,animations:[]};rows.set(key,entry);list.append(row);animate(entry,false);
    }else if(entry.removing)animate(entry,false);
   }
   placeholder();

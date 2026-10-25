@@ -4,12 +4,13 @@ import fs from 'node:fs';
 import {JSDOM} from 'jsdom';
 import {makeStore} from '../src/storage.js';
 import {mountUI} from '../src/ui.js';
-import {cleanGM,newScene,newObstacle,newObstacleRow,moveScene,copyObstacle,publicObstacle,referenceParts,obstacleReference,safeImage} from '../src/gm-model.js';
+import {cleanGM,cleanGMStatus,gmStatusValue,toggleGMStatusKind,sceneEffectSource,newScene,newObstacle,newObstacleRow,moveScene,copyObstacle,publicObstacle,referenceParts,obstacleReference,safeImage} from '../src/gm-model.js';
 import {createGMBoard,GM_BOARD_KEY} from '../src/gm-board.js';
+import {collectActionSources,gmActionFeed,ACTION_FEED} from '../src/action-sources.js';
 import {boardCardElement} from '../src/board-render.js';
 const settle=()=>new Promise(r=>setTimeout(r,0));
 test('GM migration preserves old tags and notes, remains stable and keeps scenes independent',()=>{
- const state=cleanGM({scene:['Туман'],notes:'Секрет'});assert.deepEqual(state.scenes[0].tags,['Туман']);assert.equal(state.scenes[0].notes[0].sections[0].text,'Секрет');assert.deepEqual(cleanGM(state),state);
+ const state=cleanGM({scene:['Туман'],notes:'Секрет'});assert.deepEqual(state.scenes[0].tags.map(t=>t.name),['Туман']);assert.equal(state.scenes[0].notes[0].sections[0].text,'Секрет');assert.deepEqual(cleanGM(state),state);
  state.scenes.push(newScene());state.activeSceneId=state.scenes[1].id;const next=cleanGM(state);assert.deepEqual(next.scene,[]);assert.equal(next.scenes[0].notes[0].sections[0].text,'Секрет');assert.deepEqual(cleanGM({scenes:[]}).scenes,[]);
 });
 test('scene moves preserve order and content across collapsed groups and reject invalid destinations',()=>{
@@ -21,7 +22,7 @@ test('template copies keep visibility settings and deeply isolate all fields and
 });
 test('public projection excludes private names, images, rows and hidden bookkeeping',()=>{
  const o=newObstacle();o.name='СЕКРЕТ';o.image={url:'https://example.org/private.png'};o.hidden=['name','image'];o.tags=[{...newObstacleRow(),name:'PRIVATE',hidden:true},{...newObstacleRow(),name:'Видимый',spent:true}];
- const p=publicObstacle(o),text=JSON.stringify(p);for(const forbidden of ['СЕКРЕТ','private.png','PRIVATE','hidden',o.id])assert(!text.includes(forbidden));assert.equal(p.tags[0].name,'Видимый');assert.equal(p.tags[0].spent,true);assert.equal(o.name,'СЕКРЕТ');
+ const p=publicObstacle(o),text=JSON.stringify(p);for(const forbidden of ['СЕКРЕТ','private.png','PRIVATE','hidden',o.id])assert(!text.includes(forbidden));assert.equal(p.tags[0].name,'Видимый');assert.equal(p.tags[0].spent,false);assert.equal(p.tags[0].direction,0);assert.equal(o.name,'СЕКРЕТ');
  assert.equal(safeImage({url:'javascript:alert(1)'}),null);assert.equal(safeImage({url:'data:image/png;base64,abc'}),null);
  const node=boardCardElement({character:'Препятствие',card:{type:'obstacle',data:p}},new JSDOM().window.document);assert(node.textContent.includes('Видимый'));assert(!node.textContent.includes('PRIVATE'));assert.equal(node.querySelectorAll('input,textarea,button').length,0);
 });
@@ -47,7 +48,7 @@ function builder(type,props={}){const item={id:crypto.randomUUID(),type,...props
 function board(){
  let items=[],callback=()=>{},readyCallback=()=>{},role='GM',fail=false;const rendered=[],state=cleanGM({scenes:[],library:[]}),o=newObstacle();state.library.push(o);const api={getItems:async ids=>structuredClone(ids?items.filter(i=>ids.includes(i.id)):items),onChange:fn=>{callback=fn;return()=>{callback=()=>{};};},addItems:async next=>{if(fail)throw Error('Denied');items.push(...structuredClone(next));callback(structuredClone(items));},updateItems:async(ids,fn)=>{if(fail)throw Error('Denied');const names=ids.map(i=>typeof i==='string'?i:i.id),drafts=structuredClone(items);fn(drafts.filter(i=>names.includes(i.id)));items=drafts;callback(structuredClone(items));},deleteItems:async ids=>{items=items.filter(i=>!ids.includes(i.id));callback(structuredClone(items));}};
  const obr={player:{id:'owner',getRole:async()=>role},scene:{isReady:async()=>true,onReadyChange:fn=>{readyCallback=fn;return()=>{};},items:api,grid:{getDpi:async()=>150}},viewport:{getWidth:async()=>1000,getHeight:async()=>700,inverseTransformPoint:async p=>p}};
- const service=createGMBoard(obr,{store:{load:()=>structuredClone(state)},build:(image,grid)=>builder('IMAGE',{image,grid}),buildPath:()=>builder('PATH'),render:async record=>{rendered.push(structuredClone(record));return {width:244,height:300,dpi:150,parts:[{key:'text',type:'path',commands:[[0,record.card.data.tags.length,0],[1,1,1]],fill:'#333333'}]};},report:assert.fail});
+ const service=createGMBoard(obr,{store:{load:()=>structuredClone(state)},build:(image,grid)=>builder('IMAGE',{image,grid}),buildPath:()=>builder('PATH'),render:async record=>{rendered.push(structuredClone(record));return {width:244,height:300,dpi:150,parts:[{key:'text',type:'path',commands:[[0,record.card.data.tags?.length||0,0],[1,1,1]],fill:'#333333'}]};},report:assert.fail});
  return {service,obr,o,state,rendered,get items(){return items;},set role(v){role=v;},set fail(v){fail=v;},ready:()=>readyCallback(true)};
 }
 test('board obstacles expose only the public projection, sync in place and preserve native movement',async()=>{
@@ -66,4 +67,35 @@ test('saving the panel updates placed cards through flush and private edits do n
 
 test('long obstacle data cannot be shared beyond the host metadata limit',async()=>{
  const f=board();await f.service.start();f.o.features=Array.from({length:30},()=>({...newObstacleRow(),text:'Т'.repeat(1200)}));await assert.rejects(f.service.place(f.o),/Слишком много данных/);assert.equal(f.items.length,0);assert.equal(f.state.library[0].features.length,30);f.service.dispose();
+});
+
+test('legacy scene tags migrate to stable neutral chips and scene status values and directions persist',()=>{
+ const state=cleanGM({scenes:[{id:'scene-a',tags:['Туман',{id:'wind',name:'Ветер',direction:1}],statuses:[{id:'mud',name:'Вязкая грязь',value:'3',direction:-1}]}]});
+ assert.equal(state.scenes[0].tags[0].name,'Туман');assert.equal(state.scenes[0].tags[0].direction,0);assert.equal(state.scenes[0].statuses[0].value,'3');assert.deepEqual(cleanGM(state),state);assert.deepEqual(state.scene,['Туман','Ветер']);
+});
+
+test('scene chips add, cycle and save tags and statuses independently without extra descriptions',()=>{
+ const f=ui();f.click('+ Создать сцену');f.click('Добавить: Теги сцены');f.fill('Название тега сцены','Попутный ветер');f.root.querySelector('[data-scene-effect=tags] .mt-gm-row-direction').click();
+ f.click('Добавить: Статусы сцены');f.fill('Название статуса сцены','Скользкая тропа');f.click('Переключить на числовой статус');f.click('Отметка статуса 3');f.root.querySelector('[data-scene-effect=statuses] .mt-gm-row-direction').click();f.root.querySelector('[data-scene-effect=statuses] .mt-gm-row-direction').click();
+ let state=f.store.load(),scene=state.scenes.find(s=>s.id===state.activeSceneId);assert.equal(scene.tags[0].direction,1);assert.equal(scene.statuses[0].direction,-1);assert.equal(gmStatusValue(scene.statuses[0]),3);assert.equal(f.root.querySelector('[data-scene-effect=tags] textarea'),null);
+ f.click('Удалить тег сцены Попутный ветер');state=f.store.load();scene=state.scenes.find(s=>s.id===state.activeSceneId);assert.equal(scene.tags.length,0);assert.equal(scene.statuses.length,1);f.dom.window.close();
+});
+
+test('GM status type preserves six independent marks and ordinary statuses always count as one',()=>{
+ const row={...newObstacleRow(),name:'Бодрость',direction:1};assert.equal(gmStatusValue(row),1);toggleGMStatusKind(row);assert.equal(gmStatusValue(row),0);row.marks[1]=true;row.marks[4]=true;assert.equal(gmStatusValue(row),5);toggleGMStatusKind(row);assert.equal(gmStatusValue(row),1);toggleGMStatusKind(row);assert.equal(gmStatusValue(row),5);assert.equal(row.name,'Бодрость');assert.equal(row.direction,1);
+ const legacy=cleanGMStatus({value:'3'});assert.equal(legacy.kind,'numeric');assert.deepEqual(legacy.marks,[false,false,true,false,false,false]);
+});
+
+test('obstacle and scene editors switch types without losing names, directions or marked digits',()=>{
+ const f=ui();f.click('Препятствия и Противники');f.click('+ Создать заготовку');f.click('Добавить: Статусы');f.fill('Название статуса','Оглушён');f.click('Переключить на числовой статус');assert.equal(f.root.querySelectorAll('.mt-gm-status-mark').length,6);f.click('Отметка статуса 2');f.click('Отметка статуса 6');assert.equal(gmStatusValue(f.store.load().library[0].statuses[0]),6);
+ f.click('Переключить на обычный статус');assert.equal(f.root.querySelectorAll('.mt-gm-status-mark').length,0);assert.equal(gmStatusValue(f.store.load().library[0].statuses[0]),1);f.click('Переключить на числовой статус');assert.equal(f.root.querySelectorAll('.mt-gm-status-mark.is-marked').length,2);f.click('Закрыть препятствие');f.click('Выбор Сцены');f.click('+ Создать сцену');f.click('Добавить: Статусы сцены');f.fill('Название статуса сцены','Вдохновение');f.click('Переключить на числовой статус');f.click('Отметка статуса 4');const state=f.store.load(),scene=state.scenes.find(s=>s.id===state.activeSceneId);assert.equal(gmStatusValue(scene.statuses[0]),4);f.dom.window.close();
+});
+
+test('scene tags and numeric statuses export in place, synchronize and are not counted twice',async()=>{
+ const f=board(),scene=newScene(),tag={...newObstacleRow(),name:'Попутный ветер',direction:1},status={...newObstacleRow(),kind:'numeric',name:'Вдохновение',direction:1,marks:[false,true,false,false,false,false]};scene.tags.push(tag);scene.statuses.push(status);f.state.scenes.push(scene);f.state.activeSceneId=scene.id;await f.service.start();
+ const item=await f.service.place(sceneEffectSource(scene,'statuses',status)),tagItem=await f.service.place(sceneEffectSource(scene,'tags',tag));assert.equal(f.state.scenes[0].tags.length,1);assert.equal(f.state.scenes[0].statuses.length,1);assert.equal(item.metadata[GM_BOARD_KEY].card.type,'scene-effect');
+ status.marks[4]=true;await f.service.flush();const current=f.items.find(i=>i.id===item.id);assert.equal(current.metadata[GM_BOARD_KEY].card.data.value,5);assert.equal(current.metadata[GM_BOARD_KEY].card.data.marks[4],true);assert.equal((await f.service.place(sceneEffectSource(scene,'statuses',status))).id,item.id);
+ const feed=gmActionFeed(f.state,'owner'),sources=collectActionSources(f.items,{[ACTION_FEED+'owner']:feed},'player');assert.equal(sources.tags.size,1);assert.equal(sources.statuses.size,1);assert.equal([...sources.statuses.values()][0].value,5);
+ const node=boardCardElement(current.metadata[GM_BOARD_KEY],new JSDOM().window.document);assert.equal(node.querySelectorAll('.mt-status-mark').length,6);assert.equal(node.querySelectorAll('.mt-status-mark.is-marked').length,2);assert.equal(node.querySelectorAll('button,input,textarea').length,0);
+ scene.statuses=[];await f.service.flush();assert(!f.items.some(i=>i.id===item.id));assert(f.items.some(i=>i.id===tagItem.id));f.service.dispose();
 });

@@ -2,11 +2,13 @@ import {editorTools,renderTheme} from './editor-ui.js';
 import {dressScroll} from './scroll-view.js';
 import {quintessences} from './theme-model.js';
 import {cardFields,fieldValue} from './board-model.js';
+import {gmStatusValue} from './gm-model.js';
 export function boardCardElement(record,doc=document){
  const host=doc.createElement('div');host.id='mist-table-design';host.className='mt-board-stage';
  const shell=doc.createElement('div');shell.className='mt-v4 mt-board-render';host.append(shell);
  const {el,btn,scratchButton,...rest}=editorTools(host),tools={el,btn,scratchButton,...rest},fields=cardFields(record.card),d=record.card.data;
  const mapped=(node,id)=>{const f=fields.find(f=>f.id===id);if(f){node.dataset.boardField=f.id;node.dataset.boardKind=f.kind;}return node;};
+ const gmMarks=row=>{const marks=el('div','mt-status-marks mt-gm-export-marks');for(let i=0;i<6;i++){const mark=el('span','mt-status-mark'+(row.marks?.[i]?' is-marked':''),String(i+1));mark.dataset.boardField='gm-marks:'+row.id+':'+i;mark.dataset.boardKind='toggle';marks.append(mark);}return marks;};
  const text=(cls,id,placeholder='')=>mapped(el('div',cls,fieldValue(record.card,fields.find(f=>f.id===id))||placeholder),id);
  const caption=el('div','mt-board-owner',record.character||'Без имени');shell.append(caption);let article;
  if(record.card.type==='theme'){
@@ -18,9 +20,13 @@ export function boardCardElement(record,doc=document){
   article.querySelectorAll('.mt-improvement-title').forEach((n,i)=>mapped(n,'storyImprovements.'+i+'.text'));
   const select=article.querySelector('.mt-might');const label=el('span','mt-board-might',select.selectedOptions[0].textContent);select.replaceWith(label);
  }else{
-  const kind=record.card.type,cls=kind==='status'?'mt-status-scroll':kind==='bag'?'mt-backpack-card':kind==='note'?'mt-notes-card':'mt-character-card';
+  const kind=record.card.type,cls=kind==='status'||kind==='scene-effect'?'mt-status-scroll':kind==='bag'?'mt-backpack-card':kind==='note'?'mt-notes-card':'mt-character-card';
   article=el('article','mt-theme '+cls);const head=el('div','mt-theme-head');article.append(head);
-  if(kind==='status'){
+  if(kind==='scene-effect'){
+   article.dataset.statusKind=d.effectKind==='tags'?'story':d.kind;article.dataset.tear=[...d.id].reduce((n,c)=>n+c.charCodeAt(0),0)%5;
+   head.append(el('span','',d.effectKind==='tags'?'Тег сцены':'Статус сцены'));const line=el('div','mt-obstacle-export-row mt-obstacle-tag mt-direction-'+(d.direction||0));line.append(el('span','mt-obstacle-direction',d.direction===1?'↑ ':d.direction===-1?'↓ ':'◇ '),el('strong','',d.name));
+   if(d.effectKind==='statuses'&&d.kind==='numeric')line.append(gmMarks(d));article.append(line);
+  }else if(kind==='status'){
    article.dataset.statusKind=d.kind;article.dataset.tear=d.tear;head.append(el('span','mt-status-kind',d.kind==='story'?'Сюжетный тег':'Статус'));
    const row=el('div','mt-status-title-row'+(d.scratched?' mt-status-scratched':''));row.append(text('mt-status-name','name','Название…'));
    if(d.kind==='story')row.append(mapped(scratchButton(d.scratched,()=>{},'Зачеркнуть'),'scratched'));article.append(row);
@@ -32,10 +38,10 @@ export function boardCardElement(record,doc=document){
    article.classList.add('mt-obstacle-export');head.append(el('span','','Препятствие'));
    if(d.image){const picture=el('img','mt-board-picture');picture.src=d.image.url;picture.alt='';picture.style.aspectRatio=d.image.width+'/'+d.image.height;picture.dataset.mime=d.image.mime;article.append(picture);}
    article.append(el('h2','mt-obstacle-export-name',d.name||'Препятствие'));
-   for(const [key,title]of [['limits','Пределы'],['tags','Теги'],['features','Особые свойства'],['threats','Угрозы и последствия']]){
+   for(const [key,title]of [['limits','Пределы'],['tags','Теги'],['statuses','Статусы'],['features','Особые свойства'],['threats','Угрозы и последствия']]){
     if(!d[key]?.length)continue;const section=el('section','mt-obstacle-export-section');section.append(el('h4','',title));
-    const rows=el('div',key==='limits'?'mt-obstacle-limits':key==='tags'?'mt-obstacle-tags':'');
-    for(const row of d[key]){const line=el('div','mt-obstacle-export-row'+(key==='limits'?' mt-obstacle-limit':key==='tags'?' mt-obstacle-tag':''));if(key==='limits')line.append(el('div','mt-obstacle-limit-value',row.value),el('div','mt-obstacle-limit-name',row.name));else{line.append(el('strong','',row.name));if(key!=='tags')line.append(el('span','',row.text?' — '+row.text:''));}if(row.spent)line.classList.add('is-spent');rows.append(line);}section.append(rows);article.append(section);
+    const rows=el('div',key==='limits'?'mt-obstacle-limits':(key==='tags'||key==='statuses')?'mt-obstacle-tags':'');
+    for(const row of d[key]){const line=el('div','mt-obstacle-export-row'+(key==='limits'?' mt-obstacle-limit':(key==='tags'||key==='statuses')?' mt-obstacle-tag mt-direction-'+(row.direction||0):''));if(key==='limits')line.append(el('div','mt-obstacle-limit-value',row.value||'X'),el('div','mt-obstacle-limit-name',row.name));else{if(key==='tags'||key==='statuses')line.append(el('span','mt-obstacle-direction',row.direction===1?'↑ ':row.direction===-1?'↓ ':'◇ '));line.append(el('strong','',row.name));if(key==='statuses'&&row.kind==='numeric')line.append(gmMarks(row));else if(key==='statuses')line.append(el('span','', ' '+gmStatusValue(row)));else if(key!=='tags')line.append(el('span','',row.text?' — '+row.text:''));}if(row.spent)line.classList.add('is-spent');rows.append(line);}section.append(rows);article.append(section);
    }
   }else if(kind==='character'){
    head.append(el('span','','Персонаж'));const body=el('div','mt-character-body');

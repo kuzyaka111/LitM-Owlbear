@@ -40,15 +40,15 @@ export async function renderBoardGraphics(record){
   }
   const image=(file,r,front=false,key=file,visible=true)=>(front?overlays:paints).push({key:'image:'+key,visible,type:'image',url:boardAsset(file.replace('.svg','.png')),...r});
   const paintRect=(r,fill,alpha=1)=>paints.push({key:'paint:'+paints.length,type:'path',commands:rectCommands(r.x,r.y,r.width,r.height),fill:color(fill),alpha:alpha*rgba(fill).alpha});
-  const body=shell.querySelector('.mt-scroll-body'),bodyRect=relative(body),status=record.card.type==='status',aged=status&&record.card.data.kind!=='story',skin=aged?'aged':'paper';
-  if(status){image(skin+'.svg',{...bodyRect,height:Math.max(1,bodyRect.height-20)});image(skin+'-tear-'+record.card.data.tear+'.svg',{...bodyRect,y:bodyRect.y+bodyRect.height-21.333,height:21.333});}
+  const body=shell.querySelector('.mt-scroll-body'),bodyRect=relative(body),status=['status','scene-effect'].includes(record.card.type),aged=status&&(record.card.type==='scene-effect'?record.card.data.effectKind==='statuses':record.card.data.kind!=='story'),skin=aged?'aged':'paper';
+  if(status){const tear=Number.isInteger(record.card.data.tear)?record.card.data.tear:Number(shell.querySelector('[data-tear]')?.dataset.tear)||0;image(skin+'.svg',{...bodyRect,height:Math.max(1,bodyRect.height-20)});image(skin+'-tear-'+tear+'.svg',{...bodyRect,y:bodyRect.y+bodyRect.height-21.333,height:21.333});}
   else image(skin+'.svg',bodyRect);
   for(const node of shell.querySelectorAll('.mt-board-picture'))paints.push({key:'image:illustration',type:'image',url:node.src,intrinsic:{width:node.naturalWidth,height:node.naturalHeight},mime:node.dataset.mime||'image/png',...relative(node)});
   const dark={origin:'#263c32',adventure:'#451b16',greatness:'#19283f'}[record.card.data.might]||'#3c291f';
-  for(const node of shell.querySelectorAll('.mt-board-owner,.mt-quest,.mt-hero-growth,.mt-improvements,.mt-track,.mt-note-section-heading,.mt-note-subheading,.mt-status-mark,.mt-obstacle-limit-name,.mt-obstacle-tag')){
+  for(const node of shell.querySelectorAll('.mt-board-owner,.mt-quest,.mt-hero-growth,.mt-improvements,.mt-track,.mt-note-section-heading,.mt-note-subheading,.mt-status-mark,.mt-obstacle-limit-name,.mt-obstacle-limit-value,.mt-obstacle-tag')){
    const r=relative(node),css=style(node);if(!r.width||!r.height)continue;
    if(node.matches('.mt-board-owner,.mt-quest,.mt-hero-growth,.mt-improvements'))paintRect(r,node.matches('.mt-board-owner')?'#4c3629':dark);
-   else if(css.backgroundColor!=='rgba(0, 0, 0, 0)')paintRect(r,css.backgroundColor,opacity(node));
+   else if(css.backgroundColor!=='rgba(0, 0, 0, 0)'){if(node.matches('.mt-obstacle-limit-value'))paints.push({key:'paint:'+paints.length,type:'path',commands:[[0,r.x+r.width/2,r.y],[1,r.x+r.width,r.y+r.height],[1,r.x,r.y+r.height],[5]],fill:color(css.backgroundColor),alpha:opacity(node)});else paintRect(r,css.backgroundColor,opacity(node));}
   }
   const roll={origin:'scroll-roll.svg',adventure:'scroll-roll-adventure.svg',greatness:'scroll-roll-greatness.svg'}[record.card.data.might]||'scroll-roll-brown.svg';
   for(const node of shell.querySelectorAll('.mt-scroll-top,.mt-scroll-bottom')){const r=relative(node);if(r.width&&r.height&&style(node).display!=='none')image(roll,{...r,height:36},false,node.classList.contains('mt-scroll-top')?'roll-top':'roll-bottom');}

@@ -77,6 +77,7 @@ export function clean(value, view) {
     actionExtras: Object.fromEntries(['power','weakness'].map(kind => [kind, Array.isArray(value.actionExtras?.[kind]) ? value.actionExtras[kind].filter(x => x && typeof x.text === 'string').slice(0,30).map((x,i) => ({ id: id(x.id, 'extra-'+i), text: text(x.text, '', 160) })) : []])),
     settings:{scrollAnimation:value.settings?.scrollAnimation!==false,diceAnimation:value.settings?.diceAnimation!==false,disableSway:value.settings?.disableSway===true,disableEntrance:value.settings?.disableEntrance===true,disableTextAnimation:value.settings?.disableTextAnimation===true},
     cardOrder:Object.fromEntries(['party','themes','notes','statuses'].map(key=>[key,strings(value.cardOrder?.[key],[],100)])),statusCards:cleanStatuses(value.statusCards),
+    actionStatuses:Array.isArray(value.actionStatuses)?value.actionStatuses.filter(s=>s&&typeof s.key==='string'&&s.key.length<=300).slice(0,100).map(s=>({key:s.key,sign:s.sign===-1?-1:1})):[],actionFieldKinds:Object.fromEntries(Object.entries(value.actionFieldKinds||{}).filter(([key,v])=>key.length<=300&&['power','weakness'].includes(v)).slice(0,200)),
     cards, selected, marks: Array.isArray(value.marks) ? [...new Set(value.marks.filter(x => Number.isInteger(x) && x >= 0 && x < 24))] : [],
     noteCards: cleanNoteCards(value.noteCards,text(value.notes,d.notes)),
     notes: text(value.notes, d.notes),

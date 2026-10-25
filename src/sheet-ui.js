@@ -1,3 +1,4 @@
+import {createActionStatuses} from './action-statuses.js';
 import {mountBoardReturn} from './board-return.js';
 import {createSheetTransfer} from './sheet-transfer.js';
 import {openDiceTray} from './dice.js';
@@ -25,6 +26,8 @@ export function mountSheet(root,state,save,actions) {
   const win=doc.defaultView,toolbar=q('.mt-toolbar'),sizeToolbar=()=>q('.mt-v4').style.setProperty('--toolbar-height',toolbar.getBoundingClientRect().height/SHEET_SCALE+'px');
   if(win.ResizeObserver){const observer=new win.ResizeObserver(sizeToolbar);observer.observe(toolbar);win.addEventListener('pagehide',()=>observer.disconnect(),{once:true});}sizeToolbar();
   const selected=new Set(state.selected),expanded=new Map();
+  let actionPinned=false;state.actionFieldKinds??={};const getActionSources=()=>actions.actionSources?.get()||{tags:new Map(),statuses:new Map()};
+  let statusPanel;
   let specialAction=null,rollModifier=0,rolling=false,currentRoll=0,resizePending,selectionSequence=0;
   state.settings??={scrollAnimation:true,diceAnimation:true};
   syncAnimationSettings(root,state.settings);let settingsCardCount=()=>1,statusColumnCount=()=>1;
@@ -49,28 +52,31 @@ export function mountSheet(root,state,save,actions) {
     state.cards.forEach(c=>{if(c.type==='theme')addTheme(c.theme);else c.items.forEach(item=>{if(item.text.trim()&&!item.scratched)tags.set(`card:${c.id}:${item.id}`,{text:item.text,kind:'power',source:c.title});});});
     state.relationships.forEach(r=>{if(r.tag)tags.set('relationship:'+r.id,{text:r.tag,kind:'power',source:r.companion});});
     for(const kind of ['power','weakness'])state.actionExtras[kind].forEach(x=>tags.set(`extra:${kind}:${x.id}`,{text:x.text,kind,source:'Тег действия'}));
+    for(const [key,item]of getActionSources().tags)tags.set(key,{...item,kind:item.forced?item.kind:state.actionFieldKinds[key]||item.kind});
     return tags;
   }
   const actionLists=Object.fromEntries(['power','weakness'].map(kind=>[kind,createActionTagList(q('.mt-action-list[data-kind="'+kind+'"]'),(key,item)=>{
-    const row=el('div','mt-action-tag');const text=btn(item.text,'',()=>select(key));text.title=item.source;row.append(text,btn('×','',()=>{selected.delete(key);if(key.startsWith('extra:'))state.actionExtras[kind]=state.actionExtras[kind].filter(x=>`extra:${kind}:${x.id}`!==key);refreshSelection();localSave();},'Убрать '+item.text));return row;
+    const row=el('div','mt-action-tag'+(item.forced?' mt-auto-action-tag':''));const text=btn(item.text,'',()=>select(key));text.title=item.source;text.disabled=!!item.forced;row.append(text);if(!item.forced)row.append(btn('×','',()=>{selected.delete(key);if(key.startsWith('extra:'))state.actionExtras[kind]=state.actionExtras[kind].filter(x=>`extra:${kind}:${x.id}`!==key);refreshSelection();localSave();},'Убрать '+item.text));return row;
   },kind==='power'?'Выбери подходящие теги силы':'Выбери мешающие теги слабости')]));
   function refreshSelection(){
     const tags=allTags();for(const key of selected)if(!tags.has(key)&&!(key.startsWith('theme:fellowship:')&&!sharedReady))selected.delete(key);
     qa('[data-key]').forEach(b=>b.setAttribute('aria-pressed',String(selected.has(b.dataset.key))));
+    const chosenKeys=new Set([...selected,...[...tags].filter(([,item])=>item.forced).map(([key])=>key)]);
+    const statusResult=statusPanel?.render()||{values:[],bonus:0};
     const pendingRemovals=[];
     for(const kind of ['power','weakness']){
-      const pending=actionLists[kind].sync([...selected].map(key=>[key,tags.get(key)]).filter(([,item])=>item?.kind===kind));if(pending)pendingRemovals.push(pending);
+      const pending=actionLists[kind].sync([...chosenKeys].map(key=>[key,tags.get(key)]).filter(([,item])=>item?.kind===kind));if(pending)pendingRemovals.push(pending);
     }
-    q('.mt-clear').disabled=!selected.size;state.selected=[...selected];
-    const chosen=[...selected].map(key=>tags.get(key)).filter(Boolean);
-    const base=chosen.reduce((n,t)=>n+(t.kind==='power'?1:-1),0);
-    if(!chosen.length){specialAction=null;rollModifier=0;q('.mt-roll-modifier').value='0';}
+    q('.mt-clear').disabled=!selected.size&&!state.actionStatuses?.length;state.selected=[...selected];
+    const chosen=[...chosenKeys].map(key=>tags.get(key)).filter(Boolean);
+    const base=chosen.reduce((n,t)=>n+(t.kind==='power'?1:-1),0)+statusResult.bonus;
+    if(!chosen.length&&!statusResult.values.length){specialAction=null;rollModifier=0;q('.mt-roll-modifier').value='0';}
 
     const result=calculateAction(base,specialAction,rollModifier);currentRoll=result.roll;
     q('.mt-action-power-value').textContent=result.power===null?'—':result.power;
     q('.mt-action-roll-value').textContent=(result.roll>0?'+':'')+result.roll;
     qa('[data-special]').forEach(button=>{const active=specialAction===button.dataset.special;button.setAttribute('aria-pressed',String(active));button.querySelector('span').textContent=active?'◆':'◇';button.disabled=false;});
-    const hideForTab=['notes','settings','statuses'].includes(activeTab);actionPanel.show(chosen.length>0&&!hideForTab,hideForTab,pendingRemovals.length?Promise.allSettled(pendingRemovals):undefined);
+    const hideForTab=['notes','settings','statuses'].includes(activeTab)&&!actionPinned;q('.mt-open-action').setAttribute('aria-pressed',String(actionPinned));actionPanel.show((chosen.length>0||statusResult.values.length>0||actionPinned)&&!hideForTab,hideForTab,pendingRemovals.length?Promise.allSettled(pendingRemovals):undefined);
   }
   function select(key){
     if(selected.has(key)){selected.delete(key);if(key.startsWith('extra:'))for(const kind of ['power','weakness'])state.actionExtras[kind]=state.actionExtras[kind].filter(x=>`extra:${kind}:${x.id}`!==key);}else selected.add(key);
@@ -165,15 +171,19 @@ export function mountSheet(root,state,save,actions) {
   q('.mt-add-backpack').addEventListener('click',()=>addCard('bag'));q('.mt-add-theme').addEventListener('click',()=>addCard('theme'));
   drawInventory();
   const layoutNotes=mountNotes(root,state,localSave,fit,tools);
-  const layoutStatuses=mountStatuses(root,state,localSave,fit,tools);
+  const layoutStatuses=mountStatuses(root,state,()=>{refreshSelection();localSave();},fit,tools);
   statusColumnCount=layoutStatuses.columns;
-  qa('.mt-add-action-tag').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input'),kind=form.dataset.kind;if(input.value.trim()&&state.actionExtras[kind].length<30){const item={id:makeId(),text:input.value.trim()};state.actionExtras[kind].push(item);selected.add(`extra:${kind}:${item.id}`);input.value='';refreshSelection();localSave();}}));
+  statusPanel=createActionStatuses(q('.mt-action-statuses'),state,getActionSources,()=>{refreshSelection();localSave();},tools);
+  q('.mt-open-action').addEventListener('click',()=>{actionPinned=!actionPinned;refreshSelection();});
+  function pickFieldTag(kind){dialog('Добавить тег с поля',(form,close)=>{const search=el('input');search.placeholder='Найти тег';search.setAttribute('aria-label','Найти тег с поля');const list=el('div','mt-action-source-options');function draw(){list.replaceChildren();for(const [key,item]of getActionSources().tags){if(item.forced||!item.text.toLowerCase().includes(search.value.toLowerCase()))continue;const add=btn(item.text,'',()=>{state.actionFieldKinds[key]=kind;selected.add(key);refreshSelection();localSave();close();});add.title=item.source;list.append(add);}if(!list.childElementCount)list.append(el('p','','На поле нет подходящих тегов.'));}search.addEventListener('input',draw);form.append(search,list);draw();});}
+  qa('.mt-add-action-tag').forEach(form=>{form.append(btn('С поля','mt-pick-field-tag',()=>pickFieldTag(form.dataset.kind),'Выбрать тег с поля: '+(form.dataset.kind==='power'?'сила':'слабость')));});
+  qa('.mt-add-action-tag').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input'),kind=form.dataset.kind;if(!input.value.trim()){pickFieldTag(kind);return;}if(input.value.trim()&&state.actionExtras[kind].length<30){const item={id:makeId(),text:input.value.trim()};state.actionExtras[kind].push(item);selected.add(`extra:${kind}:${item.id}`);input.value='';refreshSelection();localSave();}}));
   settingsCardCount=mountAnimationSettings(root,state,localSave,fit,motion,tools);
   dressScroll(q('.mt-settings-card'));
   q('.mt-roll-dice').addEventListener('click',async()=>{
     if(rolling)return;rolling=true;const button=q('.mt-roll-dice');button.disabled=true;
     const bonus=currentRoll,sacrifice=specialAction==='sacrifice';
-    const onFirstResult=()=>{selected.clear();state.actionExtras={power:[],weakness:[]};refreshSelection();localSave();};
+    const onFirstResult=()=>{selected.clear();statusPanel.clear();state.actionExtras={power:[],weakness:[]};refreshSelection();localSave();};
     try{await openDiceTray(root,{bonus,sacrifice,onFirstResult,animated:state.settings.diceAnimation&&!win.matchMedia?.('(prefers-reduced-motion: reduce)').matches});}
     catch(error){report(error);}finally{rolling=false;button.disabled=false;fit();}
   });
@@ -195,7 +205,7 @@ export function mountSheet(root,state,save,actions) {
     return resizePending=actions.fitWindow?.(activeTab==='themes'?Math.max(1,[...q('.mt-themes').children].filter(n=>n.dataset.onBoard!=='true').length):activeTab==='settings'?settingsCardCount():activeTab==='statuses'?statusColumnCount():activeTab==='notes'?1+state.noteCards.filter(c=>c.open).length:Math.max(1,[...q('#panel-party').querySelectorAll('.mt-card-slot')].filter(n=>n.dataset.onBoard!=='true').length),!q('.mt-action-card').hidden,requestedHeight,minimumWidth);
   }
   qa('[role=tabpanel]').forEach(panel=>{const version=el('div','mt-sheet-version','v'+packageInfo.version);panel.querySelector('.mt-card-row').after(version);});
-  dressScroll(q('.mt-action-card'),{extensionLabel:'Особые действия',onExpand:fit});refreshSelection();createScratchEffects(root);
+  dressScroll(q('.mt-action-card'),{extensionLabel:'Особые действия',onExpand:fit});refreshSelection();createScratchEffects(root);if(actions.actionSources){const off=actions.actionSources.subscribe(()=>refreshSelection());win.addEventListener('pagehide',off,{once:true});}
   let transfer;
   if(actions.board)transfer=createSheetTransfer(root,state,save,{scene:actions.board,resize:actions.boardResize,toScene:actions.boardPoint,getShared:()=>sharedReady?sharedView():null,fit,report,
    redraw:key=>{if(key==='character')drawCharacter();else if(key.startsWith('card:'))drawInventory();else if(key.startsWith('theme:')){const t=state.heroThemes.find(t=>'theme:'+t.id===key),host=[...q('.mt-themes').children].find(h=>h.querySelector('[data-theme-id]')?.dataset.themeId===t?.id);if(t&&host)drawLocal(t,host,true);}else if(key.startsWith('status:'))layoutStatuses.draw();else if(key.startsWith('note:'))layoutNotes.draw();refreshSelection();}

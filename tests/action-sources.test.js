@@ -1,0 +1,51 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import {JSDOM} from 'jsdom';
+import {ACTION_FEED,collectActionSources,gmActionFeed,statusValue,strongestStatuses,createActionSources} from '../src/action-sources.js';
+import {cleanGM,newObstacle,newObstacleRow} from '../src/gm-model.js';import {defaults,makeStore} from '../src/storage.js';import {BOARD_KEY} from '../src/board-model.js';import {GM_BOARD_KEY,createGMBoard} from '../src/gm-board.js';import {mountUI} from '../src/ui.js';
+test('numeric status uses the greatest crossed number and positive/negative statuses take separate maxima',()=>{
+ assert.equal(statusValue({kind:'numeric',marks:[true,false,false,true,false,true]}),6);assert.equal(statusValue({kind:'numeric',marks:Array(6).fill(false)}),0);assert.equal(statusValue({kind:'status'}),1);
+ assert.deepEqual(strongestStatuses([{sign:1,value:2},{sign:1,value:5},{sign:1,value:5},{sign:-1,value:3},{sign:-1,value:1}]),{positive:5,negative:3});
+});
+test('GM feed excludes neutral and private data and uses only the active authored scene',()=>{
+ const state=cleanGM({scenes:[{id:'active'},{id:'other'}],activeSceneId:'active'}),o=newObstacle();o.name='PRIVATE NAME';o.tags=[{...newObstacleRow(),name:'Помощь',direction:1},{...newObstacleRow(),name:'Помеха',direction:-1},{...newObstacleRow(),name:'SECRET',direction:1,hidden:true},{...newObstacleRow(),name:'Нейтральный'}];o.statuses=[{...newObstacleRow(),name:'Ранен',kind:'numeric',marks:[false,false,true,false,false,false],value:'3',direction:-1}];state.library.push(o);state.scenes[1].obstacles.push({...newObstacle(),tags:[{...newObstacleRow(),name:'OTHER SCENE',direction:1}]});const feed=gmActionFeed(state,'gm');assert.equal(feed.tags.length,2);assert.equal(feed.statuses[0].value,3);for(const secret of ['PRIVATE NAME','SECRET','Нейтральный','OTHER SCENE'])assert(!JSON.stringify(feed).includes(secret));
+ const result=collectActionSources([],{[ACTION_FEED+'gm']:feed},'player');assert.equal([...result.tags.values()][0].forced,true);assert.equal([...result.tags.values()][1].kind,'weakness');
+});
+test('field catalog includes theme, bag and story tags and excludes crossed, hidden and returned sources',()=>{
+ const record=(id,card,extra={})=>({id,metadata:{[BOARD_KEY]:{owner:'other',placed:true,character:'Лира',card,...extra}}});const d=defaults('sheet');d.heroThemes[0].power[1].scratched=true;d.heroThemes[0].power[1].text='CROSSED';
+ const items=[record('theme',{type:'theme',data:d.heroThemes[0]}),record('bag',{type:'bag',data:d.cards[0]}),record('story',{type:'status',data:{id:'s',kind:'story',name:'Лунный свет'}}),record('status',{type:'status',data:{id:'n',kind:'numeric',name:'Ранен',marks:[false,true,false,true]}}),{...record('hidden',{type:'status',data:{kind:'story',name:'HIDDEN'}}),visible:false},record('returned',{type:'status',data:{kind:'story',name:'RETURNED'}},{placed:false})];
+ const result=collectActionSources(items,{},'me'),texts=[...result.tags.values()].map(t=>t.text);assert(texts.includes('Лунный свет'));assert(texts.includes('Дорожный плащ'));assert(!texts.includes('CROSSED'));assert(!texts.includes('HIDDEN'));assert(!texts.includes('RETURNED'));assert([...result.tags.values()].every(t=>!t.forced));assert.equal([...result.statuses.values()][0].value,4);
+});
+function sheet(sources,state=defaults('sheet')){const dom=new JSDOM('<main></main>'),root=dom.window.document.querySelector('main');state.settings.disableTextAnimation=true;const store={load:()=>structuredClone(state),save:s=>{Object.assign(state,structuredClone(s));return true;}};mountUI(root,'sheet',fs.readFileSync(new URL('../src/sheet.html',import.meta.url),'utf8'),store,{close:async()=>{},actionSources:sources});return {dom,root,state,click(label){const n=[...root.querySelectorAll('button')].find(b=>(b.getAttribute('aria-label')||b.textContent)===label);assert(n,'Missing '+label);n.click();},roll:()=>Number(root.querySelector('.mt-action-roll-value').textContent)};}
+function sourceMock(initial){let value=initial;const listeners=new Set();return {get:()=>value,subscribe(fn){listeners.add(fn);fn(value);return()=>listeners.delete(fn);},emit(next){value=next;listeners.forEach(fn=>fn(value));}};}
+test('one shared change updates two sheets, cycles power/weakness and neutral removes the automatic tag',()=>{
+ const state=cleanGM({scenes:[]}),o=newObstacle();o.tags.push({...newObstacleRow(),name:'Ветер в спину',direction:1});state.library.push(o);const sources=sourceMock(collectActionSources([],{[ACTION_FEED+'gm']:gmActionFeed(state,'gm')})),a=sheet(sources),b=sheet(sources);
+ assert.equal(a.roll(),1);assert.equal(b.roll(),1);assert.equal(a.root.querySelector('.mt-action-card').hidden,false);o.tags[0].direction=-1;sources.emit(collectActionSources([],{[ACTION_FEED+'gm']:gmActionFeed(state,'gm')}));assert.equal(a.roll(),-1);assert.equal(b.roll(),-1);assert(a.root.querySelector('.mt-action-list[data-kind=weakness]').textContent.includes('Ветер в спину'));o.tags[0].direction=0;sources.emit(collectActionSources([],{[ACTION_FEED+'gm']:gmActionFeed(state,'gm')}));assert.equal(a.roll(),0);assert.equal(b.roll(),0);a.dom.window.close();b.dom.window.close();
+});
+test('status selection takes only maxima, replaces the largest when removed, and field tags can be added',()=>{
+ const statuses=new Map([['a',{key:'a',text:'Ловкость',value:2,direction:0}],['b',{key:'b',text:'Благословение',value:5,direction:0}],['c',{key:'c',text:'Ранен',value:3,direction:-1,forced:false}]]),tags=new Map([['field:x',{key:'field:x',text:'Чужой плащ',kind:'power',forced:false}]]),f=sheet(sourceMock({tags,statuses}));f.click('Подсчёт Силы');f.click('+ Выбрать статусы');
+ for(const text of ['◇ Ловкость · 2','◇ Благословение · 5','◇ Ранен · 3'])f.click(text);assert.equal(f.roll(),2);f.click('Готово');f.click('Убрать статус Благословение');assert.equal(f.roll(),-1);f.click('Выбрать тег с поля: сила');f.click('Чужой плащ');assert.equal(f.roll(),0);assert(f.root.querySelector('.mt-action-power .mt-action-list').textContent.includes('Чужой плащ'));f.dom.window.close();
+});
+test('automatic GM statuses use the largest helpful and harmful values without summing duplicates',()=>{
+ const sources=sourceMock({tags:new Map(),statuses:new Map([['a',{key:'a',text:'Сила',value:4,direction:1,forced:true}],['b',{key:'b',text:'Помощь',value:2,direction:1,forced:true}],['c',{key:'c',text:'Рана',value:3,direction:-1,forced:true}],['d',{key:'d',text:'Испуг',value:1,direction:-1,forced:true}]])}),f=sheet(sources);assert.equal(f.roll(),1);assert.equal(f.root.querySelectorAll('.mt-action-status').length,4);assert(f.root.querySelector('.mt-status-contribution').textContent.includes('+4 / −3'));f.dom.window.close();
+});
+test('movement does not notify calculators while metadata changes and scene resets do',async()=>{
+ let onItems,onMeta,onReady,items=[{id:'bag',position:{x:0,y:0},metadata:{[BOARD_KEY]:{placed:true,owner:'other',card:{type:'bag',data:{id:'b',items:[{id:'i',text:'Тег'}]}}}}}];const obr={player:{id:'p'},scene:{isReady:async()=>true,onReadyChange:fn=>{onReady=fn;return()=>{};},onMetadataChange:fn=>{onMeta=fn;return()=>{};},getMetadata:async()=>({}),items:{getItems:async()=>items,onChange:fn=>{onItems=fn;return()=>{};}}}};const service=createActionSources(obr,assert.fail);await service.start();let count=0;service.subscribe(()=>count++);const before=count;for(let i=0;i<50;i++){items[0].position.x=i;onItems(items);}assert.equal(count,before);onMeta({[ACTION_FEED+'gm']:{v:1,tags:[{key:'gm:a',text:'Новый',direction:1}],statuses:[]}});assert.equal(count,before+1);await onReady(false);assert.equal(service.get().tags.size,0);service.dispose();
+});
+
+test('GM shared feed overrides an older board paint so neutral and hidden changes cannot leave automatic bonuses',()=>{
+ const item={id:'old',metadata:{[GM_BOARD_KEY]:{placed:true,owner:'gm',source:'obstacle',card:{type:'obstacle',data:{name:'Враг',tags:[{name:'Старый тег',direction:1}]}}}}};
+ assert.equal([...collectActionSources([item]).tags.values()][0].forced,true);
+ const next=collectActionSources([item],{[ACTION_FEED+'gm']:{v:1,tags:[],statuses:[]}});assert.equal([...next.tags.values()][0].forced,false);
+});
+
+test('GM publishes only active public rows, preserves other metadata and reports failed writes',async()=>{
+ const state=cleanGM({scenes:[]}),o=newObstacle();o.tags.push({...newObstacleRow(),name:'Защита',direction:1},{...newObstacleRow(),name:'SECRET',direction:1,hidden:true});state.library.push(o);let metadata={unrelated:'kept'},fail=false;
+ const obr={player:{id:'gm',getRole:async()=>'GM'},scene:{isReady:async()=>true,getMetadata:async()=>structuredClone(metadata),setMetadata:async patch=>{if(fail)throw Error('Denied');Object.assign(metadata,patch);},items:{getItems:async()=>[]}}};
+ const service=createGMBoard(obr,{store:{load:()=>structuredClone(state)},report:assert.fail});await service.flush();assert.equal(metadata.unrelated,'kept');assert.equal(metadata[ACTION_FEED+'gm'].tags[0].text,'Защита');assert(!JSON.stringify(metadata).includes('SECRET'));
+ o.tags[0].direction=-1;fail=true;await assert.rejects(service.flush(),/Denied/);assert.equal(metadata[ACTION_FEED+'gm'].tags[0].direction,1);fail=false;o.tags[0].direction=0;await service.flush();assert.deepEqual(metadata[ACTION_FEED+'gm'].tags,[]);service.dispose();
+});
+
+test('switching authored scene replaces its active tags and statuses on both player calculators',()=>{
+ const state=cleanGM({activeSceneId:'a',scenes:[{id:'a',tags:[{id:'wind',name:'Попутный ветер',direction:1}],statuses:[{id:'mud',name:'Грязь',value:'3',direction:-1}]},{id:'b',tags:[{id:'mist',name:'Туман',direction:-1}],statuses:[{id:'help',name:'Помощь',value:'2',direction:1}]}]});
+ const catalog=()=>collectActionSources([],{[ACTION_FEED+'gm']:gmActionFeed(state,'gm')}),sources=sourceMock(catalog()),a=sheet(sources),b=sheet(sources);assert.equal(a.roll(),-2);assert.equal(b.roll(),-2);
+ state.activeSceneId='b';sources.emit(catalog());assert.equal(a.roll(),1);assert.equal(b.roll(),1);assert.equal(sources.get().tags.size,1);assert.equal([...sources.get().tags.values()][0].text,'Туман');assert.equal([...sources.get().statuses.values()][0].text,'Помощь');a.dom.window.close();b.dom.window.close();
+});

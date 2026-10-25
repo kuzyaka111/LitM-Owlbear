@@ -22,6 +22,7 @@ export async function renderBoardGraphics(record){
  const typefaces=await fonts();await Promise.all(Object.values(FONT_NAMES).map(name=>document.fonts.load('400 15px "'+name+'"')));await document.fonts.ready;
  const host=boardCardElement(record);host.setAttribute('aria-hidden','true');document.body.append(host);
  try{
+  for(const image of host.querySelectorAll('.mt-board-picture')){try{await image.decode();image.style.aspectRatio=image.naturalWidth+'/'+image.naturalHeight;}catch{throw Error('Не удалось загрузить изображение препятствия. Проверьте ссылку.');}}
   // Background extension frames may never receive animation frames. Reading bounds forces layout synchronously.
   const shell=host.firstElementChild,bounds=shell.getBoundingClientRect();
   if(bounds.height>6000)throw Error('Карточка слишком длинная. Разделите заметку.');
@@ -42,8 +43,9 @@ export async function renderBoardGraphics(record){
   const body=shell.querySelector('.mt-scroll-body'),bodyRect=relative(body),status=record.card.type==='status',aged=status&&record.card.data.kind!=='story',skin=aged?'aged':'paper';
   if(status){image(skin+'.svg',{...bodyRect,height:Math.max(1,bodyRect.height-20)});image(skin+'-tear-'+record.card.data.tear+'.svg',{...bodyRect,y:bodyRect.y+bodyRect.height-21.333,height:21.333});}
   else image(skin+'.svg',bodyRect);
+  for(const node of shell.querySelectorAll('.mt-board-picture'))paints.push({key:'image:illustration',type:'image',url:node.src,intrinsic:{width:node.naturalWidth,height:node.naturalHeight},mime:node.dataset.mime||'image/png',...relative(node)});
   const dark={origin:'#263c32',adventure:'#451b16',greatness:'#19283f'}[record.card.data.might]||'#3c291f';
-  for(const node of shell.querySelectorAll('.mt-board-owner,.mt-quest,.mt-hero-growth,.mt-improvements,.mt-track,.mt-note-section-heading,.mt-note-subheading,.mt-status-mark')){
+  for(const node of shell.querySelectorAll('.mt-board-owner,.mt-quest,.mt-hero-growth,.mt-improvements,.mt-track,.mt-note-section-heading,.mt-note-subheading,.mt-status-mark,.mt-obstacle-limit-name,.mt-obstacle-tag')){
    const r=relative(node),css=style(node);if(!r.width||!r.height)continue;
    if(node.matches('.mt-board-owner,.mt-quest,.mt-hero-growth,.mt-improvements'))paintRect(r,node.matches('.mt-board-owner')?'#4c3629':dark);
    else if(css.backgroundColor!=='rgba(0, 0, 0, 0)')paintRect(r,css.backgroundColor,opacity(node));

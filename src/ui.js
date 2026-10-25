@@ -1,3 +1,4 @@
+import {mountGM} from './gm-ui.js';
 import { mountSheet } from './sheet-ui.js';
 
 function element(doc, type, className, text) {
@@ -22,27 +23,14 @@ export function mountUI(root, view, template, store, actions) {
     q('.mt-save-state').textContent = saved ? 'Сохранено' : 'Не сохранено';
     note.classList.toggle('mt-error', !saved);
     note.textContent = saved ? normalNote : 'Браузер не разрешил сохранение. После закрытия окна изменения могут потеряться.';
+    return saved;
   }
   function run(action) { Promise.resolve().then(action).catch(() => { note.textContent = 'Не удалось выполнить действие. Попробуй открыть окно снова.'; note.classList.add('mt-error'); }); }
 
   if (view === 'sheet') {
     mountSheet(root, state, save, actions);
   } else {
-    function renderScene() {
-      q('.mt-edit-scene').replaceChildren();
-      state.scene.forEach(name => {
-        const chip = element(doc, 'span', 'mt-edit-chip'); const b = element(doc, 'button', '', '×'); b.type = 'button'; b.setAttribute('aria-label', 'Удалить тег ' + name);
-        b.addEventListener('click', () => { state.scene = state.scene.filter(x => x !== name); renderScene(); save(); });
-        chip.append(element(doc, 'span', '', name), b); q('.mt-edit-scene').append(chip);
-      });
-    }
-    renderScene();
-    q('.mt-add-scene').addEventListener('submit', e => { e.preventDefault(); const input = q('#mt-scene-name'); const value = input.value.trim().slice(0, 60); if (value && !state.scene.includes(value) && state.scene.length < 30) { state.scene.push(value); renderScene(); save(); input.value = ''; } });
-    qa('[data-gm-tab]').forEach(b => b.addEventListener('click', () => { qa('[data-gm-tab]').forEach(x => x.setAttribute('aria-pressed', String(x === b))); q('.mt-gm-scene').hidden = b.dataset.gmTab !== 'scene'; q('.mt-gm-party').hidden = b.dataset.gmTab !== 'party'; }));
-    q('#mt-gm-note-text').value = state.notes; q('#mt-gm-note-text').maxLength = 5000;
-    q('#mt-gm-note-text').addEventListener('input', e => { state.notes = e.target.value; save(); });
-    q('.mt-close-gm').addEventListener('click', () => run(actions.close));
-    q('.mt-party-card').addEventListener('click', () => run(actions.openSheet));
+    mountGM(root,state,save,actions);
   }
   return state;
 }

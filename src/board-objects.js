@@ -11,8 +11,8 @@ export function makeBoardObjects({id=crypto.randomUUID(),record,plan,point,build
   let builder;
   if(part.type==='image'){
    if(part.url.length>2048)throw Error('Адрес элемента карточки слишком длинный.');
-   const file=new URL(part.url).pathname.split('/').at(-1),size=sizes[file];if(!size)throw Error('Неизвестное оформление карточки.');
-   builder=build({url:part.url,mime:'image/png',width:size.width,height:size.height},{dpi:gridDpi,offset:{x:0,y:0}}).scale({x:scale.x*part.width/size.width,y:scale.y*part.height/size.height});
+   const file=new URL(part.url).pathname.split('/').at(-1),size=part.intrinsic||sizes[file];if(!size||!Number.isFinite(size.width)||!Number.isFinite(size.height)||size.width<=0||size.height<=0)throw Error('Неизвестное оформление карточки.');
+   builder=build({url:part.url,mime:part.mime||'image/png',width:size.width,height:size.height},{dpi:gridDpi,offset:{x:0,y:0}}).scale({x:scale.x*part.width/size.width,y:scale.y*part.height/size.height});
   }else{
    if(!buildPath)throw Error('Векторный вывод недоступен.');
    builder=buildPath().commands(part.commands).fillColor(part.fill||'#000000').fillOpacity(part.alpha??1).strokeColor(part.stroke||'#000000').strokeOpacity(part.stroke?(part.strokeAlpha??1):0).strokeWidth(part.strokeWidth||0).fillRule('nonzero').scale(scale);

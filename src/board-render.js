@@ -28,6 +28,15 @@ export function boardCardElement(record,doc=document){
   }else if(kind==='bag'){
    head.append(text('mt-storage-title','title','Рюкзак'));const items=el('div','mt-backpack-items');
    d.items.forEach((item,i)=>{const row=el('div','mt-item-row mt-tag-row'+(item.scratched?' mt-scratched':''));row.append(text('mt-tag-text','items.'+i+'.text'),mapped(scratchButton(item.scratched,()=>{},'Зачеркнуть'),'items.'+i+'.scratched'));items.append(row);});article.append(items);
+  }else if(kind==='obstacle'){
+   article.classList.add('mt-obstacle-export');head.append(el('span','','Препятствие'));
+   if(d.image){const picture=el('img','mt-board-picture');picture.src=d.image.url;picture.alt='';picture.style.aspectRatio=d.image.width+'/'+d.image.height;picture.dataset.mime=d.image.mime;article.append(picture);}
+   article.append(el('h2','mt-obstacle-export-name',d.name||'Препятствие'));
+   for(const [key,title]of [['limits','Пределы'],['tags','Теги'],['features','Особые свойства'],['threats','Угрозы и последствия']]){
+    if(!d[key]?.length)continue;const section=el('section','mt-obstacle-export-section');section.append(el('h4','',title));
+    const rows=el('div',key==='limits'?'mt-obstacle-limits':key==='tags'?'mt-obstacle-tags':'');
+    for(const row of d[key]){const line=el('div','mt-obstacle-export-row'+(key==='limits'?' mt-obstacle-limit':key==='tags'?' mt-obstacle-tag':''));if(key==='limits')line.append(el('div','mt-obstacle-limit-value',row.value),el('div','mt-obstacle-limit-name',row.name));else{line.append(el('strong','',row.name));if(key!=='tags')line.append(el('span','',row.text?' — '+row.text:''));}if(row.spent)line.classList.add('is-spent');rows.append(line);}section.append(rows);article.append(section);
+   }
   }else if(kind==='character'){
    head.append(el('span','','Персонаж'));const body=el('div','mt-character-body');
    for(const [id,label]of [['name','Имя героя'],['playerName','Имя игрока']]){const field=el('div','mt-field');field.append(el('span','',label),text('mt-editor-name',id,'…'));body.append(field);}

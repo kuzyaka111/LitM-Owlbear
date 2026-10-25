@@ -89,6 +89,7 @@ test('user text is rendered as text, not HTML', () => {
 
 test('GM scene tags can be added and removed', () => {
   const { root: r, store, event } = ui('gm');
+  r.querySelector('[data-gm-tab=scene]').click();
   r.querySelector('#mt-scene-name').value = 'Дождь'; r.querySelector('.mt-add-scene').dispatchEvent(event('submit')); assert(store.load().scene.includes('Дождь'));
   r.querySelector('[aria-label="Удалить тег Дождь"]').click(); assert(!store.load().scene.includes('Дождь'));
 });

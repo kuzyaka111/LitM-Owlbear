@@ -6,3 +6,4 @@ import './typography.css';
 import './scratch-effects.css';
 import './status-settings.css';
 import './board.css';
+import './gm.css';

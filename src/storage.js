@@ -1,5 +1,6 @@
 import {legacyNotes,cleanNoteCards} from './notes-model.js';
 import {cleanStatuses} from './status-model.js';
+import {cleanGM,gmDefaults} from './gm-model.js';
 import { cleanTheme, asStoryTheme, makeTheme, initialThemes, legacyTheme, quintessences } from './theme-model.js';
 const text = (value, fallback = '', limit = 5000) => typeof value === 'string' ? value.slice(0, limit) : fallback;
 const strings = (value, fallback, count = 50) => Array.isArray(value)
@@ -13,7 +14,7 @@ export function newCard(type) {
   return { id: makeId(), type, title: 'Хранилище', typeLabel: '', items: [], weakness: '', quest: '', notes: '', improve: 0, abandon: 0, milestone: 0 };
 }
 export function defaults(view) {
-  if (view === 'gm') return { scene: ['Густой туман', 'Старый каменный мост'], notes: 'Мельник прячет письмо под настилом. Он согласится поговорить, когда стража уйдёт.' };
+  if (view === 'gm') return gmDefaults();
   return {
     name: 'Эрин из Вересковой долины', playerName: '', concept: 'Следопыт, который однажды обещал вернуться',
     relationships: [], promise: 0, quintessences: '', quintessenceIds: [], selected: [], marks: [], heroThemes: initialThemes(), actionExtras: { power: [], weakness: [] }, schemaVersion: 4,
@@ -43,7 +44,7 @@ function cleanCards(cards) {
 export function clean(value, view) {
   const d = defaults(view);
   if (!value || typeof value !== 'object' || Array.isArray(value)) return d;
-  if (view === 'gm') return { scene: strings(value.scene, d.scene, 30), notes: text(value.notes, d.notes) };
+  if (view === 'gm') return cleanGM(value);
   // Retain the v1 storage key and migrate its flat inventory without touching notes.
   const cards = Array.isArray(value.cards) ? cleanCards(value.cards) : structuredClone(d.cards);
   if (!Array.isArray(value.cards) && Array.isArray(value.bag)) cards[0].items = strings(value.bag, [], 50).map((name, i) => ({ id: 'item-' + i, text: name.slice(0, 160), scratched: false }));

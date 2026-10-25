@@ -17,19 +17,20 @@ export function createBoardScene(obr,{store,fellowship,base=globalThis.location?
   const signature=items.map(i=>i.id+':'+record(i).rev+':'+record(i).placed+':'+record(i).deleted).sort().join('|');if(signature===lastSignature)return;
   let cleanup=[];
 
-  if(store){const state=store.load(),unrestored=new Set();let changed=false;for(const item of items){const r=record(item);if(r.owner!==obr.player.id||r.source==='fellowship')continue;
-    const before=JSON.stringify(state);if(!(r.deleted?deleteSource(state,r):applySource(state,r.source,r.card)))unrestored.add(item.id);changed||=before!==JSON.stringify(state);
-   }if(changed&&!store.save(state)){report(Error('Не удалось сохранить карточку на этом устройстве.'));return;}
-   const returned=items.filter(item=>{const r=record(item);return r.owner===obr.player.id&&!r.placed&&!acknowledging.has(item.id)&&!unrestored.has(item.id);}).map(i=>i.id);
-   if(unrestored.size)report(Error('В листе нет места для возврата карточки. Её данные сохранены на сцене.'));
-   cleanup=returned;
-  if(changed)void syncCharacter(state.name).catch(report);
+  if(store){const states=new Map(),dirty=new Set(),renamed=new Set(),unrestored=new Set();
+   for(const item of items){const r=record(item);if(r.owner!==obr.player.id||r.source==='fellowship')continue;
+    const id=r.characterId||store.legacyId||null;if(!states.has(id))states.set(id,store.loadCharacter?store.loadCharacter(id):store.load());const state=states.get(id);if(!state){unrestored.add(item.id);continue;}
+    const nameBefore=state.name,before=JSON.stringify(state);if(!(r.deleted?deleteSource(state,r):applySource(state,r.source,r.card)))unrestored.add(item.id);if(before!==JSON.stringify(state))dirty.add(id);if(nameBefore!==state.name)renamed.add(id);
+   }
+   for(const id of dirty){const state=states.get(id);if(!(store.saveCharacter?store.saveCharacter(id,state):store.save(state))){report(Error('Не удалось сохранить карточку на этом устройстве.'));return;}if(renamed.has(id))void syncCharacter(state.name,id).catch(report);}
+   cleanup=items.filter(item=>{const r=record(item);return r.owner===obr.player.id&&!r.placed&&!acknowledging.has(item.id)&&!unrestored.has(item.id);}).map(i=>i.id);
   }lastSignature=signature;notify();
   if(cleanup.length){cleanup.forEach(id=>acknowledging.add(id));void obr.scene.items.deleteItems(cleanup).catch(error=>{cleanup.forEach(id=>acknowledging.delete(id));report(error);});}
  }
  async function refresh(ready){
   const current=++epoch;off();offShared();items=[];partsCache.clear();dpiPromise=null;lastSignature=null;notify();resets.forEach(fn=>fn());if(!ready||!alive)return;
   off=obr.scene.items.onChange(next=>{if(current===epoch)void sync(next).catch(report);});const next=await obr.scene.items.getItems();if(current!==epoch||!alive)return;await sync(next);
+  if(store?.loadCharacter){const retired=items.filter(i=>{const r=record(i);return r.owner===obr.player.id&&r.source!=='fellowship'&&!store.loadCharacter(r.characterId||store.legacyId);});if(retired.length)await obr.scene.items.deleteItems(retired.flatMap(i=>[i.id,...(record(i).parts||[])]));}
   for(const item of upgrade?[...items]:[]){const r=record(item);if(item.type==='PATH'&&r.placed&&r.owner===obr.player.id&&r.interactionVersion!==BOARD_GRAPHICS_VERSION){const stale=[...partsCache.values()].filter(p=>p.attachedTo===item.id&&!r.parts?.includes(p.id)).map(p=>p.id);await update(item.id,card=>card);const latest=record(items.find(i=>i.id===item.id));const remove=stale.filter(id=>!latest?.parts?.includes(id));if(remove.length)await obr.scene.items.deleteItems(remove);}}
   if(fellowship)offShared=fellowship.subscribe((shared,loaded)=>{if(!loaded||current!==epoch)return;for(const item of items){const r=record(item);if(r.owner===obr.player.id&&r.source==='fellowship'&&r.placed&&JSON.stringify(r.card.data)!==JSON.stringify(fellowshipTheme(shared)))void update(item.id,()=>({type:'theme',data:fellowshipTheme(shared)})).catch(report);}});
  }
@@ -37,8 +38,9 @@ export function createBoardScene(obr,{store,fellowship,base=globalThis.location?
  async function place(source,character,card,point){
   const current=epoch;boardDebug('place-start',{source,point});
   if(!await obr.scene.isReady())throw Error('Откройте сцену, чтобы разместить карточку.');
-  const existing=(await obr.scene.items.getItems()).find(item=>{const r=record(item);return r?.placed&&r.owner===obr.player.id&&r.source===source;});if(existing)throw Error('Эта карточка уже находится на поле.');
-  const data={v:1,owner:obr.player.id,source,character:character.slice(0,80),card:cleanCard(card),placed:true,rev:crypto.randomUUID()};
+  const characterId=store?.activeId?.()||null;
+  const existing=(await obr.scene.items.getItems()).find(item=>{const r=record(item);return r?.placed&&r.owner===obr.player.id&&r.source===source&&(source==='fellowship'||(r.characterId||store?.legacyId||null)===characterId);});if(existing)throw Error('Эта карточка уже находится на поле.');
+  const data={v:1,owner:obr.player.id,source,...(characterId?{characterId}:{}),character:character.slice(0,80),card:cleanCard(card),placed:true,rev:crypto.randomUUID()};
   if(new TextEncoder().encode(JSON.stringify(data)).length>12000)throw Error('Слишком много текста для одной карточки на поле. Разделите заметку.');
   const plan=await render(data);data.hits=plan.hits;data.interactionVersion=plan.interactionVersion;const gridDpi=await getDpi();
   const {root:item,parts}=makeBoardObjects({record:data,plan,point,build,buildPath,gridDpi});
@@ -53,6 +55,8 @@ export function createBoardScene(obr,{store,fellowship,base=globalThis.location?
    const started=performance.now();
    for(let attempt=0;attempt<4;attempt++){
     const item=items.find(i=>i.id===id)||(await obr.scene.items.getItems([id]))[0],before=record(item);if(!before||!before.placed)throw Error('Карточка уже возвращена в лист.');
+    if(before.source!=='fellowship'&&before.owner!==obr.player.id&&await obr.player.getRole()!=='GM')throw Error('Изменять карточку может её владелец или ведущий.');
+    if(before.source!=='fellowship'&&before.owner===obr.player.id&&store?.loadCharacter&&!store.loadCharacter(before.characterId||store.legacyId))throw Error('Этот персонаж больше не закреплён за вами.');
     const readAt=performance.now(),current=epoch,next=structuredClone(before);next.card=change(next.card);next.rev=crypto.randomUUID();
     if(character!==undefined)next.character=character;if(next.card.type==='character')next.character=next.card.data.name;
     if(before.interactionVersion===BOARD_GRAPHICS_VERSION&&next.character===before.character&&JSON.stringify(next.card)===JSON.stringify(before.card))return before;
@@ -122,9 +126,9 @@ export function createBoardScene(obr,{store,fellowship,base=globalThis.location?
   objects.root.metadata={};objects.root.locked=true;objects.root.disableHit=true;for(const part of objects.parts)part.metadata={};let removed=false,moving=Promise.resolve(),pending=null,running=false;
   await obr.scene.local.addItems([objects.root,...objects.parts]);return {move(point){pending=point;if(!running){running=true;moving=(async()=>{try{while(pending&&!removed){const latest=pending;pending=null;await obr.scene.local.updateItems([objects.root.id],drafts=>{if(drafts[0])drafts[0].position=latest;});}}finally{running=false;}})().catch(report);}return moving;},async remove(){if(removed)return;removed=true;await moving;await obr.scene.local.deleteItems(ids);}};
  }
- async function syncCharacter(name){for(const item of items){const r=record(item);if(r.owner===obr.player.id&&r.placed&&r.character!==name)await update(item.id,card=>card,{character:name});}}
+ async function syncCharacter(name,characterId=store?.activeId?.()||null){for(const item of items){const r=record(item);if(r.owner===obr.player.id&&r.placed&&r.character!==name&&(r.source==='fellowship'||(r.characterId||store?.legacyId||null)===characterId))await update(item.id,card=>card,{character:name});}}
 
- return {onReset(fn){resets.add(fn);return()=>resets.delete(fn);},owner:obr.player.id,syncCharacter,start,place,ghost,edit,activateControl,update,returnToSheet,deleteCard,record,items:()=>items,subscribe(fn){listeners.add(fn);fn(items);return()=>listeners.delete(fn);},dispose(){alive=false;++epoch;off();offShared();offReady();offGrid();partsCache.clear();listeners.clear();resets.clear();}};
+ return {async syncNow(){if(await obr.scene.isReady())await sync(await obr.scene.items.getItems());},onReset(fn){resets.add(fn);return()=>resets.delete(fn);},owner:obr.player.id,isActive:r=>!store?.activeId||r.source==='fellowship'||(r.characterId||store.legacyId)===store.activeId(),syncCharacter,start,place,ghost,edit,activateControl,update,returnToSheet,deleteCard,record,items:()=>items,subscribe(fn){listeners.add(fn);fn(items);return()=>listeners.delete(fn);},dispose(){alive=false;++epoch;off();offShared();offReady();offGrid();partsCache.clear();listeners.clear();resets.clear();}};
 }
 export function watchBoardTools(obr,scene,base=location.href){
  let installed=false,queue=Promise.resolve(),alive=true,clickTimer=null,offPlayer=()=>{},selected='',activating=false,clickSequence=0;

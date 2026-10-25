@@ -12,12 +12,12 @@ export function createSheetTransfer(root,state,save,{scene,resize,toScene,getSha
   const t=node.querySelector('[data-theme-id]');return t?'theme:'+t.dataset.themeId:null;
  };
  const nodes=()=>[...root.querySelectorAll('.mt-card-slot,.mt-status-cards > .mt-scroll-frame,.mt-notes-cards > .mt-notes-card')];
- function syncVisibility(){const sources=new Set(scene.items().filter(i=>scene.record(i)?.owner===scene.owner&&scene.record(i)?.placed).map(i=>scene.record(i).source));for(const node of nodes()){const key=identify(node);if(key)node.dataset.onBoard=String(sources.has(key));}for(const button of root.querySelectorAll('.mt-note-index-row .mt-open-note'))button.closest('.mt-note-index-row').dataset.onBoard=String(sources.has('note:'+button.dataset.noteId));}
+ function syncVisibility(){const sources=new Set(scene.items().filter(i=>scene.record(i)?.owner===scene.owner&&scene.record(i)?.placed&&(!scene.isActive||scene.isActive(scene.record(i)))).map(i=>scene.record(i).source));for(const node of nodes()){const key=identify(node);if(key)node.dataset.onBoard=String(sources.has(key));}for(const button of root.querySelectorAll('.mt-note-index-row .mt-open-note'))button.closest('.mt-note-index-row').dataset.onBoard=String(sources.has('note:'+button.dataset.noteId));}
  const off=scene.subscribe(items=>{
-  let changed=false;for(const item of items){const r=scene.record(item);if(r.owner!==scene.owner)continue;
+  let changed=false;for(const item of items){const r=scene.record(item);if(r.owner!==scene.owner||scene.isActive&&!scene.isActive(r))continue;
    const stamp=String(r.deleted)+String(r.placed)+JSON.stringify(r.card);if(known.get(item.id)===stamp)continue;known.set(item.id,stamp);
    if(r.source!=='fellowship'&&(r.deleted?deleteSource(state,r):applySource(state,r.source,r.card))){if(!r.placed)redraw(r.source);changed=true;}
-  }if(changed)save();syncVisibility();const sources=items.filter(i=>scene.record(i)?.owner===scene.owner&&scene.record(i)?.placed).map(i=>scene.record(i).source).sort().join('|');if(sources!==visibleSources){visibleSources=sources;void fit();}
+  }if(changed)save();syncVisibility();const sources=items.filter(i=>scene.record(i)?.owner===scene.owner&&scene.record(i)?.placed&&(!scene.isActive||scene.isActive(scene.record(i)))).map(i=>scene.record(i).source).sort().join('|');if(sources!==visibleSources){visibleSources=sources;void fit();}
  });
  const observer=new win.MutationObserver(syncVisibility);observer.observe(root,{childList:true,subtree:true});
  async function restore(){

@@ -1,4 +1,5 @@
 import {mountGM} from './gm-ui.js';
+import {openCharacterPicker} from './character-picker.js';
 import { mountSheet } from './sheet-ui.js';
 
 function element(doc, type, className, text) {
@@ -13,6 +14,11 @@ export function mountUI(root, view, template, store, actions) {
   root.innerHTML = template;
   const q = s => root.querySelector(s), qa = s => [...root.querySelectorAll(s)];
   const state = store.load();
+  if(view==='sheet'&&store.exists&&!store.exists())store.save(state);
+  if(view==='sheet'&&store.activeId&&!store.activeId()){
+    root.replaceChildren();const panel=element(doc,'section','mt-empty-characters'),title=element(doc,'h2','','Персонаж не выбран'),choose=element(doc,'button','','Выбрать'),close=element(doc,'button','','Закрыть лист');
+    choose.addEventListener('click',()=>openCharacterPicker(root,store,actions.reloadSheet));close.addEventListener('click',actions.close);panel.append(title,element(doc,'p','','Создайте персонажа или дождитесь, пока ведущий выдаст его вам.'),choose,close);root.append(panel);return state;
+  }
   const normalNote = view === 'sheet' && actions.preview ? 'Предпросмотр · все данные здесь сохраняются только на этом устройстве.' : view === 'sheet' ? 'Личный лист сохраняется на этом устройстве. Братство — общее для комнаты.' : 'Панель ведущего · заметки сохраняются только на этом устройстве.';
   const note = element(doc, 'div', 'mt-prototype-note', normalNote);
   const info = root.querySelector('.mt-storage-info');

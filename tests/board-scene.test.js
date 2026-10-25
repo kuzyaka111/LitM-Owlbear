@@ -34,6 +34,12 @@ test('queued edits preserve other tag fields and unauthorized clients cannot ret
  f.obr.player.id='someone-else';await assert.rejects(f.scene.returnToSheet(item.id),/владелец/);assert.equal(f.items[0].visible,true);f.scene.dispose();
 });
 
+test('players cannot edit or mark another personal card, but a GM can',async()=>{
+ const f=fixture();await f.scene.start();const item=await f.scene.place('theme:hero-0','Эрин',sourceCard(f.store.load(),'theme:hero-0'),{x:0,y:0});const before=structuredClone(f.items);
+ f.obr.player.id='other';await assert.rejects(f.scene.edit(item.id,'power.1.text','Чужая запись'),/владелец/);await assert.rejects(f.scene.activateControl(item.id,'power.1.scratched'),/владелец/);assert.deepEqual(f.items,before);
+ f.obr.player.getRole=async()=>'GM';await f.scene.edit(item.id,'power.1.text','Правка ведущего');assert.equal(f.items[0].metadata[BOARD_KEY].card.data.power[1].text,'Правка ведущего');f.scene.dispose();
+});
+
 test('moving a placed card never reloads storage, saves or notifies sheet layout',async()=>{
  const f=fixture();await f.scene.start();const state=f.store.load(),item=await f.scene.place('card:original-backpack',state.name,sourceCard(state,'card:original-backpack'),{x:0,y:0});
  await f.scene.syncCharacter(state.name);let loads=0,saves=0,notifications=0;const load=f.store.load,save=f.store.save;f.store.load=()=>{loads++;return load();};f.store.save=v=>{saves++;return save(v);};const off=f.scene.subscribe(()=>notifications++);notifications=0;

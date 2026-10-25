@@ -13,6 +13,7 @@ import './gm.css';
 import {createGMBoard} from './gm-board.js';
 import {createActionSources} from './action-sources.js';
 import {createBoardScene} from './board-scene.js';
+import {BOARD_KEY} from './board-model.js';
 import rollImage from './scroll-roll.svg';
 import paperImage from './parchment.svg';
 import brownRoll from './scroll-roll-brown.svg';
@@ -24,6 +25,7 @@ import sheetTemplate from './sheet.html?raw';
 import gmTemplate from './gm.html?raw';
 import { MODAL_ID, SHEET_POPOVER_ID, sheetBounds, openSheet, watchSheetAction } from './bridge.js';
 import { makeStore } from './storage.js';
+import {createSheetDirectory} from './player-sheets.js';
 import { mountUI } from './ui.js';
 import { makeFellowshipStore, makePreviewFellowship } from './fellowship.js';
 
@@ -56,17 +58,28 @@ async function start(inOwlbear) {
   const fellowship = view === 'sheet' ? (inOwlbear ? makeFellowshipStore(OBR.room) : makePreviewFellowship(storage)) : null;
   if (fellowship) window.addEventListener('pagehide', () => fellowship.dispose(), { once: true });
   let resizeQueue = Promise.resolve(),miniature=false;
+  let reloading=false;const reloadSheet=()=>{if(!reloading){reloading=true;window.location.reload();}};
   const store=makeStore(storage,scope,view);
-  const actionSources=inOwlbear&&view==='sheet'?createActionSources(OBR,error=>{const node=root.querySelector('.mt-ui-message');if(node){node.hidden=false;node.textContent=error.message;}else console.error(error);}):null;
+  const playerSheets=inOwlbear&&view==='gm'?createSheetDirectory(OBR,storage,{onTaken:async character=>{
+    if(await OBR.player.getRole()!=='GM')throw Error('Действие доступно только ведущему.');
+    if(!await OBR.scene.isReady())return;
+    const items=await OBR.scene.items.getItems(),roots=items.filter(i=>{const r=i.metadata?.[BOARD_KEY];return r?.owner===character.from&&r.source!=='fellowship'&&(r.characterId===character.id||!r.characterId&&character.id.startsWith('legacy-'));});
+    const ids=roots.flatMap(i=>[i.id,...(i.metadata[BOARD_KEY].parts||[])]);if(ids.length)await OBR.scene.items.deleteItems(ids);
+  }}):null;
+  const releaseSheets=()=>{playerSheets?.dispose();playerSheets?.fellowship.dispose();};
+  if(playerSheets){playerSheets.fellowship=makeFellowshipStore(OBR.room);disposeGM=releaseSheets;await playerSheets.fellowship.start();if(thisGeneration!==generation){releaseSheets();return;}await playerSheets.start();if(thisGeneration!==generation){releaseSheets();return;}}
+  const actionSources=inOwlbear&&view==='sheet'?createActionSources(OBR,error=>{const node=root.querySelector('.mt-ui-message');if(node){node.hidden=false;node.textContent=error.message;}else console.error(error);},()=>store.activeId?.()):null;
   if(actionSources)await actionSources.start();
   const gmBoard=inOwlbear&&view==='gm'?createGMBoard(OBR,{store,build:buildImage,buildPath,report:error=>{const node=root.querySelector('.mt-gm-message');if(node){node.hidden=false;node.textContent=error.message;}else console.error(error);}}):null;
-  if(gmBoard)await gmBoard.start();
-  if(gmBoard)disposeGM=()=>gmBoard.dispose();
+  if(gmBoard){const release=()=>{gmBoard.dispose();releaseSheets();};disposeGM=release;await gmBoard.start();if(thisGeneration!==generation||await OBR.player.getRole()!=='GM'){release();return;}}
   const board=inOwlbear&&view==='sheet'?createBoardScene(OBR,{build:buildImage,buildPath,store,fellowship,upgrade:false,report:error=>{const node=root.querySelector('.mt-ui-message');if(node){node.hidden=false;node.textContent=error.message;}else console.error(error);}}):null;
   const fitWindow = (count, hasSelection, requestedHeight, minimumWidth) => { if (!inOwlbear || view !== 'sheet'||miniature) return resizeQueue; resizeQueue = resizeQueue.then(async () => { if(miniature)return;const size = await sheetBounds(OBR, count, hasSelection, requestedHeight, minimumWidth); await OBR.popover.setWidth(SHEET_POPOVER_ID, size.width); await OBR.popover.setHeight(SHEET_POPOVER_ID, size.height); }).catch(console.error); return resizeQueue; };
   if(board)await board.start();
+  if(view==='sheet'&&store.activeId){const active=store.activeId();const off=store.subscribe(()=>{if(store.activeId()!==active)reloadSheet();});window.addEventListener('pagehide',off,{once:true});}
   mountUI(root, view, view === 'gm' ? gmTemplate : sheetTemplate, store, {
-    close, fellowship, fitWindow, preview: !inOwlbear,board,actionSources,
+    characters:view==='sheet'?store:null,reloadSheet,
+    close, fellowship, fitWindow, preview: !inOwlbear,board,actionSources,playerSheets,
+    registerDispose:fn=>{const before=disposeGM;disposeGM=()=>{before();fn();};},
     placeObstacle:gmBoard?obstacle=>gmBoard.place(obstacle):null,
     placeSceneEffect:gmBoard?effect=>gmBoard.place(effect):null,
     obstaclesChanged:()=>gmBoard?.changed(),
@@ -78,6 +91,7 @@ async function start(inOwlbear) {
   if(board)window.addEventListener('pagehide',()=>board.dispose(),{once:true});
   if(actionSources)window.addEventListener('pagehide',()=>actionSources.dispose(),{once:true});
   if(gmBoard)window.addEventListener('pagehide',()=>gmBoard.dispose(),{once:true});
+  if(playerSheets)window.addEventListener('pagehide',()=>{playerSheets.dispose();playerSheets.fellowship.dispose();},{once:true});
   createIcons({ icons: { Feather, X, UserRound, Sprout, BookOpen, ArrowUpRight } });
   if (!inOwlbear) {
     const p = root.querySelector('.mt-prototype-note');

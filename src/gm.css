@@ -121,3 +121,22 @@ body[data-view=gm] #mist-table-design>.mt-prototype-note{flex-shrink:0}
 #mist-table-design .mt-board-render .mt-scene-effect-title{align-items:flex-start;gap:7px;padding:8px 0}
 #mist-table-design .mt-board-render .mt-scene-effect-direction{flex:0 0 16px;font:600 21px/30px var(--font-heading);color:#79684c}
 #mist-table-design .mt-board-render .mt-scene-effect-title .mt-status-name{font:400 20px/30px var(--font-writing);color:#66563d;white-space:pre-wrap;overflow-wrap:anywhere;min-width:0}
+/* Read-only sheets in the GM panel retain the same paper and typography. */
+.mt-player-sheet-list{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}.mt-player-sheet-list [aria-pressed=true]{background:#725138;color:#fff0ce}
+.mt-player-sheet-cards{display:flex;align-items:flex-start;gap:16px;overflow:auto;padding:8px 0 18px;max-height:520px}
+.mt-player-sheet-cards .mt-player-sheet-card{position:relative;left:auto;top:auto;flex:0 0 244px;pointer-events:none;min-width:244px}
+.mt-player-sheet-card .mt-board-render{zoom:1!important;width:244px!important;min-width:0!important;padding:8px 10px!important;background:transparent!important}
+.mt-player-sheet-card .mt-theme.mt-scroll-frame,.mt-player-sheet-card .mt-scroll-body,.mt-player-sheet-card .mt-scroll-main,.mt-player-sheet-card .mt-scroll-flow{max-height:none!important;height:auto!important;overflow:visible!important}
+.mt-player-sheet-card .mt-scroll-extension{height:auto!important;overflow:visible!important}
+.mt-player-sheet-card button:disabled{opacity:1!important}
+.mt-gm-tabs{flex-wrap:wrap}
+#mist-table-design .mt-character-select{float:right;margin-left:8px;padding:1px 7px;min-height:22px;border:1px solid #a08b65;border-radius:3px;background:#f4e9c8;color:#5c4933;font:13px var(--font-heading)}
+.mt-character-choices{display:flex;flex-direction:column;gap:8px}.mt-character-choice{display:flex;gap:8px;align-items:center}.mt-character-choice>button:first-child{flex:1;text-align:left}.mt-empty-characters{padding:20px;background:#efe3c3;color:#493724}.mt-empty-characters button{margin-right:8px;padding:6px 12px}
+.mt-gm-character-actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.mt-gm-character-actions select{max-width:200px}
+
+.mt-character-choice>button[aria-pressed=true]{outline:2px solid #b79350;outline-offset:1px}
+#mist-table-design .mt-character-picker-header{display:flex;align-items:center;flex-wrap:wrap;gap:10px 14px;padding-right:20px;margin-bottom:14px}
+#mist-table-design .mt-character-picker-header h2{margin:0;padding:0;flex:1}
+#mist-table-design .mt-character-picker button:not(.mt-dialog-close){background:#654831;color:#fff0d0;border:1px solid #795b40;border-radius:3px;padding:7px 10px;white-space:nowrap}
+#mist-table-design .mt-character-picker button:not(.mt-dialog-close):hover{background:#7a573c}
+#mist-table-design .mt-character-picker .mt-character-choice>button[aria-pressed=true]{background:#4b3425}

@@ -1,4 +1,5 @@
 import {createActionStatuses} from './action-statuses.js';
+import {openCharacterPicker} from './character-picker.js';
 import {mountBoardReturn} from './board-return.js';
 import {createSheetTransfer} from './sheet-transfer.js';
 import {openDiceTray} from './dice.js';
@@ -126,6 +127,7 @@ export function mountSheet(root,state,save,actions) {
     state.relationships=state.relationships.filter(r=>r.companion.trim()||r.tag.trim());
     const article=el('article','mt-theme mt-character-card');const head=el('div','mt-theme-head');head.append(el('span','','Персонаж'));article.append(head);
     const body=el('div','mt-character-body');const name=field('Имя героя',state.name,value=>{state.name=value;localSave();},80,true);name.input.className='mt-editor-name';
+    if(actions.characters){const choose=btn('Выбрать','mt-character-select',e=>{e.preventDefault();openCharacterPicker(root,actions.characters,actions.reloadSheet);},'Выбрать персонажа');name.input.setAttribute('aria-label','Имя героя');name.label.firstElementChild.append(choose);}
     const player=field('Имя игрока',state.playerName,value=>{state.playerName=value;localSave();});player.input.className='mt-editor-name mt-player-name';body.append(name.label,player.label);
     const relationships=el('section','mt-relationships');relationships.setAttribute('aria-label','Отношения в братстве');relationships.append(el('h4','mt-relationships-heading','Отношения в братстве'));
     function relationshipRow(r){const row=el('div','mt-relationship');let timer;const tag=btn(r.tag||'Тег отношения','',()=>{clearTimeout(timer);if(r.tag)timer=setTimeout(()=>{if(tag.isConnected)select('relationship:'+r.id);},230);});tag.dataset.key='relationship:'+r.id;tag.title=r.companion;tag.addEventListener('dblclick',()=>{clearTimeout(timer);editRelationship();});

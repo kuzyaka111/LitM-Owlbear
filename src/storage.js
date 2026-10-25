@@ -1,3 +1,4 @@
+import {makeCharacterStore} from './character-store.js';
 import {legacyNotes,cleanNoteCards} from './notes-model.js';
 import {cleanStatuses} from './status-model.js';
 import {cleanGM,gmDefaults} from './gm-model.js';
@@ -70,6 +71,7 @@ export function clean(value, view) {
     return item ? `card:${cards[0].id}:${item.id}` : name;
   });
   return {
+    characterId: typeof value.characterId==='string'?value.characterId:null,
     name: text(value.name, d.name, 80), playerName: text(value.playerName, '', 80), concept: text(value.concept, d.concept, 500),
     relationships: Array.isArray(value.relationships) ? value.relationships.filter(x => x && typeof x === 'object').slice(0, 20).map((x, i) => ({ id: id(x.id, 'relationship-' + i), companion: text(x.companion, '', 80), tag: text(x.tag, '', 80) })) : [],
     promise: count(value.promise, 5), quintessences: text(value.quintessences, '', 2000),
@@ -84,9 +86,12 @@ export function clean(value, view) {
   };
 }
 export function makeStore(storage, scope, view) {
+  if(view==='sheet')return makeCharacterStore(storage,scope,{clean,defaults});
   const key = 'legend-mist-prototype:v1:' + JSON.stringify([scope.room, scope.player, view]);
   return {
+    exists() { try { return storage.getItem(key) !== null; } catch { return false; } },
+    subscribe(fn) { const receive = event => { if (event.key === key && (!event.storageArea || event.storageArea === storage)) fn(); }; globalThis.addEventListener?.('storage', receive); globalThis.addEventListener?.('legend-mist-store', receive); return () => { globalThis.removeEventListener?.('storage', receive); globalThis.removeEventListener?.('legend-mist-store', receive); }; },
     load() { try { return clean(JSON.parse(storage.getItem(key)), view); } catch { return defaults(view); } },
-    save(state) { try { const before = storage.getItem(key); let oldSchema; try { oldSchema = JSON.parse(before)?.schemaVersion; } catch {} if (view === 'sheet' && before && oldSchema !== 4 && !storage.getItem(key + ':before-v4')) storage.setItem(key + ':before-v4', before); storage.setItem(key, JSON.stringify(clean(state, view))); return true; } catch { return false; } },
+    save(state) { try { const before = storage.getItem(key); let oldSchema; try { oldSchema = JSON.parse(before)?.schemaVersion; } catch {} if (view === 'sheet' && before && oldSchema !== 4 && !storage.getItem(key + ':before-v4')) storage.setItem(key + ':before-v4', before); storage.setItem(key, JSON.stringify(clean(state, view))); if (globalThis.dispatchEvent && globalThis.CustomEvent) { const event = new CustomEvent('legend-mist-store'); Object.defineProperty(event, 'key', {value:key}); globalThis.dispatchEvent(event); } return true; } catch { return false; } },
   };
 }

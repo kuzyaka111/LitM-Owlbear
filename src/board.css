@@ -1,7 +1,7 @@
 /* Board exports use the existing card paints at a fixed logical size. */
 .mt-board-stage{position:fixed;left:-10000px;top:0;width:244px;pointer-events:none}
 #mist-table-design .mt-v4.mt-board-render{zoom:1!important;width:244px!important;min-width:0!important;padding:8px 10px!important;background:transparent!important}
-#mist-table-design .mt-board-render .mt-board-owner{font:500 13px/19px var(--font-heading);text-align:center;color:#f4e7c9;background:#3c291fdb;border-radius:3px;margin:0 4px 5px;padding:4px 6px;white-space:pre-wrap;overflow-wrap:anywhere}
+#mist-table-design .mt-board-render .mt-board-owner{font:500 13px/19px var(--font-heading);text-align:center;color:#f4e7c9;background:rgba(76,54,41,.5);border-radius:3px;margin:0 4px 5px;padding:4px 6px;white-space:pre-wrap;overflow-wrap:anywhere}
 #mist-table-design .mt-board-render .mt-theme.mt-scroll-frame{max-height:none!important;overflow:visible!important}
 #mist-table-design .mt-board-render .mt-scroll-flow,#mist-table-design .mt-board-render .mt-scroll-body,#mist-table-design .mt-board-render .mt-scroll-main{max-height:none!important;overflow:visible!important;height:auto!important}
 #mist-table-design .mt-board-render .mt-scroll-main{min-height:0!important}

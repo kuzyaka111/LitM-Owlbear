@@ -24,8 +24,8 @@ export function boardCardElement(record,doc=document){
   article=el('article','mt-theme '+cls);const head=el('div','mt-theme-head');article.append(head);
   if(kind==='scene-effect'){
    article.dataset.statusKind=d.effectKind==='tags'?'story':d.kind;article.dataset.tear=[...d.id].reduce((n,c)=>n+c.charCodeAt(0),0)%5;
-   head.append(el('span','',d.effectKind==='tags'?'Тег сцены':'Статус сцены'));const line=el('div','mt-obstacle-export-row mt-obstacle-tag mt-direction-'+(d.direction||0));line.append(el('span','mt-obstacle-direction',d.direction===1?'↑ ':d.direction===-1?'↓ ':'◇ '),el('strong','',d.name));
-   if(d.effectKind==='statuses'&&d.kind==='numeric')line.append(gmMarks(d));article.append(line);
+   head.append(el('span','',d.effectKind==='tags'?'Тег сцены':'Статус сцены'));const line=el('div','mt-status-title-row mt-scene-effect-title');line.append(el('span','mt-scene-effect-direction',d.direction===1?'↑':d.direction===-1?'↓':'◇'),el('div','mt-status-name',d.name));article.append(line);
+   if(d.effectKind==='statuses'&&d.kind==='numeric')article.append(gmMarks(d));
   }else if(kind==='status'){
    article.dataset.statusKind=d.kind;article.dataset.tear=d.tear;head.append(el('span','mt-status-kind',d.kind==='story'?'Сюжетный тег':'Статус'));
    const row=el('div','mt-status-title-row'+(d.scratched?' mt-status-scratched':''));row.append(text('mt-status-name','name','Название…'));

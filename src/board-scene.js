@@ -1,7 +1,7 @@
 import {boardDebug} from './board-debug.js';
 import {canDeleteBoardCard,deleteSource} from './board-model.js';
 import {BOARD_KEY,BOARD_TOOL,BOARD_EDITOR,validRecord,cleanCard,editCard,cardFields,fieldValue,activationValue,textToggle,cardPoint,hitField,applySource} from './board-model.js';
-import {renderBoardGraphics} from './board-graphics.js';
+import {renderBoardGraphics,BOARD_GRAPHICS_VERSION} from './board-graphics.js';
 import {inlineEditorOptions} from './board-inline.js';
 import {makeBoardObjects} from './board-objects.js';
 import {BOARD_PART,reconcileBoardObjects,applyPaint,previewBoardChanges} from './board-diff.js';
@@ -30,7 +30,7 @@ export function createBoardScene(obr,{store,fellowship,base=globalThis.location?
  async function refresh(ready){
   const current=++epoch;off();offShared();items=[];partsCache.clear();dpiPromise=null;lastSignature=null;notify();resets.forEach(fn=>fn());if(!ready||!alive)return;
   off=obr.scene.items.onChange(next=>{if(current===epoch)void sync(next).catch(report);});const next=await obr.scene.items.getItems();if(current!==epoch||!alive)return;await sync(next);
-  for(const item of upgrade?[...items]:[]){const r=record(item);if(item.type==='PATH'&&r.placed&&r.owner===obr.player.id&&r.interactionVersion!==7){const stale=[...partsCache.values()].filter(p=>p.attachedTo===item.id&&!r.parts?.includes(p.id)).map(p=>p.id);await update(item.id,card=>card);const latest=record(items.find(i=>i.id===item.id));const remove=stale.filter(id=>!latest?.parts?.includes(id));if(remove.length)await obr.scene.items.deleteItems(remove);}}
+  for(const item of upgrade?[...items]:[]){const r=record(item);if(item.type==='PATH'&&r.placed&&r.owner===obr.player.id&&r.interactionVersion!==BOARD_GRAPHICS_VERSION){const stale=[...partsCache.values()].filter(p=>p.attachedTo===item.id&&!r.parts?.includes(p.id)).map(p=>p.id);await update(item.id,card=>card);const latest=record(items.find(i=>i.id===item.id));const remove=stale.filter(id=>!latest?.parts?.includes(id));if(remove.length)await obr.scene.items.deleteItems(remove);}}
   if(fellowship)offShared=fellowship.subscribe((shared,loaded)=>{if(!loaded||current!==epoch)return;for(const item of items){const r=record(item);if(r.owner===obr.player.id&&r.source==='fellowship'&&r.placed&&JSON.stringify(r.card.data)!==JSON.stringify(fellowshipTheme(shared)))void update(item.id,()=>({type:'theme',data:fellowshipTheme(shared)})).catch(report);}});
  }
  async function start(){offReady();offReady=obr.scene.onReadyChange?.(ready=>void refresh(ready).catch(report))||(()=>{});await refresh(await obr.scene.isReady());}
@@ -55,7 +55,7 @@ export function createBoardScene(obr,{store,fellowship,base=globalThis.location?
     const item=items.find(i=>i.id===id)||(await obr.scene.items.getItems([id]))[0],before=record(item);if(!before||!before.placed)throw Error('Карточка уже возвращена в лист.');
     const readAt=performance.now(),current=epoch,next=structuredClone(before);next.card=change(next.card);next.rev=crypto.randomUUID();
     if(character!==undefined)next.character=character;if(next.card.type==='character')next.character=next.card.data.name;
-    if(before.interactionVersion===7&&next.character===before.character&&JSON.stringify(next.card)===JSON.stringify(before.card))return before;
+    if(before.interactionVersion===BOARD_GRAPHICS_VERSION&&next.character===before.character&&JSON.stringify(next.card)===JSON.stringify(before.card))return before;
     const plan=await render(next);next.hits=plan.hits;next.interactionVersion=plan.interactionVersion;const gridDpi=await getDpi(),renderAt=performance.now();
     const objects=makeBoardObjects({id,record:next,plan,point:item.position,existing:item,build,buildPath,gridDpi});
     const missing=(before.parts||[]).filter(id=>!partsCache.has(id));if(missing.length)for(const part of await obr.scene.items.getItems(missing))partsCache.set(part.id,part);

@@ -1,5 +1,6 @@
 import './board-styles.js';
 import {createBoardScene,watchBoardTools} from './board-scene.js';
+import {watchGMBoardReturn} from './gm-board.js';
 import {makeStore} from './storage.js';
 import {makeFellowshipStore} from './fellowship.js';
 import OBR,{buildImage,buildPath} from '@owlbear-rodeo/sdk';
@@ -11,7 +12,8 @@ if (OBR.isAvailable) {
     const board=createBoardScene(OBR,{build:buildImage,buildPath,store:makeStore(localStorage,{room:OBR.room.id,player:OBR.player.id},'sheet'),fellowship});
     void board.start().catch(console.error);
     const boardTools=watchBoardTools(OBR,board,window.location.href);
+    const gmReturn=watchGMBoardReturn(OBR,window.location.href);
     const controller = watchGMTool(OBR, window.location.href);
-    window.addEventListener('pagehide', () => { void controller.dispose();board.dispose();fellowship.dispose();void boardTools.dispose(); }, { once: true });
+    window.addEventListener('pagehide', () => { void controller.dispose();board.dispose();fellowship.dispose();void boardTools.dispose();void gmReturn.dispose(); }, { once: true });
   });
 }

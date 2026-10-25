@@ -118,3 +118,6 @@ body[data-view=gm] #mist-table-design>.mt-prototype-note{flex-shrink:0}
 #mist-table-design .mt-gm-export-marks .mt-status-mark{min-width:0;width:auto;height:25px;padding:0;font:14px/25px var(--font-heading);border:1px solid #8f704d88;text-align:center;box-sizing:border-box}
 
 #mist-table-design .mt-gm-scene-effects[data-scene-effect=tags] .mt-gm-obstacle-row.mt-obstacle-tag{flex-basis:240px;max-width:100%}
+#mist-table-design .mt-board-render .mt-scene-effect-title{align-items:flex-start;gap:7px;padding:8px 0}
+#mist-table-design .mt-board-render .mt-scene-effect-direction{flex:0 0 16px;font:600 21px/30px var(--font-heading);color:#79684c}
+#mist-table-design .mt-board-render .mt-scene-effect-title .mt-status-name{font:400 20px/30px var(--font-writing);color:#66563d;white-space:pre-wrap;overflow-wrap:anywhere;min-width:0}

@@ -5,7 +5,7 @@ import {JSDOM} from 'jsdom';
 import {makeStore} from '../src/storage.js';
 import {mountUI} from '../src/ui.js';
 import {cleanGM,cleanGMStatus,gmStatusValue,toggleGMStatusKind,sceneEffectSource,newScene,newObstacle,newObstacleRow,moveScene,copyObstacle,publicObstacle,referenceParts,obstacleReference,safeImage} from '../src/gm-model.js';
-import {createGMBoard,GM_BOARD_KEY} from '../src/gm-board.js';
+import {createGMBoard,GM_BOARD_KEY,returnGMCard,watchGMBoardReturn} from '../src/gm-board.js';
 import {collectActionSources,gmActionFeed,ACTION_FEED} from '../src/action-sources.js';
 import {boardCardElement} from '../src/board-render.js';
 const settle=()=>new Promise(r=>setTimeout(r,0));
@@ -46,7 +46,7 @@ test('obstacle visibility dims without disabling fields and placing never closes
 test('references retain stable obstacle IDs through renaming',()=>{const token=obstacleReference('example');assert.deepEqual(referenceParts('До '+token+' после'),[{start:3,end:3+token.length,id:'example'}]);});
 function builder(type,props={}){const item={id:crypto.randomUUID(),type,...props},api={build:()=>structuredClone(item)};for(const key of ['id','commands','fillColor','fillOpacity','strokeColor','strokeOpacity','strokeWidth','fillRule','scale','position','rotation','layer','createdUserId','attachedTo','locked','disableHit','disableAutoZIndex','zIndex','metadata','name'])api[key]=v=>{item[key]=v;return api;};return api;}
 function board(){
- let items=[],callback=()=>{},readyCallback=()=>{},role='GM',fail=false;const rendered=[],state=cleanGM({scenes:[],library:[]}),o=newObstacle();state.library.push(o);const api={getItems:async ids=>structuredClone(ids?items.filter(i=>ids.includes(i.id)):items),onChange:fn=>{callback=fn;return()=>{callback=()=>{};};},addItems:async next=>{if(fail)throw Error('Denied');items.push(...structuredClone(next));callback(structuredClone(items));},updateItems:async(ids,fn)=>{if(fail)throw Error('Denied');const names=ids.map(i=>typeof i==='string'?i:i.id),drafts=structuredClone(items);fn(drafts.filter(i=>names.includes(i.id)));items=drafts;callback(structuredClone(items));},deleteItems:async ids=>{items=items.filter(i=>!ids.includes(i.id));callback(structuredClone(items));}};
+ let items=[],callback=()=>{},readyCallback=()=>{},role='GM',fail=false;const rendered=[],state=cleanGM({scenes:[],library:[]}),o=newObstacle();state.library.push(o);const api={getItems:async ids=>structuredClone(ids?items.filter(i=>ids.includes(i.id)):items),onChange:fn=>{callback=fn;return()=>{callback=()=>{};};},addItems:async next=>{if(fail)throw Error('Denied');items.push(...structuredClone(next));callback(structuredClone(items));},updateItems:async(ids,fn)=>{if(fail)throw Error('Denied');const names=ids.map(i=>typeof i==='string'?i:i.id),drafts=structuredClone(items);fn(drafts.filter(i=>names.includes(i.id)));items=drafts;callback(structuredClone(items));},deleteItems:async ids=>{if(fail)throw Error('Denied');const removed=new Set(ids);for(let changed=true;changed;){changed=false;for(const item of items)if(item.attachedTo&&removed.has(item.attachedTo)&&!removed.has(item.id)){removed.add(item.id);changed=true;}}items=items.filter(i=>!removed.has(i.id));callback(structuredClone(items));}};
  const obr={player:{id:'owner',getRole:async()=>role},scene:{isReady:async()=>true,onReadyChange:fn=>{readyCallback=fn;return()=>{};},items:api,grid:{getDpi:async()=>150}},viewport:{getWidth:async()=>1000,getHeight:async()=>700,inverseTransformPoint:async p=>p}};
  const service=createGMBoard(obr,{store:{load:()=>structuredClone(state)},build:(image,grid)=>builder('IMAGE',{image,grid}),buildPath:()=>builder('PATH'),render:async record=>{rendered.push(structuredClone(record));return {width:244,height:300,dpi:150,parts:[{key:'text',type:'path',commands:[[0,record.card.data.tags?.length||0,0],[1,1,1]],fill:'#333333'}]};},report:assert.fail});
  return {service,obr,o,state,rendered,get items(){return items;},set role(v){role=v;},set fail(v){fail=v;},ready:()=>readyCallback(true)};
@@ -98,4 +98,24 @@ test('scene tags and numeric statuses export in place, synchronize and are not c
  const feed=gmActionFeed(f.state,'owner'),sources=collectActionSources(f.items,{[ACTION_FEED+'owner']:feed},'player');assert.equal(sources.tags.size,1);assert.equal(sources.statuses.size,1);assert.equal([...sources.statuses.values()][0].value,5);
  const node=boardCardElement(current.metadata[GM_BOARD_KEY],new JSDOM().window.document);assert.equal(node.querySelectorAll('.mt-status-mark').length,6);assert.equal(node.querySelectorAll('.mt-status-mark.is-marked').length,2);assert.equal(node.querySelectorAll('button,input,textarea').length,0);
  scene.statuses=[];await f.service.flush();assert(!f.items.some(i=>i.id===item.id));assert(f.items.some(i=>i.id===tagItem.id));f.service.dispose();
+});
+
+test('return removes only the public copy, preserves its source and can be placed again without resurrection',async()=>{
+ const f=board(),scene=newScene(),row={...newObstacleRow(),name:'Ранен',kind:'numeric',direction:-1,marks:[false,true,false,false,true,false]};scene.statuses.push(row);f.state.scenes.push(scene);f.state.activeSceneId=scene.id;await f.service.start();
+ const source=sceneEffectSource(scene,'statuses',row),item=await f.service.place(source),before=structuredClone(f.state);assert.equal(f.items.length,2);await f.service.returnToPanel(item.id);assert.equal(f.items.length,0);assert.deepEqual(f.state,before);await f.service.flush();assert.equal(f.items.length,0);
+ const next=await f.service.place(sceneEffectSource(scene,'statuses',row));assert.notEqual(next.id,item.id);assert.equal(next.metadata[GM_BOARD_KEY].card.data.value,5);assert.equal(next.metadata[GM_BOARD_KEY].card.data.direction,-1);f.service.dispose();
+});
+
+test('another player cannot return a GM card and a failed return retains both source and graphics',async()=>{
+ const f=board();await f.service.start();const item=await f.service.place(f.o),before=structuredClone(f.state);f.obr.player.id='other';f.role='PLAYER';await assert.rejects(returnGMCard(f.obr,item.id),/владелец/);assert.equal(f.items.length,2);
+ f.obr.player.id='owner';f.fail=true;await assert.rejects(returnGMCard(f.obr,item.id),/Denied/);assert.equal(f.items.length,2);assert.deepEqual(f.state,before);f.fail=false;f.obr.player.id='other-gm';f.role='GM';await returnGMCard(f.obr,item.id);assert.equal(f.items.length,0);assert.deepEqual(f.state,before);f.service.dispose();
+});
+
+test('GM return menu is registered in the background and removed when its controller closes',async()=>{
+ let menu,ready;const removed=[],errors=[],obr={scene:{isReady:async()=>true,onReadyChange:fn=>{ready=fn;return()=>{};}},contextMenu:{create:async m=>menu=m,remove:async id=>removed.push(id)},notification:{show:async e=>errors.push(e)}};
+ const controller=watchGMBoardReturn(obr,'https://example.org/LitM-Owlbear/background.html');await controller.refresh();assert.equal(menu.icons[0].label,'Вернуть в панель');assert.deepEqual(menu.icons[0].filter.every,[{key:['metadata',GM_BOARD_KEY,'placed'],value:true}]);assert.equal(menu.icons[0].icon,'https://example.org/LitM-Owlbear/sheet.svg');await controller.dispose();assert(removed.includes(GM_BOARD_KEY+'/return'));assert.deepEqual(errors,[]);
+});
+
+test('individual scene effects use plain sheet status typography and retain marks without directional color fills',()=>{
+ const scene=newScene(),doc=new JSDOM().window.document;for(const effectKind of ['tags','statuses']){const row={...newObstacleRow(),kind:'numeric',name:'Проверка',direction:-1,marks:[false,true,false,false,true,false]};const node=boardCardElement({character:scene.name,card:{type:'scene-effect',data:{...row,effectKind}}},doc);assert.equal(node.querySelectorAll('.mt-obstacle-tag,.mt-direction--1').length,0);assert.equal(node.querySelector('.mt-status-name').textContent,'Проверка');assert.equal(node.querySelector('.mt-scene-effect-direction').textContent,'↓');assert.equal(node.querySelectorAll('.mt-status-mark.is-marked').length,effectKind==='statuses'?2:0);}
 });

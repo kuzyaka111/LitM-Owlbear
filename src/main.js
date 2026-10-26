@@ -29,6 +29,7 @@ import { makeStore } from './storage.js';
 import {createGMCloud} from './gm-cloud.js';
 import {getCloudClient} from './cloud-client.js';
 import {isDetached,connectDetached,openDetached} from './detached-client.js';
+import {latestTask} from './latest-task.js';
 import {createSheetDirectory} from './player-sheets.js';
 import { mountUI } from './ui.js';
 import { makeFellowshipStore, makePreviewFellowship } from './fellowship.js';
@@ -82,7 +83,9 @@ async function start(inOwlbear) {
   const gmBoard=inOwlbear&&view==='gm'?createGMBoard(OBR,{store,build:buildImage,buildPath,report:error=>{const node=root.querySelector('.mt-gm-message');if(node){node.hidden=false;node.textContent=error.message;}else console.error(error);}}):null;
   if(gmBoard){const release=()=>{gmBoard.dispose();releaseSheets();};disposeGM=release;await gmBoard.start();if(thisGeneration!==generation||await OBR.player.getRole()!=='GM'){release();return;}}
   const board=inOwlbear&&view==='sheet'?createBoardScene(OBR,{build:buildImage,buildPath,store,fellowship,upgrade:false,report:error=>{const node=root.querySelector('.mt-ui-message');if(node){node.hidden=false;node.textContent=error.message;}else console.error(error);}}):null;
-  const fitWindow = (count, hasSelection, requestedHeight, minimumWidth) => { if (!inOwlbear || detached || view !== 'sheet'||miniature) return resizeQueue; resizeQueue = resizeQueue.then(async () => { if(miniature)return;const size = await sheetBounds(OBR, count, hasSelection, requestedHeight, minimumWidth); await OBR.popover.setWidth(SHEET_POPOVER_ID, size.width); await OBR.popover.setHeight(SHEET_POPOVER_ID, size.height); }).catch(console.error); return resizeQueue; };
+  let lastSize;
+  const requestFit=latestTask(args=>{resizeQueue=resizeQueue.then(async()=>{if(miniature)return;const size=await sheetBounds(OBR,...args);if(miniature)return;if(size.width!==lastSize?.width)await OBR.popover.setWidth(SHEET_POPOVER_ID,size.width);if(size.height!==lastSize?.height)await OBR.popover.setHeight(SHEET_POPOVER_ID,size.height);lastSize=size;});return resizeQueue;});
+  const fitWindow=(...args)=>{if(!inOwlbear||detached||view!=='sheet'||miniature)return resizeQueue;return requestFit(args).catch(error=>{resizeQueue=Promise.resolve();lastSize=null;console.error(error);});};
   if(board)await board.start();
   if(view==='sheet'&&store.activeId){const active=store.activeId();const off=store.subscribe(()=>{if(store.activeId()!==active)reloadSheet();});window.addEventListener('pagehide',off,{once:true});}
   mountUI(root, view, view === 'gm' ? gmTemplate : sheetTemplate, store, {
@@ -98,7 +101,7 @@ async function start(inOwlbear) {
     placeSceneEffect:gmBoard?effect=>gmBoard.place(effect):null,
     obstaclesChanged:()=>gmBoard?.changed(),
     pickObstacleImage:inOwlbear?async()=>{if(detached)window.opener?.top.focus();const assets=await OBR.assets.downloadImages(false);if(detached)window.focus();return assets[0]?.image||null;}:null,
-    boardResize:(mini,size)=>{miniature=mini;resizeQueue=resizeQueue.then(async()=>{await OBR.popover.setWidth(SHEET_POPOVER_ID,Math.round(size.width*(mini ? .3 : 1)));await OBR.popover.setHeight(SHEET_POPOVER_ID,Math.round(size.height*(mini ? .3 : 1)));});return resizeQueue;},
+    boardResize:(mini,size)=>{miniature=mini;lastSize=null;resizeQueue=resizeQueue.then(async()=>{await OBR.popover.setWidth(SHEET_POPOVER_ID,Math.round(size.width*(mini ? .3 : 1)));await OBR.popover.setHeight(SHEET_POPOVER_ID,Math.round(size.height*(mini ? .3 : 1)));lastSize=null;});return resizeQueue;},
     boardPoint:event=>OBR.viewport.inverseTransformPoint({x:16+event.clientX,y:96+event.clientY}),
     openSheet: async () => { if (inOwlbear) { await OBR.modal.close(MODAL_ID); await openSheet(OBR, window.location.href); } else window.location.href = new URL('./index.html', window.location.href).href; },
   });

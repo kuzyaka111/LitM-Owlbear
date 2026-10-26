@@ -7,27 +7,34 @@ export function makeCharacterStore(storage,scope,{clean,defaults}){
  const key='legend-mist-prototype:v1:'+JSON.stringify([scope.room,scope.player,'sheet']);
  let hash=2166136261,hash2=2246822519;for(const c of key){hash=Math.imul(hash^c.charCodeAt(0),16777619);hash2=Math.imul(hash2^c.charCodeAt(0),3266489917);}const legacyId='legacy-'+(hash>>>0).toString(16)+(hash2>>>0).toString(16);
  const safe=(state,id)=>({...clean(state,'sheet'),characterId:id});
+ let cachedRaw,cachedRoster;
  function read(){
-  let raw;try{raw=JSON.parse(storage.getItem(key));}catch{}
+  let encoded;try{encoded=storage.getItem(key);}catch{}
+  if(cachedRoster&&encoded===cachedRaw)return cachedRoster;
+  let raw;try{raw=JSON.parse(encoded);}catch{}
+  let roster;
   if(raw?.rosterVersion===1&&Array.isArray(raw.characters)){
    const seen=new Set(),characters=raw.characters.filter(c=>c&&typeof c.id==='string'&&/^[\w-]{1,100}$/.test(c.id)&&!seen.has(c.id)&&seen.add(c.id)).slice(0,50).map(c=>({id:c.id,state:safe(c.state,c.id)}));
-   return {characters,activeCharacterId:characters.some(c=>c.id===raw.activeCharacterId)?raw.activeCharacterId:characters[0]?.id||null,receipts:Array.isArray(raw.characterReceipts)?raw.characterReceipts.slice(-30):[]};
+   roster={characters,activeCharacterId:characters.some(c=>c.id===raw.activeCharacterId)?raw.activeCharacterId:characters[0]?.id||null,receipts:Array.isArray(raw.characterReceipts)?raw.characterReceipts.slice(-30):[]};
   }
-  return {characters:[{id:legacyId,state:safe(raw||defaults('sheet'),legacyId)}],activeCharacterId:legacyId,receipts:[]};
+  roster??={characters:[{id:legacyId,state:safe(raw||defaults('sheet'),legacyId)}],activeCharacterId:legacyId,receipts:[]};
+  cachedRaw=encoded;cachedRoster=roster;return roster;
  }
  function write(roster){
   const active=roster.characters.find(c=>c.id===roster.activeCharacterId),before=storage.getItem(key);let previous;try{previous=JSON.parse(before);}catch{}
   if(before&&previous?.schemaVersion!==4&&!storage.getItem(key+':before-v4'))storage.setItem(key+':before-v4',before);
-  storage.setItem(key,JSON.stringify({...safe(active?.state||emptyCharacter(defaults),active?.id||null),rosterVersion:1,activeCharacterId:active?.id||null,characters:roster.characters,characterReceipts:roster.receipts}));
+  const encoded=JSON.stringify({...safe(active?.state||emptyCharacter(defaults),active?.id||null),rosterVersion:1,activeCharacterId:active?.id||null,characters:roster.characters,characterReceipts:roster.receipts});
+  if(encoded===before)return;
+  storage.setItem(key,encoded);cachedRaw=encoded;cachedRoster=roster;
   if(globalThis.dispatchEvent&&globalThis.CustomEvent){const event=new CustomEvent('legend-mist-store');Object.defineProperty(event,'key',{value:key});globalThis.dispatchEvent(event);}
  }
- function mutate(fn){const roster=read(),result=fn(roster);write(roster);return result;}
+ function mutate(fn){const roster=structuredClone(read()),result=fn(roster);write(roster);return structuredClone(result);}
  const api={
   legacyId,
   exists(){try{return storage.getItem(key)!=null;}catch{return false;}},
-  load(){const r=read();return r.characters.find(c=>c.id===r.activeCharacterId)?.state||safe(emptyCharacter(defaults),null);},
-  loadCharacter(id){return read().characters.find(c=>c.id===id)?.state||null;},
-  listCharacters(){return read().characters;},
+  load(){const r=read();return structuredClone(r.characters.find(c=>c.id===r.activeCharacterId)?.state||safe(emptyCharacter(defaults),null));},
+  loadCharacter(id){return structuredClone(read().characters.find(c=>c.id===id)?.state||null);},
+  listCharacters(){return structuredClone(read().characters);},
   activeId(){return read().activeCharacterId;},
   save(state){try{return mutate(r=>{const id=state.characterId||r.activeCharacterId,c=r.characters.find(c=>c.id===id);if(!c)throw Error('Персонаж больше не закреплён за вами.');c.state=safe(state,id);return true;});}catch{return false;}},
   saveCharacter(id,state){return api.save({...state,characterId:id});},

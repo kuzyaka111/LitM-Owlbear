@@ -28,8 +28,12 @@ export function collectActionSources(items=[],metadata={},owner,characterId){
  return {tags,statuses};
 }
 export function createActionSources(obr,report=console.error,characterId=()=>undefined){
- let items=[],metadata={},value=collectActionSources(),signature='',epoch=0,alive=true,offItems=()=>{},offMeta=()=>{},offReady=()=>{};const listeners=new Set();
- function publish(){const next=collectActionSources(items,metadata,obr.player.id,characterId()),stamp=JSON.stringify([[...next.tags],[...next.statuses]]);if(stamp===signature)return;signature=stamp;value=next;listeners.forEach(fn=>fn(value));}
+ let items=[],metadata={},value=collectActionSources(),signature='',inputSignature='',epoch=0,alive=true,offItems=()=>{},offMeta=()=>{},offReady=()=>{};const listeners=new Set();
+ function publish(){
+  const character=characterId(),roots=[];for(const item of items){const record=item.metadata?.[BOARD_KEY]||item.metadata?.[GM_KEY];if(record?.placed)roots.push([item.id,item.visible,record.rev||JSON.stringify(record)]);}
+  const input=JSON.stringify([character,roots,Object.entries(metadata).filter(([key])=>key.startsWith(ACTION_FEED))]);if(input===inputSignature)return;inputSignature=input;
+  const next=collectActionSources(items,metadata,obr.player.id,character),stamp=JSON.stringify([[...next.tags],[...next.statuses]]);if(stamp===signature)return;signature=stamp;value=next;listeners.forEach(fn=>fn(value));
+ }
  async function refresh(ready){const current=++epoch;offItems();offMeta();items=[];metadata={};publish();if(!ready||!alive)return;let itemRev=0,metaRev=0;offItems=obr.scene.items.onChange(next=>{if(current===epoch){itemRev++;items=next;publish();}});offMeta=obr.scene.onMetadataChange(next=>{if(current===epoch){metaRev++;metadata=next;publish();}});const a=itemRev,b=metaRev,[next,meta]=await Promise.all([obr.scene.items.getItems(),obr.scene.getMetadata()]);if(current!==epoch||!alive)return;if(a===itemRev)items=next;if(b===metaRev)metadata=meta;publish();}
  return {async start(){offReady=obr.scene.onReadyChange(ready=>void refresh(ready).catch(report));await refresh(await obr.scene.isReady());},get:()=>value,subscribe(fn){listeners.add(fn);fn(value);return()=>listeners.delete(fn);},dispose(){alive=false;++epoch;offReady();offItems();offMeta();listeners.clear();}};
 }

@@ -1,6 +1,6 @@
 import {publicObstacle,findObstacle,publicSceneEffect,findSceneEffect} from './gm-model.js';
 import {ACTION_FEED,gmActionFeed} from './action-sources.js';
-import {renderBoardGraphics,BOARD_GRAPHICS_VERSION} from './board-graphics.js';
+import {renderBoardGraphics,BOARD_GRAPHICS_VERSION} from './board-graphics-loader.js';
 import {makeBoardObjects} from './board-objects.js';
 import {reconcileBoardObjects,applyPaint} from './board-diff.js';
 export const GM_BOARD_KEY='io.github.kuzyaka111.legend-mist/gm-obstacle';

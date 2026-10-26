@@ -13,7 +13,7 @@ export function createGMCloud({client:getClient,localStore,storage,roomId,localS
  const snapshot=()=>({user:user?{id:user.id,email:user.email}:null,status,detail,dirty,conflict:!!conflict,ready});
  const emit=()=>{if(alive)for(const fn of statuses)fn(snapshot());};
  const publish=()=>{if(alive)for(const fn of documents)fn(clone(document));};
- const setStatus=(next,message='')=>{status=next;detail=message;emit();};
+ const setStatus=(next,message='')=>{if(status===next&&detail===message)return;status=next;detail=message;emit();};
  function cache(){storage.setItem(cacheKey(user.id),JSON.stringify({document,revision,dirty}));}
  function backup(value){storage.setItem(backupKey(user.id),JSON.stringify({document:cleanGM(value),savedAt:new Date().toISOString()}));}
  async function guard(){if(!alive||!await allowed())throw Error('Облачная панель доступна только ведущему.');}
@@ -26,7 +26,11 @@ export function createGMCloud({client:getClient,localStore,storage,roomId,localS
  async function readRemote({force=false}={}){
   await guard();if(!user||!repo)return;const current=epoch,id=user.id;
   try{
-   const row=await repo.read(id,roomId,abort.signal);if(!alive||epoch!==current)return;
+   let row,version;
+   if(!force&&revision!==null){version=await repo.version(id,roomId,abort.signal);if(!alive||epoch!==current)return;await guard();if(epoch!==current)return;
+    if(version&&Number(version.revision)===(conflict?.revision??revision)){if(conflict)setStatus('conflict',detail);else if(dirty){setStatus('pending');schedule();}else setStatus('saved');return;}
+   }
+   row=version===null?null:await repo.read(id,roomId,abort.signal);if(!alive||epoch!==current)return;
    await guard();if(epoch!==current)return;
    if(!row){if(revision!==null&&revision!==0){conflict={document:empty(),revision:0};setStatus('conflict','Облачная запись была изменена или удалена.');return;}revision=0;dirty=true;cache();schedule();setStatus('pending');return;}
    if(dirty){
@@ -63,7 +67,7 @@ export function createGMCloud({client:getClient,localStore,storage,roomId,localS
  const service={
   store:{
    load:()=>clone(document),exists:()=>user?true:localStore.exists?.(),
-   save(value){if(!alive)return false;document=cleanGM(value);++sequence;
+   save(value){if(!alive)return false;const next=cleanGM(value);if(user&&status!=='error'&&same(document,next)){if(dirty)schedule();return true;}document=next;++sequence;
     if(!user)return localStore.save(document);
     dirty=true;try{cache();}catch{setStatus('error','Не удалось сохранить местную копию. Освободите место в браузере.');return false;}
     if(conflict)setStatus('conflict',detail);else{setStatus('pending');schedule();}return true;

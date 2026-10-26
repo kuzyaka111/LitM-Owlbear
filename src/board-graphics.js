@@ -2,8 +2,9 @@ import {questionLetterCommands} from './question-letters.js';
 import {parse} from 'opentype.js';
 import {boardCardElement} from './board-render.js';
 import {boardDebug} from './board-debug.js';
+import {BOARD_GRAPHICS_VERSION,rectCommands} from './board-geometry.js';
+export {BOARD_GRAPHICS_VERSION,rectCommands} from './board-geometry.js';
 const FONT_NAMES={writing:'Bad Script',heading:'Alegreya SC'};
-export const BOARD_GRAPHICS_VERSION=14;
 let fontsPromise;
 export const boardAsset=(file,base=globalThis.location?.href)=>new URL('./board-assets/'+file,base).href;
 async function fonts(){
@@ -15,7 +16,6 @@ async function fonts(){
 export function fontCommands(path){
  return path.commands.map(c=>c.type==='M'?[0,c.x,c.y]:c.type==='L'?[1,c.x,c.y]:c.type==='Q'?[2,c.x1,c.y1,c.x,c.y]:c.type==='C'?[4,c.x1,c.y1,c.x2,c.y2,c.x,c.y]:[5]).map(c=>c.map((v,i)=>i?Math.round(v*100)/100:v));
 }
-export const rectCommands=(x,y,w,h)=>[[0,x,y],[1,x+w,y],[1,x+w,y+h],[1,x,y+h],[5]];
 function diamond(x,y,size,filled){
  const points=[[0,x,y-size/2],[1,x+size/2,y],[1,x,y+size/2],[1,x-size/2,y],[5]];
  return {commands:points,filled};

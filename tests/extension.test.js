@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import path from 'node:path';
 import { JSDOM } from 'jsdom';
 import { createGMTool, openGM, pageUrl, watchGMTool } from '../src/bridge.js';
 import { makeStore, clean } from '../src/storage.js';
@@ -104,5 +105,6 @@ test('manifest URLs retain the GitHub project path even when resolved from the o
       const resolved=new URL(url,base);resolved.search='';assert.equal(resolved.href, expected);
     }
   }
-  assert.deepEqual(m, JSON.parse(fs.readFileSync(new URL('../docs/manifest.json', import.meta.url))));
+  const builtManifest=process.env.LITM_BUILD_DIR?path.resolve(process.env.LITM_BUILD_DIR,'manifest.json'):new URL('../docs/manifest.json',import.meta.url);
+  assert.deepEqual(m, JSON.parse(fs.readFileSync(builtManifest)));
 });

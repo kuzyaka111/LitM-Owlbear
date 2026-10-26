@@ -20,6 +20,7 @@ export function createDetachedHost(obr,win,{storage=win.localStorage,bus=obr.roo
    if(packet.type==='command'){
     if(packet.command==='storage'){
      const {key,value}=packet.data;if(!allowedDetachedKey(key,scope(session.view))||value!==null&&typeof value!=='string')throw Error('Нет доступа к этой записи.');
+     if(storage.getItem(key)===value){respond(true);return;}
      if(value===null)storage.removeItem(key);else storage.setItem(key,value);
      const event=new win.CustomEvent('legend-mist-store');Object.defineProperty(event,'key',{value:key});win.dispatchEvent(event);respond(true);return;
     }

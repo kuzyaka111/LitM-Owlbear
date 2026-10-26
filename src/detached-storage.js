@@ -21,6 +21,7 @@ export function createDetachedStorage({initial,scope,request,cache,notify=()=>{}
  function persistDraft(){cache.setItem(cacheKey,JSON.stringify(Object.fromEntries(pending)));}
  function write(key,value){
   if(!allowedDetachedKey(key,scope))throw Error('Нет доступа к этой записи.');
+  if(!failed&&(values.get(key)??null)===value)return;
   const hadPending=pending.has(key),previous=pending.get(key);pending.set(key,value);try{persistDraft();}catch(error){if(!hadPending)pending.delete(key);else pending.set(key,previous);throw error;}
   if(value===null)values.delete(key);else values.set(key,value);
   queue=queue.catch(()=>{}).then(async()=>{try{await request('storage',{key,value});if(pending.get(key)===value){pending.delete(key);persistDraft();}failed=false;}catch(error){failed=true;report(error);throw error;}});void queue.catch(()=>{});

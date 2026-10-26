@@ -2,7 +2,8 @@ import {dressScroll} from './scroll-view.js';
 import {newNoteCard,newNoteSection,newNoteHeading,attachListEditor} from './notes-model.js';
 export function mountNotes(root,state,save,fit,tools){
  const {el,btn,dialog}=tools,host=root.querySelector('.mt-notes-cards');
- function layout(){host.querySelectorAll('.mt-note-text').forEach(input=>{if(input.offsetParent){input.style.height='0px';input.style.height=Math.max(100,input.scrollHeight)+'px';}});}
+ function resizeEditor(input){if(input.offsetParent){input.style.height='0px';input.style.height=Math.max(100,input.scrollHeight)+'px';}}
+ function layout(){host.querySelectorAll('.mt-note-text').forEach(resizeEditor);}
  function titleInput(value,label,onInput){const input=el('input','mt-note-title');input.value=value;input.placeholder=label;input.maxLength=120;input.setAttribute('aria-label',label);input.addEventListener('click',e=>e.stopPropagation());input.addEventListener('keydown',e=>e.stopPropagation());input.addEventListener('input',()=>{onInput(input.value);save();});return input;}
  function trackFold(details,item){details.open=!item.collapsed;details.addEventListener('toggle',()=>{if(!details.isConnected)return;const closed=!details.open;if(item.collapsed!==closed){item.collapsed=closed;save();}if(details.open)layout();});}
  function persist(){draw();save();fit();layout();}
@@ -11,7 +12,7 @@ export function mountNotes(root,state,save,fit,tools){
   form.append(el('p','',`Заметка «${card.title||'Без названия'}» будет удалена целиком, вместе со всеми заголовками, подзаголовками и текстом.`));
   form.append(btn('Отмена','mt-note-cancel',close),btn('Удалить заметку','mt-primary mt-confirm-delete-note',()=>{state.noteCards=state.noteCards.filter(x=>x!==card);if(card.sections.some(s=>s.id==='original-notes-body'||s.children.some(x=>x.id==='original-notes-body')))state.notes='';persist();close();}));
  });}
- function bodyEditor(section){const input=el('textarea','mt-note-text');input.value=section.text;input.maxLength=5000;input.rows=4;input.placeholder='Текст заметки…\n- Пункт списка';input.setAttribute('aria-label','Текст заметки');if(section.id==='original-notes-body')input.id='mt-notes-text';const update=()=>{section.text=input.value;if(section.id==='original-notes-body')state.notes=input.value;save();layout();};input.addEventListener('input',update);input.addEventListener('focus',layout);attachListEditor(input,update);return input;}
+ function bodyEditor(section){const input=el('textarea','mt-note-text');input.value=section.text;input.maxLength=5000;input.rows=4;input.placeholder='Текст заметки…\n- Пункт списка';input.setAttribute('aria-label','Текст заметки');if(section.id==='original-notes-body')input.id='mt-notes-text';const update=()=>{section.text=input.value;if(section.id==='original-notes-body')state.notes=input.value;save();resizeEditor(input);};input.addEventListener('input',update);input.addEventListener('focus',()=>resizeEditor(input));attachListEditor(input,update);return input;}
  function sectionNode(section,siblings,sub=false){
   const detail=el('details','mt-note-section'+(sub?' mt-note-subsection':' mt-note-top-section'));trackFold(detail,section);
   const summary=el('summary',sub?'mt-note-subheading':'mt-note-section-heading');summary.setAttribute('aria-label',sub?'Свернуть или развернуть подзаголовок':'Свернуть или развернуть заголовок');

@@ -9,6 +9,7 @@ export function getCloudClient(storage){
 }
 export function cloudRepository(client){
  return {
+  async version(user,room,signal){const {data,error}=await client.from('gm_panels').select('revision').eq('owner_id',user).eq('room_id',room).maybeSingle().abortSignal(signal);if(error)throw error;return data;},
   async read(user,room,signal){const {data,error}=await client.from('gm_panels').select('document,revision,updated_at').eq('owner_id',user).eq('room_id',room).maybeSingle().abortSignal(signal);if(error)throw error;return data;},
   async write(room,revision,document,signal){const {data,error}=await client.rpc('save_gm_panel',{p_room_id:room,p_expected_revision:revision,p_document:document}).abortSignal(signal);if(error)throw error;return Array.isArray(data)?data[0]:data;},
  };

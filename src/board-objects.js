@@ -1,6 +1,6 @@
 import sizes from './board-asset-sizes.js';
 import {BOARD_KEY} from './board-model.js';
-import {rectCommands} from './board-graphics.js';
+import {rectCommands} from './board-geometry.js';
 import {BOARD_PART,paintHash} from './board-diff.js';
 export {BOARD_PART} from './board-diff.js';
 export function makeBoardObjects({id=crypto.randomUUID(),record,plan,point,build,buildPath,gridDpi=150,existing}){

@@ -1,0 +1,1 @@
+var e=1.25;function t(e){let t=e.closest(`.mt-v4`)||e.querySelector(`.mt-v4`)||e;return Number.parseFloat(e.ownerDocument.defaultView.getComputedStyle(t).zoom)||1}export{t as n,e as t};

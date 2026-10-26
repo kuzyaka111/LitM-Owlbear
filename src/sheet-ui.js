@@ -46,7 +46,8 @@ export function mountSheet(root,state,save,actions) {
   const sharedView=()=>Object.assign({},shared,...pendingShared.map(write=>write.patch));
   const service=actions.fellowship;
   const report=error=>{const node=q('.mt-ui-message');node.hidden=false;node.textContent=error?.message||String(error);};
-  function localSave(){state.selected=[...selected];save();void actions.board?.syncCharacter?.(state.name).catch(report);}
+  let lastCharacterName=state.name;
+  function localSave(){state.selected=[...selected];save();if(state.name!==lastCharacterName){lastCharacterName=state.name;void actions.board?.syncCharacter?.(state.name).catch(error=>{lastCharacterName=null;report(error);});}}
   function allTags(){
     const tags=new Map();const addTheme=t=>{for(const kind of ['power','weakness'])t[kind].forEach((slot,i)=>{if(slot.text&&!slot.scratched)tags.set(tagKey(t,kind,i),{text:slot.text,kind,source:getBook(t.bookId).name});});};
     state.heroThemes.forEach(addTheme);if(sharedReady)addTheme(fellowshipTheme(sharedView()));
@@ -98,7 +99,7 @@ export function mountSheet(root,state,save,actions) {
   function mutateTheme(t,change){if(change.kind)t[change.kind][change.index][change.field]=change.value;else t[change.field]=change.value;}
   function themeContext(t,host,core=false,card){
     return {core,isSelected:key=>selected.has(key),select,report,expanded:expanded.get(t.id),onExpand:open=>{expanded.set(t.id,open);return fit();},
-      change:async change=>{mutateTheme(t,change);drawLocal(t,host,core,card);refreshSelection();localSave();},
+      change:async change=>{mutateTheme(t,change);const current=host.querySelector('[data-theme-id]');if(current?.updateTheme&&!host.querySelector('.mt-inline-editor')&&(change.kind||['improve','abandon','milestone','might'].includes(change.field)))current.updateTheme(t);else drawLocal(t,host,core,card);if(card)inventoryStamps.set(card.id,JSON.stringify(card));refreshSelection();localSave();},
       replace:core?async(bookId,reset)=>{const replacement=reset?makeTheme(bookId,t.id):{...structuredClone(t),bookId};const b=getBook(bookId);if(reset&&b.might!=='variable')replacement.might=b.might;Object.assign(t,replacement);drawLocal(t,host,core,card);refreshSelection();localSave();}:null,
       remove:card?()=>removeCard(card):null};
   }
@@ -149,18 +150,21 @@ export function mountSheet(root,state,save,actions) {
   drawCharacter();
 
   function removeCard(card){if(card.type==='bag'&&card.id==='original-backpack')return;state.cards=state.cards.filter(c=>c!==card);drawInventory();refreshSelection();localSave();fit();}
+  const inventoryHosts=new Map(),inventoryStamps=new Map();
   function drawInventory(){
-    q('.mt-inventory-host').replaceChildren();
-    for(const card of state.cards){const host=el('div','mt-card-slot');host.dataset.cardId=card.id;q('.mt-inventory-host').append(host);
+    const ids=new Set(state.cards.map(card=>card.id));for(const [id,host]of inventoryHosts)if(!ids.has(id)){host.remove();inventoryHosts.delete(id);inventoryStamps.delete(id);}
+    for(const card of state.cards){
+      if(card.type!=='theme')card.items=card.items.filter(item=>item.text.trim());
+      const stamp=JSON.stringify(card);let host=inventoryHosts.get(card.id);if(host&&inventoryStamps.get(card.id)===stamp)continue;
+      if(!host){host=el('div','mt-card-slot');host.dataset.cardId=card.id;inventoryHosts.set(card.id,host);q('.mt-inventory-host').append(host);}inventoryStamps.set(card.id,stamp);
       if(card.type==='theme'){drawLocal(card.theme,host,false,card);continue;}
-      card.items=card.items.filter(item=>item.text.trim());
       const primary=card.id==='original-backpack',article=el('article','mt-theme mt-backpack-card'+(primary?' mt-primary-backpack':' mt-storage-card')),head=el('div','mt-theme-head');
       if(primary)head.append(el('span','','Рюкзак'));
       else {const title=btn(card.title||'Хранилище','mt-storage-title',()=>{});title.title='Двойное нажатие — изменить название';title.addEventListener('dblclick',()=>inlineText(title,card.title,async value=>{card.title=value;drawInventory();localSave();},80,'Название хранилища'));head.append(title,btn('×','mt-remove-card',()=>removeCard(card),'Удалить хранилище '+card.title));}
       article.append(head);
       const items=el('div','mt-backpack-items');function itemRow(item){const row=el('div','mt-item-row mt-tag-row'+(item.scratched?' mt-scratched':''));const key=`card:${card.id}:${item.id}`;let timer;const text=btn(item.text,'mt-tag-text',()=>{});text.dataset.key=key;text.title=item.text;const edit=()=>inlineText(text,item.text,async value=>{item.text=value;drawInventory();refreshSelection();localSave();},160,'Тег рюкзака');text.addEventListener('click',e=>{if(e.detail===0){if(!item.scratched)select(key);return;}clearTimeout(timer);timer=setTimeout(()=>{if(text.isConnected&&!item.scratched)select(key);},230);});text.addEventListener('dblclick',()=>{clearTimeout(timer);edit();});row.append(text,scratchButton(item.scratched,()=>{item.scratched=!item.scratched;drawInventory();refreshSelection();localSave();},(item.scratched?'Восстановить ':'Зачеркнуть ')+item.text),btn('×','mt-remove-item',()=>{card.items=card.items.filter(x=>x!==item);drawInventory();refreshSelection();localSave();},'Удалить тег '+item.text));return row;}card.items.forEach(item=>items.append(itemRow(item)));article.append(items);
       appendAutoSlot(items,{fields:[{key:'text',label:'Новый тег рюкзака',max:160}],items:card.items,limit:50,create:()=>({id:makeId(),text:'',scratched:false}),save:localSave,refresh:refreshSelection,remove:item=>{card.items=card.items.filter(x=>x!==item);drawInventory();refreshSelection();localSave();},commit:(item,row)=>{row.replaceWith(itemRow(item));refreshSelection();},className:'mt-item-row mt-tag-row'});
-      host.append(dressScroll(article));
+      preserveReplace(host,dressScroll(article));
     }
     q('.mt-add-backpack').disabled=q('.mt-add-theme').disabled=state.cards.length>=30;
   }

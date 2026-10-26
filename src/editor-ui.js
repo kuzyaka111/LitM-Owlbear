@@ -102,8 +102,8 @@ export function renderTheme(theme, ctx, tools) {
   card.append(details);
   if(ctx.remove)head.append(btn('×','mt-delete-card',ctx.remove,'Удалить карточку'));
   if(ctx.busy)card.querySelectorAll('button,select').forEach(x=>x.disabled=true);
-  // Shared themes keep their live controls and running animations during room updates.
-  if(fellowship)card.updateTheme=(next,{disabled=false}={})=>{
+  // Keep live controls for scalar/tag updates; book changes still rebuild the card.
+  if(!story)card.updateTheme=(next,{disabled=false}={})=>{
     for(const kind of ['power','weakness'])theme[kind].forEach((slot,i)=>Object.assign(slot,next[kind][i]));
     for(const key of Object.keys(next))if(!['power','weakness'].includes(key))theme[key]=next[key];
     const setText=(node,value)=>{if(node&&node.textContent!==value)node.textContent=value;};

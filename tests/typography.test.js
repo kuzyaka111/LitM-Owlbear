@@ -20,7 +20,7 @@ test('both bundled font faces cover Russian text, question letters and rule numb
  }
 });
 
-test('every A–J outline retains the requested one-screen-pixel left adjustment',()=>{
+test('every A–J outline retains the restored optical centre without a manual horizontal shift',()=>{
  for(const char of 'ABCDEFGHIJ')for(const size of [20,30]){
   const rect={x:7,y:11,width:size,height:size},commands=questionLetterCommands(char,rect),path=new Path();
   for(const c of commands){if(c[0]===0)path.moveTo(c[1],c[2]);else if(c[0]===1)path.lineTo(c[1],c[2]);else if(c[0]===2)path.quadraticCurveTo(...c.slice(1));else if(c[0]===4)path.curveTo(...c.slice(1));else path.close();}

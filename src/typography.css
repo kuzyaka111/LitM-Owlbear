@@ -79,8 +79,8 @@
 #mist-table-design .mt-v4 .mt-relationship small,
 #mist-table-design .mt-v4 .mt-auto-slot.mt-relationship input[data-field="companion"]{font:400 12px/1.5 var(--font-writing)}
 #mist-table-design .mt-gm-dialog{font:400 16px/1.65 var(--font-writing);font-synthesis:none}
-#mist-table-design .mt-gm-dialog :is(h2,h3,button,select){font-family:var(--font-heading);font-weight:500;font-style:normal}
-#mist-table-design .mt-gm-dialog :is(input,textarea){font:400 16px/1.65 var(--font-writing)}
+#mist-table-design .mt-gm-v2 .mt-gm-dialog :is(h2,h3,button,select){font-family:var(--font-heading);font-weight:500;font-style:normal}
+#mist-table-design .mt-gm-v2 .mt-gm-dialog :is(input,textarea){font:400 16px/1.65 var(--font-writing)}
 
 /* Centre the ink, rather than the font's ascent box. Offsets use the bundled
    Alegreya SC Medium outlines at 12px and scale with the glyph size. */
@@ -96,3 +96,8 @@
 #mist-table-design .mt-v4 .mt-question[data-letter="H"]{--question-x:-.001em;--question-y:-.0175em}
 #mist-table-design .mt-v4 .mt-question[data-letter="I"]{--question-x:-.003em;--question-y:-.0175em}
 #mist-table-design .mt-v4 .mt-question[data-letter="J"]{--question-x:.011em;--question-y:-.0855em}
+
+/* GM row styles load later; keep their text on the same embedded faces. */
+#mist-table-design .mt-gm-v2 .mt-gm-dialog .mt-gm-obstacle-row :is(input,textarea),
+#mist-table-design .mt-gm-v2 .mt-gm-note-body textarea{font:400 16px/1.65 var(--font-writing)}
+#mist-table-design .mt-gm-v2 .mt-gm-dialog .mt-gm-obstacle-title input{font:500 25px/1.25 var(--font-heading)}

@@ -2,7 +2,7 @@ import {parse} from 'opentype.js';
 import {boardCardElement} from './board-render.js';
 import {boardDebug} from './board-debug.js';
 const FONT_NAMES={writing:'Bad Script',heading:'Alegreya SC'};
-export const BOARD_GRAPHICS_VERSION=9;
+export const BOARD_GRAPHICS_VERSION=10;
 let fontsPromise;
 export const boardAsset=(file,base=globalThis.location?.href)=>new URL('./board-assets/'+file,base).href;
 async function fonts(){
@@ -14,13 +14,17 @@ async function fonts(){
 export function fontCommands(path){
  return path.commands.map(c=>c.type==='M'?[0,c.x,c.y]:c.type==='L'?[1,c.x,c.y]:c.type==='Q'?[2,c.x1,c.y1,c.x,c.y]:c.type==='C'?[4,c.x1,c.y1,c.x2,c.y2,c.x,c.y]:[5]).map(c=>c.map((v,i)=>i?Math.round(v*100)/100:v));
 }
+export function centeredGlyphCommands(font,char,rect,size){
+ const box=font.getPath(char,0,0,size).getBoundingBox();
+ return fontCommands(font.getPath(char,rect.x+rect.width/2-(box.x1+box.x2)/2,rect.y+rect.height/2-(box.y1+box.y2)/2,size));
+}
 export const rectCommands=(x,y,w,h)=>[[0,x,y],[1,x+w,y],[1,x+w,y+h],[1,x,y+h],[5]];
 function diamond(x,y,size,filled){
  const points=[[0,x,y-size/2],[1,x+size/2,y],[1,x,y+size/2],[1,x-size/2,y],[5]];
  return {commands:points,filled};
 }
 export async function renderBoardGraphics(record){
- const typefaces=await fonts();await Promise.all(Object.values(FONT_NAMES).map(name=>document.fonts.load('400 15px "'+name+'"')));await document.fonts.ready;
+ const typefaces=await fonts();await Promise.all(Object.entries(FONT_NAMES).map(([key,name])=>document.fonts.load((key==='heading'?'500':'400')+' 15px "'+name+'"')));await document.fonts.ready;
  const host=boardCardElement(record);host.setAttribute('aria-hidden','true');document.body.append(host);
  try{
   for(const image of host.querySelectorAll('.mt-board-picture')){try{await image.decode();image.style.aspectRatio=image.naturalWidth+'/'+image.naturalHeight;}catch{throw Error('Не удалось загрузить изображение препятствия. Проверьте ссылку.');}}
@@ -58,7 +62,7 @@ export async function renderBoardGraphics(record){
   // Borders and question diamonds keep the layout's exact measured spacing.
   for(const node of shell.querySelectorAll('.mt-tag-row,.mt-improvement-row,.mt-status-mark,.mt-question')){
    const r=relative(node),css=style(node);if(!r.width||!r.height)continue;
-   if(node.matches('.mt-question')){path(diamond(r.x+r.width/2,r.y+r.height/2,14,false).commands,'#000000',0,'#a49167',.8);continue;}
+   if(node.matches('.mt-question')){path(diamond(r.x+r.width/2,r.y+r.height/2,(r.width-6)*Math.SQRT2,false).commands,'#000000',0,'#a49167',1);continue;}
    if(node.matches('.mt-status-mark'))path(rectCommands(r.x,r.y,r.width,r.height),'#000000',0,'#795d3a',.6);
    else if(parseFloat(css.borderBottomWidth)>0)path([[0,r.x,r.y+r.height],[1,r.x+r.width,r.y+r.height]],'#000000',0,'#ac916f',.25);
   }
@@ -70,6 +74,8 @@ export async function renderBoardGraphics(record){
    ctx.font=(css.fontWeight||'400')+' '+size+'px "'+FONT_NAMES[family]+'"';const ascent=ctx.measureText('Hg').fontBoundingBoxAscent||font.ascender/font.unitsPerEm*size;
    let offset=0;for(let char of textNode.textContent){
     const start=offset;offset+=char.length;if(/\s/.test(char))continue;
+    const question=node.closest('.mt-question');
+    if(question){path(centeredGlyphCommands(font,char,relative(question),size),fill,alpha,null,0,groupFor(node));continue;}
     const range=doc.createRange();range.setStart(textNode,start);range.setEnd(textNode,offset);const r=range.getBoundingClientRect();if(!r.width||!r.height)continue;
     const x=r.left-bounds.left,y=r.top-bounds.top;
     if(char==='◇'||char==='◆'){const d=diamond(x+r.width/2,y+r.height/2,size*.7,char==='◆');path(d.commands,fill,d.filled?alpha:0,d.filled?null:fill,d.filled?0:1.1,groupFor(node));continue;}

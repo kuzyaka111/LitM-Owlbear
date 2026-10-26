@@ -2,7 +2,7 @@
 #mist-table-design{--font-heading:'Alegreya SC',Georgia,serif;--font-writing:'Bad Script',cursive}
 #mist-table-design .mt-v4 .mt-tag-text,#mist-table-design .mt-v4 .mt-auto-slot.mt-item-row input,#mist-table-design .mt-v4 .mt-relationship button:nth-child(2),#mist-table-design .mt-v4 .mt-auto-slot.mt-relationship input[data-field="tag"]{font-family:var(--font-writing);font-size:15px;font-weight:400;font-style:normal;line-height:1.45}
 #mist-table-design .mt-v4 .mt-title-row .mt-tag-text{font-size:18px;line-height:1.2;padding:2px 3px}
-#mist-table-design .mt-v4 .mt-improvement-title{font:400 14px/1.6 var(--font-writing)}
+#mist-table-design .mt-v4 .mt-improvement-row .mt-improvement-title{font:400 14px/1.6 var(--font-writing)}
 #mist-table-design .mt-v4 .mt-quest-text{font:400 15px/1.4 var(--font-writing)}
 #mist-table-design .mt-v4 .mt-note-text,#mist-table-design .mt-v4 .mt-backpack-notes textarea{font:400 15px/24px var(--font-writing)}
 #mist-table-design .mt-v4 .mt-editor-name{font-family:var(--font-writing);line-height:1.5}
@@ -57,3 +57,42 @@
 #mist-table-design .mt-v4 .mt-quest-text{padding:0;min-height:36px;line-height:24px}
 #mist-table-design .mt-v4 .mt-promise{margin:0;min-height:36px;align-items:center}
 #mist-table-design .mt-v4 .mt-promise .mt-pip{height:36px;min-height:36px;padding:0;line-height:36px}
+
+/* Dialogs are siblings of the sheet: card-only selectors cannot style them. */
+#mist-table-design .mt-editor-dialog{font:400 16px/1.65 var(--font-writing);font-synthesis:none}
+#mist-table-design .mt-editor-dialog h2,
+#mist-table-design .mt-editor-dialog button,
+#mist-table-design .mt-editor-dialog select,
+#mist-table-design .mt-editor-dialog label{font-family:var(--font-heading);font-weight:500;font-style:normal}
+#mist-table-design .mt-editor-dialog button,
+#mist-table-design .mt-editor-dialog select,
+#mist-table-design .mt-editor-dialog label{font-size:14px;line-height:1.45}
+#mist-table-design .mt-editor-dialog .mt-dialog-close{font-size:26px;line-height:1}
+#mist-table-design .mt-editor-dialog :is(input,textarea){font:400 16px/1.65 var(--font-writing)}
+#mist-table-design .mt-editor-dialog .mt-source-note{font:500 12px/1.5 var(--font-heading)}
+#mist-table-design .mt-editor-dialog .mt-question-option{align-items:flex-start;font:400 16px/1.65 var(--font-writing)}
+#mist-table-design .mt-editor-dialog .mt-question-option strong{flex:0 0 20px;text-align:center;font:500 14px/26.4px var(--font-heading)}
+#mist-table-design .mt-editor-dialog .mt-question-option span{min-width:0;overflow-wrap:anywhere}
+#mist-table-design .mt-editor-dialog .mt-action-source-options button,
+#mist-table-design .mt-character-picker .mt-character-choice>button:first-child,
+#mist-table-design .mt-board-return-list button{font:400 16px/1.65 var(--font-writing)}
+#mist-table-design .mt-v4 .mt-relationship small,
+#mist-table-design .mt-v4 .mt-auto-slot.mt-relationship input[data-field="companion"]{font:400 12px/1.5 var(--font-writing)}
+#mist-table-design .mt-gm-dialog{font:400 16px/1.65 var(--font-writing);font-synthesis:none}
+#mist-table-design .mt-gm-dialog :is(h2,h3,button,select){font-family:var(--font-heading);font-weight:500;font-style:normal}
+#mist-table-design .mt-gm-dialog :is(input,textarea){font:400 16px/1.65 var(--font-writing)}
+
+/* Centre the ink, rather than the font's ascent box. Offsets use the bundled
+   Alegreya SC Medium outlines at 12px and scale with the glyph size. */
+#mist-table-design .mt-v4 .mt-question{display:grid;place-items:center;font:500 12px/20px var(--font-heading);text-align:center;font-synthesis:none}
+#mist-table-design .mt-v4 .mt-question span{display:block;min-width:0;padding:0;background:transparent;line-height:20px;transform:translate(var(--question-x,0em),var(--question-y,-.016em))}
+#mist-table-design .mt-v4 .mt-question[data-letter="A"]{--question-x:.002em;--question-y:-.0145em}
+#mist-table-design .mt-v4 .mt-question[data-letter="B"]{--question-x:-.0005em;--question-y:-.019em}
+#mist-table-design .mt-v4 .mt-question[data-letter="C"]{--question-x:.005em;--question-y:-.016em}
+#mist-table-design .mt-v4 .mt-question[data-letter="D"]{--question-x:-.0075em;--question-y:-.02em}
+#mist-table-design .mt-v4 .mt-question[data-letter="E"]{--question-x:0em;--question-y:-.015em}
+#mist-table-design .mt-v4 .mt-question[data-letter="F"]{--question-x:-.02em;--question-y:-.016em}
+#mist-table-design .mt-v4 .mt-question[data-letter="G"]{--question-x:.014em;--question-y:-.016em}
+#mist-table-design .mt-v4 .mt-question[data-letter="H"]{--question-x:-.001em;--question-y:-.0175em}
+#mist-table-design .mt-v4 .mt-question[data-letter="I"]{--question-x:-.003em;--question-y:-.0175em}
+#mist-table-design .mt-v4 .mt-question[data-letter="J"]{--question-x:.011em;--question-y:-.0855em}

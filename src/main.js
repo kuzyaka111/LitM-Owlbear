@@ -43,7 +43,7 @@ async function start(inOwlbear) {
   if(view==='gm'){disposeGM();disposeGM=()=>{};}
   const thisGeneration = ++generation;
   const role = inOwlbear ? await OBR.player.getRole() : 'PREVIEW';
-  if(view==='sheet')await Promise.all([scrollAssetsReady,document.fonts.load('400 15px "Bad Script"'),document.fonts.load('500 13px "Alegreya SC"')]);
+  await Promise.all([view==='sheet'?scrollAssetsReady:Promise.resolve(),document.fonts.load('400 15px "Bad Script"'),document.fonts.load('500 13px "Alegreya SC"')]);
   if (thisGeneration !== generation) return;
   renderedRole = role;
   if (view === 'gm' && role !== 'GM' && inOwlbear) { message('Эта панель доступна только ведущему комнаты.'); return; }

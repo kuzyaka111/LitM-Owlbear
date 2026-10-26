@@ -56,7 +56,7 @@ export function renderTheme(theme, ctx, tools) {
   function row(kind,index,isTitle=false) {
     const slot=theme[kind][index], key=tagKey(theme,kind,index), q=book[kind].find(x=>x.letter===slot.q);
     const r=el('div','mt-tag-row'+(isTitle?' mt-title-row':'')+(slot.scratched?' mt-scratched':''));r.dataset.kind=kind;r.dataset.index=String(index);
-    const letter=story?el('span','mt-story-diamond','◇'):btn('','mt-question',()=>question(kind,index),'Выбрать вопрос '+slot.q);if(!story){letter.append(el('span','',slot.q));letter.title=q?.text||'Выбрать вопрос';}
+    const letter=story?el('span','mt-story-diamond','◇'):btn('','mt-question',()=>question(kind,index),'Выбрать вопрос '+slot.q);if(!story){letter.dataset.letter=slot.q;letter.append(el('span','',slot.q));letter.title=q?.text||'Выбрать вопрос';}
     const edit=()=>inlineText(text,slot.text,value=>change({kind,index,field:'text',value}),160,isTitle?'Название темы':kind==='power'?'Тег силы':'Тег слабости');
     let pending;const text=btn(slot.text||(isTitle?'Название темы':'Пустой тег'),'mt-tag-text',e=>{});text.dataset.key=key;text.title=slot.text+'\nДвойное нажатие — изменить.';text.classList.toggle('mt-empty-tag',!slot.text);
     tagTexts.set(r,text);
@@ -113,7 +113,7 @@ export function renderTheme(theme, ctx, tools) {
       row.classList.toggle('mt-scratched',slot.scratched);
       if(text){setText(text,slot.text||(title?'Название темы':'Пустой тег'));text.classList.toggle('mt-empty-tag',!slot.text);text.title=slot.text+'\nДвойное нажатие — изменить.';text.setAttribute('aria-label',(title?'Название темы':kind==='power'?'Тег силы':'Тег слабости')+' '+index+': '+(slot.text||'пусто'));}
       scratch.disabled=disabled||!slot.text;scratch.setAttribute('aria-pressed',String(slot.scratched));scratch.setAttribute('aria-label',(slot.scratched?'Восстановить':'Зачеркнуть')+' '+(slot.text||'тег'));
-      if(letter){setText(letter.querySelector('span'),slot.q);letter.setAttribute('aria-label','Выбрать вопрос '+slot.q);letter.title=book[kind].find(q=>q.letter===slot.q)?.text||'Выбрать вопрос';}
+      if(letter){letter.dataset.letter=slot.q;setText(letter.querySelector('span'),slot.q);letter.setAttribute('aria-label','Выбрать вопрос '+slot.q);letter.title=book[kind].find(q=>q.letter===slot.q)?.text||'Выбрать вопрос';}
     });
     setText(questText,theme.quest||'Задать стремление');questText.title=theme.quest+'\nДвойной клик — изменить';
     card.querySelectorAll('[data-track]').forEach(group=>group.querySelectorAll('.mt-pip').forEach((button,i)=>{const active=i<theme[group.dataset.track];setText(button,active?'◆':'◇');button.setAttribute('aria-pressed',String(active));}));

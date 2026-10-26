@@ -1,3 +1,4 @@
+import {makeTheme} from '../src/theme-model.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {JSDOM} from 'jsdom';
@@ -71,4 +72,10 @@ test('deletion updates an already open sheet and never restores the deleted sour
  Object.assign(f.scene.items()[0].metadata[BOARD_KEY],{placed:false,deleted:true});f.scene.emit();
  assert.equal(sourceCard(f.state,'status:temporary'),null);assert(f.events.includes('redraw'));assert(f.events.includes('save'));
  f.scene.emit();assert.equal(sourceCard(f.state,'status:temporary'),null);f.transfer.dispose();
+});
+
+test('story themes on the field use brown styling without Might controls or labels, including saved colored themes',()=>{
+ const dom=new JSDOM(),doc=dom.window.document;
+ for(const might of ['origin','adventure','greatness']){const data=makeTheme('story','story');data.might=might;data.power[0].text='Путь домой';const before=structuredClone(data),node=boardCardElement({card:{type:'theme',data},source:'card:story',character:'Герой'},doc);assert(node.querySelector('.mt-story-theme'));assert.equal(node.querySelector('.mt-theme-card').hasAttribute('data-might'),false);assert.equal(node.querySelector('.mt-might,.mt-board-might'),null);assert(node.textContent.includes('Путь домой'));assert.deepEqual(data,before);}
+ dom.window.close();
 });

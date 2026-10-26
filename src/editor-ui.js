@@ -40,7 +40,7 @@ export function editorTools(root) {
 }
 export function renderTheme(theme, ctx, tools) {
   const {el,btn,dialog,inlineText,scratchButton}=tools, book=getBook(theme.bookId),story=theme.bookId==='story',fellowship=theme.bookId==='fellowship';
-  const card=el('article','mt-theme mt-theme-card');card.dataset.themeId=theme.id;card.dataset.might=theme.might;
+  const card=el('article','mt-theme mt-theme-card');card.dataset.themeId=theme.id;if(story)card.classList.add('mt-story-theme');else card.dataset.might=theme.might;
   if(ctx.core)card.classList.add('mt-hero-theme');
   if(fellowship){card.classList.add('mt-fellowship-theme');card.setAttribute('aria-label','Тема Братства');}
   const change = async patch => { await ctx.change(patch); };
@@ -49,7 +49,7 @@ export function renderTheme(theme, ctx, tools) {
   function question(kind,index) {
     const slot=theme[kind][index];
     dialog(kind==='power'?'Вопросы тегов силы':'Вопросы тегов слабости',(form,close,fail)=>{
-      form.append(el('p','mt-source-note',book.name+' · '+book.originalName+' · стр. '+book.page));
+      form.append(el('p','mt-source-note',book.name+' · стр. '+book.page));
       for(const q of book[kind]) {const b=btn('', 'mt-question-option', async()=>{try{await change({kind,index,field:'q',value:q.letter});close();}catch(e){fail(e.message);}});b.append(el('strong','',q.letter),el('span','',q.text));b.setAttribute('aria-pressed',String(q.letter===slot.q));form.append(b);}
     });
   }
@@ -70,14 +70,14 @@ export function renderTheme(theme, ctx, tools) {
     if(!ctx.replace)return;
     dialog('Темник',(form,close,fail)=>{
       const select=el('select');select.setAttribute('aria-label','Темник');
-      for(const b of themebooks.filter(b=>b.id!=='fellowship')){const o=el('option','',b.name+' · '+b.originalName+(b.might==='variable'?' (переменное Могущество)':''));o.value=b.id;o.selected=b.id===theme.bookId;select.append(o);}
+      for(const b of themebooks.filter(b=>b.id!=='fellowship')){const o=el('option','',b.name+(b.might==='variable'?' (переменное Могущество)':''));o.value=b.id;o.selected=b.id===theme.bookId;select.append(o);}
       const label=el('label','mt-reset-theme'),reset=el('input');reset.type='checkbox';label.append(reset,el('span','','Начать новую тему с пустыми тегами и стремлением'));
       const submit=el('button','mt-primary','Применить темник');submit.type='submit';form.append(select,label,el('p','mt-source-note','Без отметки сохраняются ваши записи.'),submit);
       form.addEventListener('submit',async()=>{try{await ctx.replace(select.value,reset.checked);close();}catch(e){fail(e.message);}});
     });
   },'Выбрать темник');bookButton.disabled=!ctx.replace;
   const might=el('select','mt-might');might.setAttribute('aria-label','Могущество темы');for(const [v,label]of Object.entries(mightNames)){const o=el('option','',label);o.value=v;o.selected=v===theme.might;might.append(o);}might.addEventListener('change',safely(()=>change({field:'might',value:might.value})));
-  head.append(fellowship?el('span','mt-fellowship-title',book.name):story?el('span','mt-story-type','Сюжетная тема'):bookButton,might);card.append(head,row('power',0,true));
+  head.append(fellowship?el('span','mt-fellowship-title',book.name):story?el('span','mt-story-type','Сюжетная тема'):bookButton);if(!story)head.append(might);card.append(head,row('power',0,true));
   const powers=el('div','mt-power-slots');powers.append(el('span','mt-tag-label','Теги Силы'));for(let i=1;i<7;i++)powers.append(row('power',i));
   const weaknesses=el('div','mt-weakness-slots');weaknesses.append(el('span','mt-tag-label','Теги Слабости'));for(let i=0;i<3;i++)weaknesses.append(row('weakness',i));card.append(powers,weaknesses);
   const quest=el('div','mt-quest');const questText=btn(theme.quest||'Задать стремление','mt-quest-text',()=>{});questText.title=theme.quest+'\nДвойной клик — изменить';const editQuest=()=>inlineText(questText,theme.quest,value=>change({field:'quest',value}),ctx.shared?400:1000,'Стремление');questText.addEventListener('dblclick',editQuest);quest.append(el('span','mt-tag-label','СТРЕМЛЕНИЕ'),questText);card.append(quest);
@@ -95,7 +95,7 @@ export function renderTheme(theme, ctx, tools) {
     for(const imp of options){const active=theme.improvements.includes(imp.id),r=el('div','mt-improvement-row'+(!active?' mt-inactive-improvement':''));
       r.dataset.improvementId=imp.id;
       const toggle=btn(active?'◆':'◇','mt-improvement-toggle',safely(()=>change({field:'improvements',value:theme.improvements.includes(imp.id)?theme.improvements.filter(x=>x!==imp.id):[...theme.improvements,imp.id]})),'Активировать '+imp.name);toggle.setAttribute('aria-pressed',String(active));
-      const title=btn(imp.name,'mt-improvement-title',()=>dialog(imp.name,form=>form.append(el('p','',imp.text),el('small','mt-source-note','The Hero · стр. '+imp.page))));title.title=imp.text;r.append(toggle,title);details.append(r);
+      const title=btn(imp.name,'mt-improvement-title',()=>dialog(imp.name,form=>form.append(el('p','',imp.text),el('small','mt-source-note','Герой · стр. '+imp.page))));title.title=imp.text;r.append(toggle,title);details.append(r);
     }
   }
   card.append(details);

@@ -18,7 +18,7 @@ export function boardCardElement(record,doc=document){
   for(const group of article.querySelectorAll('[data-track]'))group.querySelectorAll('.mt-pip').forEach((n,i)=>{mapped(n,group.dataset.track);n.dataset.boardValue=i+1;});
   article.querySelectorAll('.mt-improvement-toggle').forEach((n,i)=>mapped(n,d.bookId==='story'?'storyImprovements.'+i+'.active':'improvements:'+n.closest('[data-improvement-id]')?.dataset.improvementId));
   article.querySelectorAll('.mt-improvement-title').forEach((n,i)=>mapped(n,'storyImprovements.'+i+'.text'));
-  const select=article.querySelector('.mt-might');const label=el('span','mt-board-might',select.selectedOptions[0].textContent);select.replaceWith(label);
+  const select=article.querySelector('.mt-might');if(select){const label=el('span','mt-board-might',select.selectedOptions[0].textContent);select.replaceWith(label);}
  }else{
   const kind=record.card.type,cls=kind==='status'||kind==='scene-effect'?'mt-status-scroll':kind==='bag'?'mt-backpack-card':kind==='note'?'mt-notes-card':'mt-character-card';
   article=el('article','mt-theme '+cls);const head=el('div','mt-theme-head');article.append(head);

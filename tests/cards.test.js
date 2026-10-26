@@ -15,6 +15,13 @@ function ui(store = makeStore(storage(), { room: 'room', player: '1' }, 'sheet')
 }
 const settle = () => new Promise(resolve => setTimeout(resolve, 0));
 
+test('players rename their own storage by double click without GM actions or changes to another player sheet',async()=>{
+ const data=storage(),aStore=makeStore(data,{room:'room',player:'alice'},'sheet'),bStore=makeStore(data,{room:'room',player:'boris'},'sheet'),a=ui(aStore),b=ui(bStore);
+ a.root.querySelector('.mt-add-backpack').click();b.root.querySelector('.mt-add-backpack').click();const title=a.root.querySelector('.mt-storage-title');title.click();assert.equal(a.root.querySelector('.mt-inline-editor'),null);
+ title.dispatchEvent(new a.dom.window.MouseEvent('dblclick',{bubbles:true}));const input=a.root.querySelector('[aria-label="Название хранилища"]');assert(input);input.value='Припасы Алисы';input.dispatchEvent(a.event('blur'));await settle();
+ assert.equal(aStore.load().cards[1].title,'Припасы Алисы');assert.equal(bStore.load().cards[1].title,'Хранилище');const reopened=ui(aStore);assert.equal(reopened.root.querySelector('.mt-storage-title').textContent,'Припасы Алисы');a.dom.window.close();b.dom.window.close();reopened.dom.window.close();
+});
+
 test('selecting the last card keeps it in the row after the calculator resizes the host',async()=>{
  const dom=new JSDOM('<main></main>'),root=dom.window.document.querySelector('main'),pending=[];
  const store=makeStore(storage(),{room:'room',player:'1'},'sheet');
@@ -57,11 +64,11 @@ test('five tabs preserve notes and support keyboard navigation', () => {
   r.querySelector('#tab-settings').dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));assert.equal(r.querySelector('#tab-party').getAttribute('aria-selected'),'true');
 });
 
-test('every theme has all Might choices, fixed slots and editable questions', async () => {
+test('core themes retain Might choices while story themes keep fixed slots without Might selection', async () => {
   const {root:r,event,store}=ui();r.querySelector('.mt-add-theme').click();
   for(const card of r.querySelectorAll('.mt-theme-card')){
     assert.equal(card.querySelectorAll('[data-kind=power]').length,7);assert.equal(card.querySelectorAll('[data-kind=weakness]').length,3);
-    assert.deepEqual([...card.querySelector('.mt-might').options].map(o=>o.value),['origin','adventure','greatness']);
+    if(card.classList.contains('mt-story-theme'))assert.equal(card.querySelector('.mt-might'),null);else assert.deepEqual([...card.querySelector('.mt-might').options].map(o=>o.value),['origin','adventure','greatness']);
   }
   let c=r.querySelector('.mt-hero-theme');let select=c.querySelector('.mt-might');select.value='greatness';select.dispatchEvent(event('change'));await settle();assert.equal(store.load().heroThemes[0].might,'greatness');
   c=r.querySelector('.mt-hero-theme');c.querySelector('.mt-question').click();assert.equal(r.querySelectorAll('.mt-question-option').length,10);r.querySelectorAll('.mt-question-option')[9].click();await settle();assert.equal(store.load().heroThemes[0].power[0].q,'J');
@@ -157,7 +164,7 @@ test('manual action tags can be cleared without accumulating hidden entries',()=
 
 test('story themes lock type, edit on double click and preserve custom improvements',async()=>{
  const {root:r,event,store,dom}=ui();r.querySelector('.mt-add-theme').click();const card=()=>r.querySelector('.mt-inventory-host .mt-theme-card');
- assert.equal(card().querySelector('.mt-story-type').textContent,'Сюжетная тема');assert.equal(card().querySelector('.mt-book-picker'),null);assert.equal(card().querySelector('.mt-question'),null);
+ assert.equal(card().querySelector('.mt-story-type').textContent,'Сюжетная тема');assert(card().classList.contains('mt-story-theme'));assert.equal(card().hasAttribute('data-might'),false);assert.equal(card().querySelector('.mt-might'),null);assert.equal(card().querySelector('.mt-book-picker'),null);assert.equal(card().querySelector('.mt-question'),null);
  const title=card().querySelector('.mt-tag-text');title.click();assert.equal(r.querySelector('dialog'),null);title.dispatchEvent(new dom.window.MouseEvent('dblclick',{bubbles:true}));assert.equal(r.querySelector('dialog'),null);assert(r.querySelector('.mt-inline-editor'));r.querySelector('.mt-inline-editor').value='Путь домой';r.querySelector('.mt-inline-editor').dispatchEvent(event('blur'));await settle();
  assert.equal(card().querySelectorAll('.mt-improvement-row').length,5);card().querySelector('.mt-improvement-title').dispatchEvent(new dom.window.MouseEvent('dblclick',{bubbles:true}));r.querySelector('.mt-inline-editor').value='Дар леса';r.querySelector('.mt-inline-editor').dispatchEvent(event('blur'));await settle();card().querySelector('.mt-improvement-toggle').click();await settle();
  const t=store.load().cards.at(-1).theme;assert.equal(t.bookId,'story');assert.deepEqual(t.storyImprovements[0],{text:'Дар леса',active:true});assert.equal(t.power[0].text,'Путь домой');assert.equal(r.textContent.includes('✎'),false);

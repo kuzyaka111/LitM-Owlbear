@@ -27,6 +27,11 @@ test('failed placement leaves source data and scene unchanged; duplicates are re
  await assert.rejects(f.scene.place('theme:hero-0','Эрин',card,{x:0,y:0}),/Denied/);assert.equal(f.items.length,0);assert.deepEqual(f.store.load(),before);
  f.fail=false;await f.scene.place('theme:hero-0','Эрин',card,{x:0,y:0});await assert.rejects(f.scene.place('theme:hero-0','Эрин',card,{x:0,y:0}),/уже/);f.scene.dispose();
 });
+
+test('a PLAYER can rename an owned field storage and sync the name to the sheet, while another PLAYER cannot',async()=>{
+ const f=fixture(),state=f.store.load();state.cards.push({id:'storage',type:'bag',title:'Хранилище',items:[]});f.store.save(state);assert.equal(await f.obr.player.getRole(),'PLAYER');await f.scene.start();const item=await f.scene.place('card:storage',state.name,sourceCard(state,'card:storage'),{x:0,y:0});
+ await f.scene.edit(item.id,'title','Припасы');assert.equal(f.store.load().cards.find(c=>c.id==='storage').title,'Припасы');assert.equal(f.items[0].metadata[BOARD_KEY].card.data.title,'Припасы');f.obr.player.id='other';await assert.rejects(f.scene.edit(item.id,'title','Чужая правка'),/владелец/);assert.equal(f.items[0].metadata[BOARD_KEY].card.data.title,'Припасы');f.scene.dispose();
+});
 test('queued edits preserve other tag fields and unauthorized clients cannot return a card',async()=>{
  const f=fixture();await f.scene.start();const item=await f.scene.place('theme:hero-0','Эрин',sourceCard(f.store.load(),'theme:hero-0'),{x:0,y:0});
  await Promise.all([f.scene.edit(item.id,'power.1.text','Первый'),f.scene.edit(item.id,'power.2.text','Второй')]);

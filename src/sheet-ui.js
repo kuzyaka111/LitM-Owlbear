@@ -68,7 +68,7 @@ export function mountSheet(root,state,save,actions) {
     for(const kind of ['power','weakness']){
       const pending=actionLists[kind].sync([...chosenKeys].map(key=>[key,tags.get(key)]).filter(([,item])=>item?.kind===kind));if(pending)pendingRemovals.push(pending);
     }
-    q('.mt-clear').disabled=!selected.size&&!state.actionStatuses?.length;state.selected=[...selected];
+    state.selected=[...selected];
     const chosen=[...chosenKeys].map(key=>tags.get(key)).filter(Boolean);
     const base=chosen.reduce((n,t)=>n+(t.kind==='power'?1:-1),0)+statusResult.bonus;
     if(!chosen.length&&!statusResult.values.length){specialAction=null;rollModifier=0;q('.mt-roll-modifier').value='0';}
@@ -178,7 +178,6 @@ export function mountSheet(root,state,save,actions) {
   statusPanel=createActionStatuses(q('.mt-action-statuses'),state,getActionSources,()=>{refreshSelection();localSave();},tools);
   q('.mt-open-action').addEventListener('click',()=>{actionPinned=!actionPinned;refreshSelection();});
   function pickFieldTag(kind){dialog('Добавить тег с поля',(form,close)=>{const search=el('input');search.placeholder='Найти тег';search.setAttribute('aria-label','Найти тег с поля');const list=el('div','mt-action-source-options');function draw(){list.replaceChildren();for(const [key,item]of getActionSources().tags){if(item.forced||!item.text.toLowerCase().includes(search.value.toLowerCase()))continue;const add=btn(item.text,'',()=>{state.actionFieldKinds[key]=kind;selected.add(key);refreshSelection();localSave();close();});add.title=item.source;list.append(add);}if(!list.childElementCount)list.append(el('p','','На поле нет подходящих тегов.'));}search.addEventListener('input',draw);form.append(search,list);draw();});}
-  qa('.mt-add-action-tag').forEach(form=>{form.append(btn('С поля','mt-pick-field-tag',()=>pickFieldTag(form.dataset.kind),'Выбрать тег с поля: '+(form.dataset.kind==='power'?'сила':'слабость')));});
   qa('.mt-add-action-tag').forEach(form=>form.addEventListener('submit',e=>{e.preventDefault();const input=form.querySelector('input'),kind=form.dataset.kind;if(!input.value.trim()){pickFieldTag(kind);return;}if(input.value.trim()&&state.actionExtras[kind].length<30){const item={id:makeId(),text:input.value.trim()};state.actionExtras[kind].push(item);selected.add(`extra:${kind}:${item.id}`);input.value='';refreshSelection();localSave();}}));
   settingsCardCount=mountAnimationSettings(root,state,localSave,fit,motion,tools);
   dressScroll(q('.mt-settings-card'));
@@ -191,7 +190,7 @@ export function mountSheet(root,state,save,actions) {
   });
   qa('[data-special]').forEach(button=>button.addEventListener('click',()=>{specialAction=specialAction===button.dataset.special?null:button.dataset.special;refreshSelection();}));
   q('.mt-roll-modifier').addEventListener('input',e=>{rollModifier=Math.max(-99,Math.min(99,Math.trunc(Number(e.target.value)||0)));refreshSelection();});
-  q('.mt-clear').addEventListener('click',()=>{selected.clear();state.actionExtras={power:[],weakness:[]};refreshSelection();localSave();});
+  q('.mt-clear').addEventListener('click',()=>{selected.clear();statusPanel.clear();state.actionExtras={power:[],weakness:[]};state.actionFieldKinds={};specialAction=null;rollModifier=0;q('.mt-roll-modifier').value='0';refreshSelection();localSave();});
   q('.mt-close-sheet').addEventListener('click',()=>Promise.resolve().then(actions.close).catch(report));
   let switchSequence=0;
   function reveal(panel){const sequence=++switchSequence;motion.stop();panel.style.visibility='hidden';Promise.resolve(fit()).then(()=>new Promise(resolve=>{const win=root.ownerDocument.defaultView;if(win.requestAnimationFrame)win.requestAnimationFrame(()=>win.requestAnimationFrame(resolve));else resolve();})).then(()=>{if(sequence!==switchSequence)return;motion.play(panel);panel.style.visibility='';}).catch(error=>{if(sequence===switchSequence)panel.style.visibility='';report(error);});}

@@ -119,3 +119,8 @@ test('GM return menu is registered in the background and removed when its contro
 test('individual scene effects use plain sheet status typography and retain marks without directional color fills',()=>{
  const scene=newScene(),doc=new JSDOM().window.document;for(const effectKind of ['tags','statuses']){const row={...newObstacleRow(),kind:'numeric',name:'Проверка',direction:-1,marks:[false,true,false,false,true,false]};const node=boardCardElement({character:scene.name,card:{type:'scene-effect',data:{...row,effectKind}}},doc);assert.equal(node.querySelectorAll('.mt-obstacle-tag,.mt-direction--1').length,0);assert.equal(node.querySelector('.mt-status-name').textContent,'Проверка');assert.equal(node.querySelector('.mt-scene-effect-direction').textContent,'↓');assert.equal(node.querySelectorAll('.mt-status-mark.is-marked').length,effectKind==='statuses'?2:0);}
 });
+
+test('limits always remain GM-only, including legacy field projections, without changing source data',()=>{
+ const o=newObstacle();o.name='Страж';o.limits=[{...newObstacleRow(),name:'ТАЙНЫЙ ПРЕДЕЛ',value:'6',hidden:false},{...newObstacleRow(),name:'ДРУГОЙ ПРЕДЕЛ',value:'4',hidden:true}];o.tags=[{...newObstacleRow(),name:'Видимый тег'}];const before=structuredClone(o),p=publicObstacle(o);assert(!Object.hasOwn(p,'limits'));assert(!JSON.stringify(p).includes('ПРЕДЕЛ'));assert.deepEqual(o,before);
+ const doc=new JSDOM().window.document;for(const data of [p,{...p,limits:o.limits}]){const card=boardCardElement({character:'Препятствие',card:{type:'obstacle',data}},doc);assert(!card.textContent.includes('Пределы'));assert(!card.textContent.includes('ПРЕДЕЛ'));assert(card.textContent.includes('Видимый тег'));}doc.defaultView.close();
+});

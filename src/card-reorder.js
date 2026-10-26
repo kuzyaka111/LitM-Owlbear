@@ -71,7 +71,7 @@ export function createCardReorder(root,{getOrder,setOrder,beforeDrag=()=>{},tran
   if(e.button!==0||drag||e.target.closest('select,input,textarea,.mt-delete-card,.mt-remove-card,.mt-note-close,.mt-clear,.mt-status-flipping'))return;
   const head=e.target.closest('.mt-reorder-handle'),card=head?.closest('.mt-scroll-frame'),row=card?.closest('.mt-card-row');if(!row)return;
   const item=items(row).find(item=>item===card||item.contains(card));if(!item)return;
-  const rect=item.getBoundingClientRect();drag={head,item,row,pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,x:e.clientX,y:e.clientY,offset:{x:e.clientX-rect.left,y:e.clientY-(rect.top||0)},translation:{x:0,y:0},transform:item.style.transform,original:ordered(row),active:false};head.setPointerCapture?.(e.pointerId);
+  const rect=item.getBoundingClientRect();drag={head,item,row,pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,x:e.clientX,y:e.clientY,offset:{x:e.clientX-rect.left,y:e.clientY-(rect.top||0)},translation:{x:0,y:0},transform:item.style.transform,original:ordered(row),active:false};
   doc.addEventListener('pointermove',move,{passive:false});doc.addEventListener('pointerup',up);doc.addEventListener('pointercancel',cancelDrag);
  });
  root.addEventListener('click',e=>{if(suppress&&Date.now()<suppress.until&&suppress.head.contains(e.target)){suppress=null;e.preventDefault();e.stopImmediatePropagation();}},true);

@@ -33,6 +33,12 @@ test('Alt and arrow keys provide a keyboard alternative to header dragging',()=>
  assert.deepEqual(f.state.party,['card:b','card:a','card:c']);assert.equal(f.cards[0].dataset.cardId,'a');
 });
 
+test('a themebook click stays on its button; pointer capture starts only when the header actually moves',()=>{
+ const f=fixture(),head=f.cards[0].querySelector('header'),button=f.dom.window.document.createElement('button');button.className='mt-book-picker';head.append(button);const captures=[];let opened=0;head.setPointerCapture=id=>captures.push(id);button.addEventListener('click',()=>opened++);
+ f.pointer(button,'pointerdown',20);assert.deepEqual(captures,[]);f.pointer(f.dom.window.document,'pointerup',20);button.click();assert.equal(opened,1);assert.deepEqual(f.state.party,[]);
+ f.pointer(button,'pointerdown',20);f.pointer(f.dom.window.document,'pointermove',22);assert.deepEqual(captures,[]);f.pointer(f.dom.window.document,'pointermove',650);assert.deepEqual(captures,[1]);f.pointer(f.dom.window.document,'pointerup',650);button.click();assert.equal(opened,1);assert.deepEqual(f.state.party,['card:b','card:c','card:a']);f.dom.window.close();
+});
+
 test('stacked cards move vertically and across columns at 125 percent scale',()=>{
  const f=fixture([],true,1.25),head=f.cards[0].querySelector('header');
  f.pointer(head,'pointerdown',25,20);f.pointer(f.dom.window.document,'pointermove',25,270);f.pointer(f.dom.window.document,'pointerup',25,270);

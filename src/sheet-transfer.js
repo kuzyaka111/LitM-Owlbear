@@ -1,6 +1,6 @@
 import {boardDebug} from './board-debug.js';
 import {sourceCard,applySource,deleteSource} from './board-model.js';
-export function createSheetTransfer(root,state,save,{scene,resize,toScene,getShared,redraw,fit,report}){
+export function createSheetTransfer(root,state,save,{scene,resize,toScene,getShared,redraw,fit,report,allowDrag=true}){
  const doc=root.ownerDocument,win=doc.defaultView;let miniature=false,restoring=false,session=null,sequence=0,dimensions=null,disposed=false;
  const known=new Map();let visibleSources=null;
  const identify=node=>{
@@ -39,6 +39,7 @@ export function createSheetTransfer(root,state,save,{scene,resize,toScene,getSha
   }catch(error){if(session===s){cancel();report(error);}}return true;
  }
  function move(drag,e){
+  if(!allowDrag)return false;
   if(restoring)return true;
   if(miniature){
    if(inside(e)&&session?.armed!==false){disposeGhost(session);session=null;void restore().catch(report);return true;}

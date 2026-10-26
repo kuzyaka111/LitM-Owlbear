@@ -10,6 +10,9 @@ body[data-view=gm] #mist-table-design:not(.mt-board-stage){height:100dvh;display
 #mist-table-design .mt-gm-tabs,#mist-table-design .mt-gm-subtabs{display:flex;gap:4px;overflow-x:auto;padding:8px 12px;border-bottom:1px solid #c9b58d;scrollbar-width:thin;flex-shrink:0}
 #mist-table-design .mt-gm-tabs{z-index:3;background:#e2d4b6}
 #mist-table-design .mt-gm-tabs button{white-space:nowrap;flex-shrink:0}
+#mist-table-design .mt-gm-tabs{overflow:hidden}
+#mist-table-design .mt-gm-tab-buttons{display:flex;gap:4px;min-width:0;flex:1;overflow-x:auto;scrollbar-width:thin}
+#mist-table-design .mt-gm-window-actions{display:flex;gap:4px;flex:none;align-items:center}
 #mist-table-design .mt-gm-v2 button[aria-pressed=true]{background:#654831;color:#fff0d0;border-color:#654831}
 #mist-table-design .mt-gm-v2 .mt-gm-content{padding:18px 20px 32px;flex:1;min-height:0;overflow-y:auto}
 #mist-table-design .mt-gm-v2 h2,#mist-table-design .mt-gm-v2 h3{margin:0 0 10px;font-weight:500}

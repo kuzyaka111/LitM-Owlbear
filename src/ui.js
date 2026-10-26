@@ -1,6 +1,7 @@
 import {mountGM} from './gm-ui.js';
 import {openCharacterPicker} from './character-picker.js';
 import { mountSheet } from './sheet-ui.js';
+import {mountDetachedButton} from './detached-ui.js';
 
 function element(doc, type, className, text) {
   const el = doc.createElement(type);
@@ -35,5 +36,6 @@ export function mountUI(root, view, template, store, actions) {
     const gm=mountGM(root,state,save,actions);
     if(actions.cloud){const off=actions.cloud.subscribeDocument(next=>{for(const key of Object.keys(state))delete state[key];Object.assign(state,next);gm.refreshDocument();actions.obstaclesChanged?.();});actions.registerDispose?.(off);doc.defaultView.addEventListener('pagehide',off,{once:true});}
   }
+  mountDetachedButton(root,view,actions);
   return state;
 }

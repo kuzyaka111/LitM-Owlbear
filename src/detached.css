@@ -1,0 +1,8 @@
+body.mt-detached-page{margin:0;background:#242733!important}
+.mt-detached-bar,.mt-detached-recovery{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:36px;padding:5px 12px;box-sizing:border-box;background:#e2d4b6;color:#654831;font:500 14px/1.4 'Alegreya SC',Georgia,serif}
+.mt-detached-bar button,.mt-detached-recovery button{border:1px solid #a68c64;border-radius:3px;background:#654831;color:#fff0d0;font:inherit;padding:4px 10px;cursor:pointer}
+.mt-detached-page #mist-table-design{height:calc(100dvh - 36px)!important}
+.mt-detached-page #mist-table-design .mt-v4 .mt-scroll-frame{max-height:calc((100dvh - 36px)/1.25 - var(--toolbar-height,34px) - 44px)}
+#mist-table-design .mt-gm-v2 .mt-detached-button{padding:0 5px;min-width:28px;font-size:23px;align-self:center;background:transparent;border:0;color:#654831}
+#mist-table-design .mt-settings-list .mt-detached-button{white-space:normal;text-align:left}
+.mt-detached-recovery{background:#f5db9f;justify-content:flex-start}

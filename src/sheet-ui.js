@@ -208,7 +208,7 @@ export function mountSheet(root,state,save,actions) {
   qa('[role=tabpanel]').forEach(panel=>{const version=el('div','mt-sheet-version','v'+packageInfo.version);panel.querySelector('.mt-card-row').after(version);});
   dressScroll(q('.mt-action-card'),{extensionLabel:'Особые действия',onExpand:fit});refreshSelection();createScratchEffects(root);if(actions.actionSources){const off=actions.actionSources.subscribe(()=>refreshSelection());win.addEventListener('pagehide',off,{once:true});}
   let transfer;
-  if(actions.board)transfer=createSheetTransfer(root,state,save,{scene:actions.board,resize:actions.boardResize,toScene:actions.boardPoint,getShared:()=>sharedReady?sharedView():null,fit,report,
+  if(actions.board)transfer=createSheetTransfer(root,state,save,{scene:actions.board,resize:actions.boardResize,toScene:actions.boardPoint,getShared:()=>sharedReady?sharedView():null,fit,report,allowDrag:!actions.detached,
    redraw:key=>{if(key==='character')drawCharacter();else if(key.startsWith('card:'))drawInventory();else if(key.startsWith('theme:')){const t=state.heroThemes.find(t=>'theme:'+t.id===key),host=[...q('.mt-themes').children].find(h=>h.querySelector('[data-theme-id]')?.dataset.themeId===t?.id);if(t&&host)drawLocal(t,host,true);}else if(key.startsWith('status:'))layoutStatuses.draw();else if(key.startsWith('note:'))layoutNotes.draw();refreshSelection();}
   });
   if(actions.board){const offReturn=mountBoardReturn(root,actions.board,{fit,report});win.addEventListener('pagehide',offReturn,{once:true});}

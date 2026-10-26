@@ -1,9 +1,9 @@
 export function mountGMCloud(root,cloud){
- const doc=root.ownerDocument,win=doc.defaultView,nav=root.querySelector('.mt-gm-tabs');let dialog=null,working=false,notice='';
+ const doc=root.ownerDocument,win=doc.defaultView;let dialog=null,working=false,notice='';
  const el=(tag,cls='',text)=>{const n=doc.createElement(tag);n.className=cls;if(text!==undefined)n.textContent=text;return n;};
  const button=(text,fn,label=text)=>{const n=el('button','',text);n.type='button';n.setAttribute('aria-label',label);n.addEventListener('click',fn);return n;};
  const labels={local:'Войти в облако',connecting:'Подключение…',pending:'Ожидает отправки',saving:'Сохраняем…',saved:'Всё сохранено в облаке',offline:'Нет связи — местная копия сохранена',conflict:'Нужно выбрать версию',error:'Ошибка сохранения'};
- const trigger=button('☁',open,'Облачное сохранение');trigger.className='mt-cloud-toggle';nav.insertBefore(trigger,root.querySelector('.mt-close-gm'));
+ const trigger=button('☁',open,'Облачное сохранение');trigger.className='mt-cloud-toggle';root.querySelector('.mt-close-gm').before(trigger);
  const redirect=()=>new URL('./cloud-auth.html',win.location.href).href;
  function close(){dialog?.close?.();dialog?.remove();dialog=null;notice='';}
  async function run(fn){if(working)return;working=true;notice='';draw();try{await fn();}catch(error){notice=error.message||'Не удалось подключиться. Попробуйте ещё раз.';}finally{working=false;draw();}}

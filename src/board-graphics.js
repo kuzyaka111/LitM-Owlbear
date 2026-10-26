@@ -1,8 +1,9 @@
+import {questionLetterCommands} from './question-letters.js';
 import {parse} from 'opentype.js';
 import {boardCardElement} from './board-render.js';
 import {boardDebug} from './board-debug.js';
 const FONT_NAMES={writing:'Bad Script',heading:'Alegreya SC'};
-export const BOARD_GRAPHICS_VERSION=10;
+export const BOARD_GRAPHICS_VERSION=11;
 let fontsPromise;
 export const boardAsset=(file,base=globalThis.location?.href)=>new URL('./board-assets/'+file,base).href;
 async function fonts(){
@@ -13,10 +14,6 @@ async function fonts(){
 }
 export function fontCommands(path){
  return path.commands.map(c=>c.type==='M'?[0,c.x,c.y]:c.type==='L'?[1,c.x,c.y]:c.type==='Q'?[2,c.x1,c.y1,c.x,c.y]:c.type==='C'?[4,c.x1,c.y1,c.x2,c.y2,c.x,c.y]:[5]).map(c=>c.map((v,i)=>i?Math.round(v*100)/100:v));
-}
-export function centeredGlyphCommands(font,char,rect,size){
- const box=font.getPath(char,0,0,size).getBoundingBox();
- return fontCommands(font.getPath(char,rect.x+rect.width/2-(box.x1+box.x2)/2,rect.y+rect.height/2-(box.y1+box.y2)/2,size));
 }
 export const rectCommands=(x,y,w,h)=>[[0,x,y],[1,x+w,y],[1,x+w,y+h],[1,x,y+h],[5]];
 function diamond(x,y,size,filled){
@@ -75,7 +72,7 @@ export async function renderBoardGraphics(record){
    let offset=0;for(let char of textNode.textContent){
     const start=offset;offset+=char.length;if(/\s/.test(char))continue;
     const question=node.closest('.mt-question');
-    if(question){path(centeredGlyphCommands(font,char,relative(question),size),fill,alpha,null,0,groupFor(node));continue;}
+    if(question){path(questionLetterCommands(char,relative(question)),fill,alpha,null,0,groupFor(node));continue;}
     const range=doc.createRange();range.setStart(textNode,start);range.setEnd(textNode,offset);const r=range.getBoundingClientRect();if(!r.width||!r.height)continue;
     const x=r.left-bounds.left,y=r.top-bounds.top;
     if(char==='◇'||char==='◆'){const d=diamond(x+r.width/2,y+r.height/2,size*.7,char==='◆');path(d.commands,fill,d.filled?alpha:0,d.filled?null:fill,d.filled?0:1.1,groupFor(node));continue;}

@@ -25,6 +25,8 @@ import sheetTemplate from './sheet.html?raw';
 import gmTemplate from './gm.html?raw';
 import { MODAL_ID, SHEET_POPOVER_ID, sheetBounds, openSheet, watchSheetAction } from './bridge.js';
 import { makeStore } from './storage.js';
+import {createGMCloud} from './gm-cloud.js';
+import {getCloudClient} from './cloud-client.js';
 import {createSheetDirectory} from './player-sheets.js';
 import { mountUI } from './ui.js';
 import { makeFellowshipStore, makePreviewFellowship } from './fellowship.js';
@@ -51,7 +53,7 @@ async function start(inOwlbear) {
   let storage;
   try { storage = window.localStorage; } catch { storage = { getItem: () => null, setItem: () => { throw new Error('Локальное хранилище недоступно'); } }; }
   const close = async () => {
-    if(view==='gm')await gmBoard?.flush();
+    if(view==='gm'){await gmBoard?.flush();await cloud?.flush().catch(()=>{});}
     if (inOwlbear) { if (view === 'gm') await OBR.modal.close(MODAL_ID); else await OBR.popover.close(SHEET_POPOVER_ID); }
     else message('Предпросмотр закрыт. Обнови страницу, чтобы открыть его снова.');
   };
@@ -59,14 +61,17 @@ async function start(inOwlbear) {
   if (fellowship) window.addEventListener('pagehide', () => fellowship.dispose(), { once: true });
   let resizeQueue = Promise.resolve(),miniature=false;
   let reloading=false;const reloadSheet=()=>{if(!reloading){reloading=true;window.location.reload();}};
-  const store=makeStore(storage,scope,view);
+  const localStore=makeStore(storage,scope,view);
+  const cloud=view==='gm'?createGMCloud({client:getCloudClient,localStore,storage,roomId:scope.room,localScope:scope.player,allowed:async()=>!inOwlbear||await OBR.player.getRole()==='GM',deferRemote:()=>!!root.querySelector('input:focus,textarea:focus,select:focus')}):null;
+  if(cloud){disposeGM=()=>cloud.dispose();await cloud.start();if(thisGeneration!==generation){cloud.dispose();return;}}
+  const store=cloud?.store||localStore;
   const playerSheets=inOwlbear&&view==='gm'?createSheetDirectory(OBR,storage,{onTaken:async character=>{
     if(await OBR.player.getRole()!=='GM')throw Error('Действие доступно только ведущему.');
     if(!await OBR.scene.isReady())return;
     const items=await OBR.scene.items.getItems(),roots=items.filter(i=>{const r=i.metadata?.[BOARD_KEY];return r?.owner===character.from&&r.source!=='fellowship'&&(r.characterId===character.id||!r.characterId&&character.id.startsWith('legacy-'));});
     const ids=roots.flatMap(i=>[i.id,...(i.metadata[BOARD_KEY].parts||[])]);if(ids.length)await OBR.scene.items.deleteItems(ids);
   }}):null;
-  const releaseSheets=()=>{playerSheets?.dispose();playerSheets?.fellowship.dispose();};
+  const releaseSheets=()=>{playerSheets?.dispose();playerSheets?.fellowship.dispose();cloud?.dispose();};
   if(playerSheets){playerSheets.fellowship=makeFellowshipStore(OBR.room);disposeGM=releaseSheets;await playerSheets.fellowship.start();if(thisGeneration!==generation){releaseSheets();return;}await playerSheets.start();if(thisGeneration!==generation){releaseSheets();return;}}
   const actionSources=inOwlbear&&view==='sheet'?createActionSources(OBR,error=>{const node=root.querySelector('.mt-ui-message');if(node){node.hidden=false;node.textContent=error.message;}else console.error(error);},()=>store.activeId?.()):null;
   if(actionSources)await actionSources.start();
@@ -78,7 +83,7 @@ async function start(inOwlbear) {
   if(view==='sheet'&&store.activeId){const active=store.activeId();const off=store.subscribe(()=>{if(store.activeId()!==active)reloadSheet();});window.addEventListener('pagehide',off,{once:true});}
   mountUI(root, view, view === 'gm' ? gmTemplate : sheetTemplate, store, {
     characters:view==='sheet'?store:null,reloadSheet,
-    close, fellowship, fitWindow, preview: !inOwlbear,board,actionSources,playerSheets,
+    close, fellowship, fitWindow, preview: !inOwlbear,board,actionSources,playerSheets,cloud,
     registerDispose:fn=>{const before=disposeGM;disposeGM=()=>{before();fn();};},
     placeObstacle:gmBoard?obstacle=>gmBoard.place(obstacle):null,
     placeSceneEffect:gmBoard?effect=>gmBoard.place(effect):null,
@@ -91,6 +96,7 @@ async function start(inOwlbear) {
   if(board)window.addEventListener('pagehide',()=>board.dispose(),{once:true});
   if(actionSources)window.addEventListener('pagehide',()=>actionSources.dispose(),{once:true});
   if(gmBoard)window.addEventListener('pagehide',()=>gmBoard.dispose(),{once:true});
+  if(cloud){const refresh=()=>void cloud.refresh().catch(()=>{});window.addEventListener('online',refresh);window.addEventListener('focus',refresh);window.addEventListener('pagehide',()=>{window.removeEventListener('online',refresh);window.removeEventListener('focus',refresh);cloud.dispose();},{once:true});}
   if(playerSheets)window.addEventListener('pagehide',()=>{playerSheets.dispose();playerSheets.fellowship.dispose();},{once:true});
   createIcons({ icons: { Feather, X, UserRound, Sprout, BookOpen, ArrowUpRight } });
   if (!inOwlbear) {

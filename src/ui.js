@@ -19,24 +19,21 @@ export function mountUI(root, view, template, store, actions) {
     root.replaceChildren();const panel=element(doc,'section','mt-empty-characters'),title=element(doc,'h2','','Персонаж не выбран'),choose=element(doc,'button','','Выбрать'),close=element(doc,'button','','Закрыть лист');
     choose.addEventListener('click',()=>openCharacterPicker(root,store,actions.reloadSheet));close.addEventListener('click',actions.close);panel.append(title,element(doc,'p','','Создайте персонажа или дождитесь, пока ведущий выдаст его вам.'),choose,close);root.append(panel);return state;
   }
-  const normalNote = view === 'sheet' && actions.preview ? 'Предпросмотр · все данные здесь сохраняются только на этом устройстве.' : view === 'sheet' ? 'Личный лист сохраняется на этом устройстве. Братство — общее для комнаты.' : 'Панель ведущего · заметки сохраняются только на этом устройстве.';
-  const note = element(doc, 'div', 'mt-prototype-note', normalNote);
-  const info = root.querySelector('.mt-storage-info');
-  if(view!=='sheet'){if (info) info.append(note); else root.prepend(note);}
   function save() {
     const saved = store.save(state);
     if(view==='sheet'){if(!saved){const error=q('.mt-ui-message');error.hidden=false;error.textContent='Не удалось сохранить изменения на этом устройстве.';}return;}
     q('.mt-save-state').textContent = saved ? 'Сохранено' : 'Не сохранено';
-    note.classList.toggle('mt-error', !saved);
-    note.textContent = saved ? normalNote : 'Браузер не разрешил сохранение. После закрытия окна изменения могут потеряться.';
+    const error=q('.mt-gm-message');
+    if(!saved){error.hidden=false;error.dataset.storageError='true';error.textContent='Не удалось сохранить изменения. После закрытия окна они могут потеряться.';}
+    else if(error.dataset.storageError==='true'){error.hidden=true;error.textContent='';delete error.dataset.storageError;}
     return saved;
   }
-  function run(action) { Promise.resolve().then(action).catch(() => { note.textContent = 'Не удалось выполнить действие. Попробуй открыть окно снова.'; note.classList.add('mt-error'); }); }
 
   if (view === 'sheet') {
     mountSheet(root, state, save, actions);
   } else {
-    mountGM(root,state,save,actions);
+    const gm=mountGM(root,state,save,actions);
+    if(actions.cloud){const off=actions.cloud.subscribeDocument(next=>{for(const key of Object.keys(state))delete state[key];Object.assign(state,next);gm.refreshDocument();actions.obstaclesChanged?.();});actions.registerDispose?.(off);doc.defaultView.addEventListener('pagehide',off,{once:true});}
   }
   return state;
 }

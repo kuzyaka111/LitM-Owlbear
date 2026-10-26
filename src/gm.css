@@ -1,14 +1,12 @@
 body[data-view=gm]{overflow:hidden}
 body[data-view=gm] #mist-table-design:not(.mt-board-stage){height:100dvh;display:flex;flex-direction:column;overflow:hidden}
 #mist-table-design .mt-gm-v2{color:#3e3328;background:#eee4cf;min-height:0;flex:1;display:flex;flex-direction:column;overflow:hidden;font:15px/1.5 var(--font-heading,'Alegreya SC'),serif}
-body[data-view=gm] #mist-table-design>.mt-prototype-note{flex-shrink:0}
 #mist-table-design .mt-gm-v2 *{box-sizing:border-box}
 #mist-table-design .mt-gm-v2 button{border:1px solid #b5a17a;border-radius:3px;background:#f5ecd9;color:#44382a;padding:7px 10px;font:inherit;min-height:34px}
 #mist-table-design .mt-gm-v2 button:hover{background:#e4d3af}
 #mist-table-design .mt-gm-v2 button:focus-visible,#mist-table-design .mt-gm-v2 input:focus-visible,#mist-table-design .mt-gm-v2 textarea:focus-visible{outline:2px solid #8c6238;outline-offset:2px}
-#mist-table-design .mt-gm-v2 .mt-windowbar{position:sticky;top:0;z-index:4;display:flex;align-items:center;gap:12px;padding:10px 16px;background:#493322;color:#f7e9cb}
-#mist-table-design .mt-gm-v2 .mt-windowbar>span:first-child{flex:1;font-size:17px}
-#mist-table-design .mt-gm-v2 .mt-close-gm{background:transparent;color:#f7e9cb;border:0;font-size:25px}
+#mist-table-design .mt-gm-v2 .mt-close-gm{margin-left:auto;align-self:center;flex-shrink:0;min-width:28px;padding:0 5px;background:transparent;color:#654831;border:0;font-size:25px;line-height:1}
+#mist-table-design .mt-gm-v2 .mt-save-announcement{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 #mist-table-design .mt-gm-tabs,#mist-table-design .mt-gm-subtabs{display:flex;gap:4px;overflow-x:auto;padding:8px 12px;border-bottom:1px solid #c9b58d;scrollbar-width:thin;flex-shrink:0}
 #mist-table-design .mt-gm-tabs{z-index:3;background:#e2d4b6}
 #mist-table-design .mt-gm-tabs button{white-space:nowrap;flex-shrink:0}
@@ -140,3 +138,14 @@ body[data-view=gm] #mist-table-design>.mt-prototype-note{flex-shrink:0}
 #mist-table-design .mt-character-picker button:not(.mt-dialog-close){background:#654831;color:#fff0d0;border:1px solid #795b40;border-radius:3px;padding:7px 10px;white-space:nowrap}
 #mist-table-design .mt-character-picker button:not(.mt-dialog-close):hover{background:#7a573c}
 #mist-table-design .mt-character-picker .mt-character-choice>button[aria-pressed=true]{background:#4b3425}
+
+#mist-table-design .mt-gm-v2 .mt-cloud-toggle{padding:0 5px;min-width:28px;font-size:21px;align-self:center;background:transparent;border:0;color:#654831}
+#mist-table-design .mt-cloud-toggle[data-cloud-status=offline],#mist-table-design .mt-cloud-toggle[data-cloud-status=conflict],#mist-table-design .mt-cloud-toggle[data-cloud-status=error]{color:#a64e2f}
+#mist-table-design .mt-cloud-toggle[data-cloud-status=saved]{color:#41634a}
+#mist-table-design .mt-cloud-dialog{max-width:calc(100% - 24px);width:500px}
+#mist-table-design .mt-cloud-dialog form{display:flex;flex-direction:column;gap:10px}
+#mist-table-design .mt-cloud-dialog input{width:100%;box-sizing:border-box;padding:9px;background:#fff8e7;border:1px solid #c8b894;font:inherit}
+#mist-table-design .mt-cloud-dialog button:not(.mt-dialog-close){background:#654831;color:#fff0d0;border:0;border-radius:3px;padding:8px 12px;margin:4px 6px 4px 0}
+#mist-table-design .mt-cloud-dialog button:disabled{opacity:.5}
+#mist-table-design .mt-cloud-account{font-weight:bold;overflow-wrap:anywhere}
+#mist-table-design .mt-cloud-detail,#mist-table-design .mt-cloud-notice{font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}

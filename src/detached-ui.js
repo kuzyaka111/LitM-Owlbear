@@ -1,7 +1,7 @@
 export function mountDetachedButton(root,view,actions){
  if(!actions.openDetached)return;
  const doc=root.ownerDocument,button=doc.createElement('button'),detached=actions.detached;
- button.type='button';button.className=view==='gm'?'mt-detached-button mt-icon':'mt-setting mt-detached-button';
+ button.type='button';button.className=view==='gm'?'mt-detached-button':'mt-setting mt-detached-button';
  button.textContent=view==='gm'?(detached?'↙ Вернуть':'↗ В отдельную вкладку'):(detached?'Вернуть в Owlbear':'Открыть в отдельной вкладке');
  button.title=button.getAttribute('aria-label')||(detached?'Вернуть в Owlbear':'Открыть в отдельной вкладке');button.setAttribute('aria-label',button.title);
  button.addEventListener('click',()=>{try{Promise.resolve(actions.openDetached()).catch(report);}catch(error){report(error);}});

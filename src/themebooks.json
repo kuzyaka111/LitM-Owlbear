@@ -1,6 +1,6 @@
 {
-  "source": "Legend in the Mist, Volume I: The Hero (2025), supplied by the user",
-  "language": "en",
+  "source": "Легенда в Тумане (Legend in the Mist), том I: «Герой» (The Hero, 2025); источник предоставлен пользователем",
+  "language": "ru",
   "themebooks": [
     {
       "id": "circumstance",
@@ -11,92 +11,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What Circumstance do you find yourself in?"
+          "text": "В каких обстоятельствах вы оказались?"
         },
         {
           "letter": "B",
-          "text": "What tools or trappings of your position or station do you carry?"
+          "text": "Какие инструменты или атрибуты вашего положения вы носите с собой?"
         },
         {
           "letter": "C",
-          "text": "Who can you call upon or relate to thanks to your Circumstance?"
+          "text": "К кому вы можете обратиться за помощью или с кем найти общий язык благодаря вашим обстоятельствам?"
         },
         {
           "letter": "D",
-          "text": "What social skills have you developed as part of your Circumstance?"
+          "text": "Какие навыки общения вы развили благодаря вашим обстоятельствам?"
         },
         {
           "letter": "E",
-          "text": "How can you exploit your Circumstance to get out of trouble?"
+          "text": "Как вы можете воспользоваться вашими обстоятельствами, чтобы выбраться из неприятностей?"
         },
         {
           "letter": "F",
-          "text": "Where do you go to be with others of similar social status?"
+          "text": "Куда вы отправляетесь, чтобы побыть среди людей схожего общественного положения?"
         },
         {
           "letter": "G",
-          "text": "What special right or privilege comes with your Circumstance?"
+          "text": "Какое особое право или привилегию дают вам ваши обстоятельства?"
         },
         {
           "letter": "H",
-          "text": "What knowledge or knack is common to people in your position?"
+          "text": "Какие знания или сноровка свойственны людям в вашем положении?"
         },
         {
           "letter": "I",
-          "text": "How have you learned to overcome your Circumstances?"
+          "text": "Как вы научились преодолевать ваши обстоятельства?"
         },
         {
           "letter": "J",
-          "text": "What is the motto or creed you’ve adopted?"
+          "text": "Какой девиз или убеждение вы приняли для себя?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What’s the biggest challenge you face due to your unique position?"
+          "text": "Какую главную трудность создаёт ваше особое положение?"
         },
         {
           "letter": "B",
-          "text": "What aspect of your Circumstance do others scorn, shun, or detest?"
+          "text": "Какую сторону ваших обстоятельств окружающие презирают, избегают или ненавидят?"
         },
         {
           "letter": "C",
-          "text": "What kinds of places or situations are off limits to you?"
+          "text": "Какие места или ситуации для вас недоступны?"
         },
         {
           "letter": "D",
-          "text": "How do others commonly mistreat you?"
+          "text": "Как окружающие обычно притесняют вас?"
         }
       ],
       "improvements": [
         {
           "id": "circumstance-1",
-          "name": "Comfort Zone",
-          "text": "When you camp or sojourn in the environment of your Circumstance, you may recover one scratched power tag in addition to any other benefits.",
+          "name": "Зона комфорта",
+          "text": "Когда вы разбиваете лагерь или останавливаетесь на постой в среде, соответствующей вашим обстоятельствам, вы можете восстановить один зачёркнутый тег силы в дополнение к прочим преимуществам.",
           "page": 93
         },
         {
           "id": "circumstance-2",
-          "name": "Expected Role",
-          "text": "Choose a status that represents how society expects you to behave, such as friendly, threatening, or in-charge. Once per session, before you take a social action befitting your expected role, you may gain this status at tier 2.",
+          "name": "Ожидаемая роль",
+          "text": "Выберите статус, отражающий поведение, которого от вас ждёт общество, например дружелюбие, угрожающий вид или положение главного. Один раз за сессию, прежде чем совершить социальное действие, соответствующее этой роли, вы можете получить этот статус со степенью 2.",
           "page": 93
         },
         {
           "id": "circumstance-3",
-          "name": "Familiar Matters",
-          "text": "There are things everyone in your situation knows. Once per scene, you may ask the Narrator for one important detail about a subject related to your Circumstance.",
+          "name": "Знакомые дела",
+          "text": "Есть вещи, которые знает каждый в вашем положении. Один раз за сцену вы можете спросить ведущего об одной важной подробности, связанной с вашими обстоятельствами.",
           "page": 93
         },
         {
           "id": "circumstance-4",
-          "name": "Strength From Adversity",
-          "text": "Once per session, when a weakness tag from this theme is invoked, you may gain driven-2, which helps this roll and expires after it.",
+          "name": "Сила в невзгодах",
+          "text": "Один раз за сессию, когда применяется тег слабости этой темы, вы можете получить статус целеустремлённость-2. Он помогает при этом броске и исчезает после него.",
           "page": 93
         },
         {
           "id": "circumstance-5",
-          "name": "Trudging Along",
-          "text": "Choose a type of status that you’ve become accustomed to given your Circumstance, such as tired or humiliated. Once per scene, you may ignore a status you have of that type if it is tier 3 or lower.",
+          "name": "Идти дальше",
+          "text": "Выберите тип статусов, к которому вы привыкли в силу ваших обстоятельств, например усталость или унижение. Один раз за сцену вы можете проигнорировать свой статус этого типа, если его степень не выше 3.",
           "page": 93
         }
       ]
@@ -110,92 +110,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "Who or what are you Devoted to?"
+          "text": "Кому или чему вы преданы?"
         },
         {
           "letter": "B",
-          "text": "What action do you most commonly take in service of your Devotion?"
+          "text": "Какое действие вы чаще всего совершаете во имя вашей преданности?"
         },
         {
           "letter": "C",
-          "text": "What feeling does your Devotion fill you with that you can call upon?"
+          "text": "Какое чувство пробуждает в вас преданность и как вы можете на него опереться?"
         },
         {
           "letter": "D",
-          "text": "What possession do you carry or have that symbolizes your Devotion?"
+          "text": "Какой предмет, который вы носите с собой или которым владеете, символизирует вашу преданность?"
         },
         {
           "letter": "E",
-          "text": "Where or when can you connect with your Devotion?"
+          "text": "Где или когда вы ощущаете связь с тем, чему преданы?"
         },
         {
           "letter": "F",
-          "text": "What does the object of your Devotion often help you with?"
+          "text": "В чём вам часто помогает тот или то, чему вы преданы?"
         },
         {
           "letter": "G",
-          "text": "What quality do you possess that best exemplifies your dedication?"
+          "text": "Какое ваше качество лучше всего выражает вашу преданность?"
         },
         {
           "letter": "H",
-          "text": "What approach do you take in social situations due to your Devotion?"
+          "text": "Как преданность определяет ваш подход к общению с другими?"
         },
         {
           "letter": "I",
-          "text": "What ethos or saying do you aspire to live up to in your dedication?"
+          "text": "Какому принципу или изречению вы стремитесь следовать в своей преданности?"
         },
         {
           "letter": "J",
-          "text": "What useful ritual or habit do you have to show your Devotion?"
+          "text": "Каким полезным ритуалом или привычкой вы выражаете свою преданность?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What are you blind to because of your Devotion?"
+          "text": "Чего вы не замечаете из-за своей преданности?"
         },
         {
           "letter": "B",
-          "text": "What duties do you have that frequently need your time or resources?"
+          "text": "Какие обязанности часто требуют вашего времени или средств?"
         },
         {
           "letter": "C",
-          "text": "What unsightly or destructive behavior can your Devotion evoke in you?"
+          "text": "Какое неприглядное или разрушительное поведение может пробудить в вас преданность?"
         },
         {
           "letter": "D",
-          "text": "What often threatens the object of your Devotion?"
+          "text": "Что часто угрожает тому, чему вы преданы?"
         }
       ],
       "improvements": [
         {
           "id": "devotion-1",
-          "name": "Bodyguard",
-          "text": "When your Devotion or a person representing it takes Consequence, you may take it instead of them (and possibly react to it), if the Narrator deems it possible.",
+          "name": "Телохранитель",
+          "text": "Когда тот, кому вы преданы, или человек, олицетворяющий вашу преданность, получает Последствия, вы можете принять их на себя и, возможно, отреагировать на них, если ведущий считает это возможным.",
           "page": 95
         },
         {
           "id": "devotion-2",
-          "name": "Catch Me When I Fall",
-          "text": "Once per session, when you act with the object of your Devotion or a person representing it at your side, and the outcome is only Consequences, you may choose to Succeed as well.",
+          "name": "Подхвати меня",
+          "text": "Один раз за сессию, когда вы действуете рядом с тем, кому преданы, или с человеком, олицетворяющим вашу преданность, и получаете только Последствия, вы можете также получить Успех.",
           "page": 95
         },
         {
           "id": "devotion-3",
-          "name": "Deeply Committed",
-          "text": "Your dedication fills you with purpose. Once per scene, when you take action to pursue this theme’s Quest, you may first gain committed-2, which expires after that action.",
+          "name": "Беззаветная преданность",
+          "text": "Ваша преданность наполняет жизнь смыслом. Один раз за сцену, совершая действие ради Стремления этой темы, вы можете сначала получить статус решимость-2, который исчезает после этого действия.",
           "page": 95
         },
         {
           "id": "devotion-4",
-          "name": "Goes Both Ways",
-          "text": "Once per session, if the object of your Devotion is near, you may gain a story tag representing aid granted by them, such as an item, encouragement, knowledge, or direct help.",
+          "name": "Взаимность",
+          "text": "Один раз за сессию, если тот или то, чему вы преданы, находится рядом, вы можете получить сюжетный тег, отражающий оказанную вам помощь: предмет, ободрение, знание или непосредственное содействие.",
           "page": 95
         },
         {
           "id": "devotion-5",
-          "name": "Unwavering",
-          "text": "Once per session, when a tag in this theme would be scratched for any reason, you may keep it unscratched instead.",
+          "name": "Непоколебимость",
+          "text": "Один раз за сессию, когда тег этой темы должен быть зачёркнут по любой причине, вы можете оставить его незачёркнутым.",
           "page": 95
         }
       ]
@@ -209,92 +209,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What past event or existence has shaped your life?"
+          "text": "Какое событие или какой прежний образ жизни определили вашу судьбу?"
         },
         {
           "letter": "B",
-          "text": "What major lesson did you learn from your Past?"
+          "text": "Какой важный урок вы извлекли из своего прошлого?"
         },
         {
           "letter": "C",
-          "text": "What clothing or equipment have you kept with you?"
+          "text": "Какую одежду или снаряжение вы сохранили?"
         },
         {
           "letter": "D",
-          "text": "What memento do you still hold on to?"
+          "text": "Какую памятную вещь вы всё ещё храните?"
         },
         {
           "letter": "E",
-          "text": "What person or people from your Past can you still call upon?"
+          "text": "К кому из людей вашего прошлого вы всё ещё можете обратиться за помощью?"
         },
         {
           "letter": "F",
-          "text": "What situation from your Past are you skilled at dealing with?"
+          "text": "С какими знакомыми по прошлому ситуациями вы умело справляетесь?"
         },
         {
           "letter": "G",
-          "text": "What reputation have you earned for yourself locally?"
+          "text": "Какую репутацию вы заслужили в этих краях?"
         },
         {
           "letter": "H",
-          "text": "What secret skill or technique did you pick up?"
+          "text": "Какое тайное умение или приём вы освоили?"
         },
         {
           "letter": "I",
-          "text": "What quality of character have you developed from your experiences?"
+          "text": "Какую черту характера сформировал ваш жизненный опыт?"
         },
         {
           "letter": "J",
-          "text": "What particular culture, clique, or people do you connect with now?"
+          "text": "С какой культурой, группой или народом вы теперь ощущаете связь?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What ugly secret do you keep, connected to your Past?"
+          "text": "Какой неприглядный секрет из вашего прошлого вы скрываете?"
         },
         {
           "letter": "B",
-          "text": "What person or group from your Past is still out to get you?"
+          "text": "Кто из вашего прошлого — человек или группа — всё ещё желает вам зла?"
         },
         {
           "letter": "C",
-          "text": "What past situations bring back painful or unwanted memories?"
+          "text": "Какие ситуации из прошлого вызывают болезненные или нежелательные воспоминания?"
         },
         {
           "letter": "D",
-          "text": "What physical or mental marks has your Past left on you?"
+          "text": "Какие следы ваше прошлое оставило на теле или в душе?"
         }
       ],
       "improvements": [
         {
           "id": "past-1",
-          "name": "Face From The Past",
-          "text": "Once per session, when you meet a character from your Past for the first time in the game, you may describe how your last meeting went and give them an appropriate tier-2 status.",
+          "name": "Лицо из прошлого",
+          "text": "Один раз за сессию, впервые встретив в игре персонажа из вашего прошлого, вы можете описать вашу последнюю встречу и дать ему подходящий статус со степенью 2.",
           "page": 97
         },
         {
           "id": "past-2",
-          "name": "Lessons Learned",
-          "text": "Once per session, when you roll a total of 6 or less, you may explain how this situation is familiar to you from your Past, reroll the dice, and take the new result.",
+          "name": "Усвоенные уроки",
+          "text": "Один раз за сессию, получив итоговый результат броска 6 или меньше, вы можете объяснить, чем эта ситуация напоминает ваше прошлое, перебросить кости и принять новый результат.",
           "page": 97
         },
         {
           "id": "past-3",
-          "name": "Not Letting Go",
-          "text": "Whenever you burn a tag from this theme for Power, you can mark Abandon on any other theme instead of marking that tag as scratched.",
+          "name": "Не отпускаю",
+          "text": "Когда вы сжигаете тег этой темы ради Силы, вы можете отметить Угасание в любой другой теме вместо того, чтобы зачёркивать этот тег.",
           "page": 97
         },
         {
           "id": "past-4",
-          "name": "Put It Behind Me",
-          "text": "When you Make a Sacrifice at the Scarring sacrifice level, you may forego the roll and treat it as a 7-9 instead, Success with Consequences. You must choose to replace this theme.",
+          "name": "Оставить позади",
+          "text": "Когда вы совершаете особое действие «Пойти на жертву» на уровне «Шрамы», вы можете отказаться от броска и считать результат равным 7–9: Успех с Последствиями. Вы должны выбрать замену этой темы.",
           "page": 97
         },
         {
           "id": "past-5",
-          "name": "Vivid Memory",
-          "text": "Once per session, when a weakness tag from this theme is invoked, you may discover (ask the Narrator) or reveal (decide yourself, Narrator approves) one important detail from your Past and gain an appropriate story tag or a tier-2 emotional status.",
+          "name": "Яркое воспоминание",
+          "text": "Один раз за сессию, когда применяется тег слабости этой темы, вы можете узнать у ведущего или раскрыть самостоятельно с его одобрения одну важную подробность из вашего прошлого и получить подходящий сюжетный тег или эмоциональный статус со степенью 2.",
           "page": 97
         }
       ]
@@ -308,92 +308,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What do your People call themselves or one of their members?"
+          "text": "Как ваш народ называет себя или одного из своих представителей?"
         },
         {
           "letter": "B",
-          "text": "What physical attribute common to your People serves you best?"
+          "text": "Какая общая для вашего народа физическая особенность лучше всего служит вам?"
         },
         {
           "letter": "C",
-          "text": "What skill, technique, or trick is practiced by your People?"
+          "text": "Какой навык, приём или хитрость распространены у вашего народа?"
         },
         {
           "letter": "D",
-          "text": "What item of cultural significance do you carry with you?"
+          "text": "Какой культурно значимый предмет вы носите с собой?"
         },
         {
           "letter": "E",
-          "text": "What knowledge is shared among your People?"
+          "text": "Какие знания разделяют представители вашего народа?"
         },
         {
           "letter": "F",
-          "text": "Where are your People from, commonly found, or most comfortable?"
+          "text": "Откуда родом ваш народ, где его обычно можно встретить или где ему уютнее всего?"
         },
         {
           "letter": "G",
-          "text": "When in need, who among your People can you call for aid?"
+          "text": "К кому из вашего народа вы можете обратиться за помощью в нужде?"
         },
         {
           "letter": "H",
-          "text": "What is the combat style or typical weapon used by your People?"
+          "text": "Какой боевой стиль или оружие характерны для вашего народа?"
         },
         {
           "letter": "I",
-          "text": "What useful quality about you is very typical of your People?"
+          "text": "Какое ваше полезное качество типично для вашего народа?"
         },
         {
           "letter": "J",
-          "text": "What unique or supernatural ability do your People possess?"
+          "text": "Какой необычной или сверхъестественной способностью обладает ваш народ?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What plight or difficulty of your People most affects you?"
+          "text": "Какая беда или трудность вашего народа сильнее всего затрагивает вас?"
         },
         {
           "letter": "B",
-          "text": "What often causes strife or discord among your People?"
+          "text": "Что часто вызывает раздоры или разногласия среди вашего народа?"
         },
         {
           "letter": "C",
-          "text": "When are you hindered by your cultural ways or inherited traits?"
+          "text": "Когда культурные обычаи или унаследованные черты мешают вам?"
         },
         {
           "letter": "D",
-          "text": "How or by whom are your People most prejudiced against?"
+          "text": "Какие предубеждения против вашего народа наиболее сильны и кто их разделяет?"
         }
       ],
       "improvements": [
         {
           "id": "people-1",
-          "name": "Shared Language",
-          "text": "Your People respond well to your presence. Once per scene, when you socially interact with them and get both a Success and Consequences, you may choose not to take the Consequences.",
+          "name": "Общий язык",
+          "text": "Представители вашего народа хорошо к вам относятся. Один раз за сцену, когда вы общаетесь с ними и получаете Успех с Последствиями, вы можете отказаться от Последствий.",
           "page": 99
         },
         {
           "id": "people-2",
-          "name": "Stand Out",
-          "text": "You are an unusual member of your People. Once per scene, when you act against your People’s habits, culture, or traditions and get both a Success and Consequences, you may choose not to take the Consequences.",
+          "name": "Не такой, как все",
+          "text": "Вы — необычный представитель своего народа. Один раз за сцену, когда вы действуете вопреки его привычкам, культуре или традициям и получаете Успех с Последствиями, вы можете отказаться от Последствий.",
           "page": 99
         },
         {
           "id": "people-3",
-          "name": "True To My Tribe",
-          "text": "You are an exemplary member of your People. Once per scene, when acting according to your People’s habits, culture, or traditions would put you at risk or disadvantage and you still choose to do so, you may mark Improve on this theme.",
+          "name": "Верность своему народу",
+          "text": "Вы — образцовый представитель своего народа. Один раз за сцену, если следование его привычкам, культуре или традициям подвергает вас риску или ставит в невыгодное положение, но вы всё равно выбираете этот путь, вы можете отметить Развитие этой темы.",
           "page": 99
         },
         {
           "id": "people-4",
-          "name": "Trust in Legacy",
-          "text": "Choose one power tag describing your People’s abilities or ways. Once per session, when you roll with this tag and get only Consequences, you may choose to Succeed as well.",
+          "name": "Доверие наследию",
+          "text": "Выберите один тег силы, описывающий способности или обычаи вашего народа. Один раз за сессию, когда вы совершаете бросок с этим тегом и получаете только Последствия, вы можете также получить Успех.",
           "page": 99
         },
         {
           "id": "people-5",
-          "name": "Wisdom Handed Down",
-          "text": "You command the lore of your People. Once per scene, you may ask the Narrator for one important detail from an area of knowledge possessed by your People.",
+          "name": "Унаследованная мудрость",
+          "text": "Вы владеете преданиями своего народа. Один раз за сцену вы можете спросить ведущего об одной важной подробности из области знаний вашего народа.",
           "page": 99
         }
       ]
@@ -407,92 +407,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What Personality trait is most central to you?"
+          "text": "Какая черта личности для вас главная?"
         },
         {
           "letter": "B",
-          "text": "In what situations does your Personality truly shine?"
+          "text": "В каких ситуациях ваша личность проявляется ярче всего?"
         },
         {
           "letter": "C",
-          "text": "How do you influence other people?"
+          "text": "Как вы влияете на других людей?"
         },
         {
           "letter": "D",
-          "text": "What item or garment best expresses your personal style?"
+          "text": "Какой предмет или одежда лучше всего выражают ваш личный стиль?"
         },
         {
           "letter": "E",
-          "text": "What interpersonal or social skill or talent do you possess?"
+          "text": "Каким талантом или навыком общения вы обладаете?"
         },
         {
           "letter": "F",
-          "text": "When in trouble or stressed, what emotion or behavior do you turn to?"
+          "text": "К какому чувству или поведению вы обращаетесь в беде или под давлением?"
         },
         {
           "letter": "G",
-          "text": "What is an unexpected but useful facet of your Personality?"
+          "text": "Какая неожиданная, но полезная сторона есть у вашей личности?"
         },
         {
           "letter": "H",
-          "text": "How do you support or help others?"
+          "text": "Как вы поддерживаете других или помогаете им?"
         },
         {
           "letter": "I",
-          "text": "How do you resist influence or stay true to yourself?"
+          "text": "Как вы сопротивляетесь чужому влиянию или сохраняете верность себе?"
         },
         {
           "letter": "J",
-          "text": "How can your unique worldview help you figure things out?"
+          "text": "Как ваш особый взгляд на мир помогает вам разобраться в происходящем?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "In what situations does your Personality get you into trouble?"
+          "text": "В каких ситуациях ваша личность навлекает на вас неприятности?"
         },
         {
           "letter": "B",
-          "text": "What is an ugly or unfortunate aspect of your Personality?"
+          "text": "Какая неприглядная или досадная сторона есть у вашей личности?"
         },
         {
           "letter": "C",
-          "text": "What unwanted behavior does your Personality push you toward?"
+          "text": "К какому нежелательному поведению вас подталкивает ваша личность?"
         },
         {
           "letter": "D",
-          "text": "Who finds you, or who do you find, irksome or loathsome?"
+          "text": "Кого вы раздражаете или отталкиваете и кто вызывает такие чувства у вас?"
         }
       ],
       "improvements": [
         {
           "id": "personality-1",
-          "name": "Adaptable Persona",
-          "text": "Once per session, when you take an action using tags from this theme and get only Consequences, you may choose to Succeed as well.",
+          "name": "Гибкий характер",
+          "text": "Один раз за сессию, когда вы совершаете действие с тегами этой темы и получаете только Последствия, вы можете также получить Успех.",
           "page": 101
         },
         {
           "id": "personality-2",
-          "name": "Big Personality",
-          "text": "When you burn power tags from this theme for Power, they add 4 Power instead of 3.",
+          "name": "Яркая личность",
+          "text": "Когда вы сжигаете теги силы этой темы ради Силы, они дают 4 Силы вместо 3.",
           "page": 101
         },
         {
           "id": "personality-3",
-          "name": "Infectious Personality",
-          "text": "When you camp or sojourn, you may give another Hero a story tag describing an aspect of your Personality (expiring any previous tag created this way).",
+          "name": "Заразительный нрав",
+          "text": "Когда вы разбиваете лагерь или останавливаетесь на постой, вы можете дать другому герою сюжетный тег, описывающий сторону вашей личности. Предыдущий тег, созданный этим способом, исчезает.",
           "page": 101
         },
         {
           "id": "personality-4",
-          "name": "Lasting Impression",
-          "text": "Once per scene, when you take a social action and Succeed, you may give a lasting impression to everyone you affect with this action.",
+          "name": "Неизгладимое впечатление",
+          "text": "Один раз за сцену, добившись Успеха в социальном действии, вы можете произвести неизгладимое впечатление на всех, кого это действие затрагивает.",
           "page": 101
         },
         {
           "id": "personality-5",
-          "name": "Unshakeable",
-          "text": "Once per scene, when you react to lessen social or emotional Consequences and get a total result of 7 or above, you may spend all your Power to completely avoid all Consequence Effects.",
+          "name": "Невозмутимость",
+          "text": "Один раз за сцену, когда вы реагируете, чтобы смягчить социальные или эмоциональные Последствия, и получаете итоговый результат 7 или выше, вы можете потратить всю Силу, чтобы полностью избежать всех эффектов Последствий.",
           "page": 101
         }
       ]
@@ -506,92 +506,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What Skill or Trade are you good at?"
+          "text": "Каким умением или ремеслом вы хорошо владеете?"
         },
         {
           "letter": "B",
-          "text": "What specific technique within this Skill set is your specialty?"
+          "text": "Какой конкретный приём в этой области — ваша специальность?"
         },
         {
           "letter": "C",
-          "text": "What tool, equipment, or outfit is a staple of your Trade?"
+          "text": "Какой инструмент, снаряжение или одежда необходимы в вашем ремесле?"
         },
         {
           "letter": "D",
-          "text": "Who most respects, values, or requires your abilities?"
+          "text": "Кто больше всего уважает, ценит ваши способности или нуждается в них?"
         },
         {
           "letter": "E",
-          "text": "What unusual or inventive application have you found for your Skill?"
+          "text": "Какое необычное или изобретательное применение вы нашли своему умению?"
         },
         {
           "letter": "F",
-          "text": "In what conditions can you work with the most confidence and efficiency?"
+          "text": "В каких условиях вы работаете увереннее и эффективнее всего?"
         },
         {
           "letter": "G",
-          "text": "How do you reduce the risk of failure, harm, or poor outcome?"
+          "text": "Как вы снижаете риск неудачи, вреда или плохого результата?"
         },
         {
           "letter": "H",
-          "text": "What are you more aware of or know about, thanks to your Skill?"
+          "text": "Что вы лучше замечаете или знаете благодаря вашему умению?"
         },
         {
           "letter": "I",
-          "text": "Who assists you in practicing your Skill or Trade?"
+          "text": "Кто помогает вам применять ваше умение или заниматься ремеслом?"
         },
         {
           "letter": "J",
-          "text": "What conviction or emotion motivates you to practice your Skill?"
+          "text": "Какое убеждение или чувство побуждает вас применять своё умение?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What challenge or feat is quite beyond your everyday ability?"
+          "text": "Какое испытание или достижение далеко за пределами ваших обычных возможностей?"
         },
         {
           "letter": "B",
-          "text": "What conditions make it harder for you to practice your Skill or Trade?"
+          "text": "Какие условия мешают вам применять умение или заниматься ремеслом?"
         },
         {
           "letter": "C",
-          "text": "How does your practice or talent bias your perceptions or interactions?"
+          "text": "Как ваше занятие или талант делают ваше восприятие или общение предвзятыми?"
         },
         {
           "letter": "D",
-          "text": "Where or when are those of your Trade unwelcome or unwilling to work?"
+          "text": "Где или когда людям вашего ремесла не рады либо они сами отказываются работать?"
         }
       ],
       "improvements": [
         {
           "id": "skill-1",
-          "name": "Deft Remedy",
-          "text": "Once per session, when you use tags from this theme and roll a total of 6 or less, you may reroll the dice and take the new result instead.",
+          "name": "Ловкое исправление",
+          "text": "Один раз за сессию, когда вы используете теги этой темы и получаете итоговый результат броска 6 или меньше, вы можете перебросить кости и принять новый результат.",
           "page": 103
         },
         {
           "id": "skill-2",
-          "name": "Learn from My Mistakes",
-          "text": "Once per scene, when you act using tags from this theme and don’t Succeed, mark Improve on this theme.",
+          "name": "Учусь на ошибках",
+          "text": "Один раз за сцену, когда вы действуете с тегами этой темы и не получаете Успеха, отметьте Развитие этой темы.",
           "page": 103
         },
         {
           "id": "skill-3",
-          "name": "Practice Makes Perfect",
-          "text": "Choose a helpful status reflecting your use of your expertise such as alert or well-off. You may burn a tag from this theme at any time to gain that status at tier 3.",
+          "name": "Практика ведёт к совершенству",
+          "text": "Выберите полезный статус, отражающий применение ваших навыков, например бдительность или достаток. В любой момент вы можете сжечь тег этой темы, чтобы получить этот статус со степенью 3.",
           "page": 103
         },
         {
           "id": "skill-4",
-          "name": "Rehearsed Technique",
-          "text": "When you choose this Special, choose a power tag from this theme. Whenever you burn that tag for Power, you gain 3 Power as normal and may also forgo rolling the dice and treat the dice roll total as 7 (before adding Power).",
+          "name": "Отработанный приём",
+          "text": "Выбирая это особое улучшение, выберите тег силы этой темы. Когда вы сжигаете этот тег ради Силы, вы получаете обычные 3 Силы и можете также отказаться от броска костей, считая сумму на костях равной 7 до прибавления Силы.",
           "page": 103
         },
         {
           "id": "skill-5",
-          "name": "Resourceful",
-          "text": "When you camp or sojourn, if you dedicate your time to preparing or crafting something using your skill, you may create an extra story tag in addition to the usual benefits.",
+          "name": "Находчивость",
+          "text": "Когда вы разбиваете лагерь или останавливаетесь на постой и посвящаете время подготовке или изготовлению чего-либо с помощью своего умения, вы можете создать дополнительный сюжетный тег помимо обычных преимуществ.",
           "page": 103
         }
       ]
@@ -605,92 +605,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What is your most defining Trait?"
+          "text": "Какая черта лучше всего определяет вас?"
         },
         {
           "letter": "B",
-          "text": "What is a specific or common way you put this Trait to use?"
+          "text": "Как именно или каким обычным способом вы применяете эту черту?"
         },
         {
           "letter": "C",
-          "text": "How is this Trait helping you keep safe?"
+          "text": "Как эта черта помогает вам оставаться в безопасности?"
         },
         {
           "letter": "D",
-          "text": "What item or ally helps you get the most of your Trait?"
+          "text": "Какой предмет или союзник помогает вам раскрыть возможности этой черты?"
         },
         {
           "letter": "E",
-          "text": "What can you do that only those with this Trait can?"
+          "text": "Что умеете делать только вы и другие обладатели этой черты?"
         },
         {
           "letter": "F",
-          "text": "In which situation is this Trait especially useful to you?"
+          "text": "В какой ситуации эта черта особенно полезна вам?"
         },
         {
           "letter": "G",
-          "text": "What skill have you developed to make the most of this gift?"
+          "text": "Какой навык вы развили, чтобы полнее использовать этот дар?"
         },
         {
           "letter": "H",
-          "text": "What do you notice, sense, or understand that most other people cannot?"
+          "text": "Что вы замечаете, чувствуете или понимаете такого, что недоступно большинству?"
         },
         {
           "letter": "I",
-          "text": "How can you perform, show off, or be creative with your Trait?"
+          "text": "Как вы можете выступать, красоваться или проявлять творчество с помощью этой черты?"
         },
         {
           "letter": "J",
-          "text": "How do you hide this Trait, when you need to?"
+          "text": "Как вы при необходимости скрываете эту черту?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What happens when you overuse your Trait?"
+          "text": "Что происходит, когда вы чрезмерно используете свою черту?"
         },
         {
           "letter": "B",
-          "text": "Who around you resents, covets, or mocks your Trait?"
+          "text": "Кто из окружающих негодует из-за вашей черты, завидует ей или высмеивает её?"
         },
         {
           "letter": "C",
-          "text": "What is the most obvious vulnerability or misuse of this Trait?"
+          "text": "Какова самая очевидная уязвимость этой черты или способ злоупотребить ею?"
         },
         {
           "letter": "D",
-          "text": "When is your Trait utterly useless?"
+          "text": "Когда ваша черта совершенно бесполезна?"
         }
       ],
       "improvements": [
         {
           "id": "trait-1",
-          "name": "Innate Sense",
-          "text": "Once per session, you can ask the Narrator for one important detail that you can intuit thanks to your Trait.",
+          "name": "Врождённое чутьё",
+          "text": "Один раз за сессию вы можете спросить ведущего об одной важной подробности, которую подсказывает ваша черта.",
           "page": 105
         },
         {
           "id": "trait-2",
-          "name": "Made for This",
-          "text": "Choose a hindering status that your Trait helps you overcome. Once per scene, you may ignore this status when you act.",
+          "name": "Создано для этого",
+          "text": "Выберите мешающий статус, который ваша черта помогает преодолеть. Один раз за сцену вы можете игнорировать этот статус при действии.",
           "page": 105
         },
         {
           "id": "trait-3",
-          "name": "Moment to Shine",
-          "text": "Once per session, when you act using tags from this theme, you may ignore being Imperiled, or treat being Extremely Imperiled as being Imperiled.",
+          "name": "Звёздный час",
+          "text": "Один раз за сессию, когда вы действуете с тегами этой темы, вы можете игнорировать опасное положение либо считать крайне опасное положение просто опасным.",
           "page": 105
         },
         {
           "id": "trait-4",
-          "name": "Pull Through",
-          "text": "Once per session, when you roll with tags from this theme, you may ignore any negative physical or emotional status of tier 3 or lower.",
+          "name": "Выстоять",
+          "text": "Один раз за сессию, когда вы совершаете бросок с тегами этой темы, вы можете игнорировать любой отрицательный физический или эмоциональный статус со степенью не выше 3.",
           "page": 105
         },
         {
           "id": "trait-5",
-          "name": "Wild Blood",
-          "text": "Your Trait manifests in unusual ways. Choose and gain a Special Improvement from the Uncanny Being themebook.",
+          "name": "Дикая кровь",
+          "text": "Ваша черта проявляется необычным образом. Выберите и получите особое улучшение из темника «Сверхъестественное существо».",
           "page": 105
         }
       ]
@@ -704,92 +704,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What is the task, goal, or ideal you have taken on so dutifully?"
+          "text": "Какую задачу, цель или идеал вы так преданно приняли на себя?"
         },
         {
           "letter": "B",
-          "text": "What quality of character is crucial in taking up this Duty?"
+          "text": "Какая черта характера необходима для исполнения этого долга?"
         },
         {
           "letter": "C",
-          "text": "How do you proclaim your Duty or convince others of its importance?"
+          "text": "Как вы заявляете о своём долге или убеждаете других в его важности?"
         },
         {
           "letter": "D",
-          "text": "Who or what is at your beck and call thanks to your commitment?"
+          "text": "Кто или что находится в вашем распоряжении благодаря вашей преданности долгу?"
         },
         {
           "letter": "E",
-          "text": "What useful resource or tool is needed for the fulfillment of this Duty?"
+          "text": "Какой полезный ресурс или инструмент необходим для исполнения этого долга?"
         },
         {
           "letter": "F",
-          "text": "What legal or social privileges or exceptions apply to you?"
+          "text": "Какие законные или общественные привилегии либо исключения действуют для вас?"
         },
         {
           "letter": "G",
-          "text": "What are the arms, armor, or trappings of your Duty?"
+          "text": "Какое оружие, доспехи или атрибуты связаны с вашим долгом?"
         },
         {
           "letter": "H",
-          "text": "Where do you patrol, hold office, or carry your Duties?"
+          "text": "Где вы патрулируете, занимаете должность или исполняете обязанности?"
         },
         {
           "letter": "I",
-          "text": "How do you interact favorably with the patron(s) of this Duty?"
+          "text": "Как вы добиваетесь расположения тех, кто покровительствует вашему служению?"
         },
         {
           "letter": "J",
-          "text": "What keeps you on the right track when you despair or falter?"
+          "text": "Что помогает вам не сбиться с пути, когда вы отчаиваетесь или колеблетесь?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "Who or what opposes you on this task?"
+          "text": "Кто или что противостоит вам в этом деле?"
         },
         {
           "letter": "B",
-          "text": "What personal failing sets you back on the path to fulfill your Duty?"
+          "text": "Какой личный недостаток мешает вам исполнять свой долг?"
         },
         {
           "letter": "C",
-          "text": "Who is your rival or challenger for this responsibility?"
+          "text": "Кто соперничает с вами или оспаривает ваше право на эту обязанность?"
         },
         {
           "letter": "D",
-          "text": "What negative emotion does your Duty bring up?"
+          "text": "Какое отрицательное чувство пробуждает в вас ваш долг?"
         }
       ],
       "improvements": [
         {
           "id": "duty-1",
-          "name": "Dutiful Anticipation",
-          "text": "Once per scene, you may ask the Narrator to reveal the closest or next danger standing in your way to fulfilling your Quest. The Narrator will point you at a danger you can perceive or provide a vague clue if you cannot.",
+          "name": "Предчувствие долга",
+          "text": "Один раз за сцену вы можете попросить ведущего раскрыть ближайшую или следующую опасность на пути к вашему Стремлению. Ведущий укажет на опасность, которую вы способны заметить, или даст туманный намёк, если заметить её вы не можете.",
           "page": 107
         },
         {
           "id": "duty-2",
-          "name": "Grim Determination",
-          "text": "Once per session, when you act to advance this theme’s Quest and suffer Consequences, you may gain determined-2 before your reaction.",
+          "name": "Мрачная решимость",
+          "text": "Один раз за сессию, когда вы действуете ради Стремления этой темы и получаете Последствия, вы можете получить статус решимость-2 перед своей реакцией.",
           "page": 107
         },
         {
           "id": "duty-3",
-          "name": "Painful Lessons",
-          "text": "Once per session, when you act using tags from this theme and suffer Consequences, you may mark Improve on this theme.",
+          "name": "Болезненные уроки",
+          "text": "Один раз за сессию, когда вы действуете с тегами этой темы и получаете Последствия, вы можете отметить Развитие этой темы.",
           "page": 107
         },
         {
           "id": "duty-4",
-          "name": "Driven by Shame",
-          "text": "Once per scene, when you act using tags from this theme, you may add Power to your roll equal to Abandon currently marked on this theme.",
+          "name": "Подгоняемый стыдом",
+          "text": "Один раз за сцену, когда вы действуете с тегами этой темы, вы можете добавить к броску столько Силы, сколько отметок Угасания сейчас есть в этой теме.",
           "page": 107
         },
         {
           "id": "duty-5",
-          "name": "Unstoppable",
-          "text": "Once per scene, when you take an action to pursue this theme’s Quest using tags from this theme and get both a Success and Consequences, you may choose not to take the Consequences.",
+          "name": "Неудержимость",
+          "text": "Один раз за сцену, когда вы действуете ради Стремления этой темы с её тегами и получаете Успех с Последствиями, вы можете отказаться от Последствий.",
           "page": 107
         }
       ]
@@ -803,92 +803,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What gives you power and Influence over others?"
+          "text": "Что даёт вам власть и влияние на других?"
         },
         {
           "letter": "B",
-          "text": "What is the most common task or service people do for you?"
+          "text": "Какое поручение или услугу люди чаще всего выполняют для вас?"
         },
         {
           "letter": "C",
-          "text": "Who are your followers, servants, foot soldiers, or agents?"
+          "text": "Кто ваши последователи, слуги, рядовые бойцы или агенты?"
         },
         {
           "letter": "D",
-          "text": "What is the most potent way in which you exert Influence?"
+          "text": "Каким самым действенным способом вы оказываете влияние?"
         },
         {
           "letter": "E",
-          "text": "In what domain is your Influence the strongest?"
+          "text": "В какой области ваше влияние сильнее всего?"
         },
         {
           "letter": "F",
-          "text": "What assets or benefits have you gained thanks to your Influence?"
+          "text": "Какие средства или преимущества вы приобрели благодаря своему влиянию?"
         },
         {
           "letter": "G",
-          "text": "Who is the most susceptible to your Influence?"
+          "text": "Кто наиболее подвержен вашему влиянию?"
         },
         {
           "letter": "H",
-          "text": "How do you grow the reach of your Influence?"
+          "text": "Как вы расширяете своё влияние?"
         },
         {
           "letter": "I",
-          "text": "How do you dismantle others’ resistance?"
+          "text": "Как вы преодолеваете чужое сопротивление?"
         },
         {
           "letter": "J",
-          "text": "How do you protect yourself from others’ influence?"
+          "text": "Как вы защищаетесь от чужого влияния?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "Who resists, ignores, or is immune to your Influence?"
+          "text": "Кто сопротивляется вашему влиянию, игнорирует его или невосприимчив к нему?"
         },
         {
           "letter": "B",
-          "text": "What do you do that undermines your own power?"
+          "text": "Какими поступками вы подрываете собственную власть?"
         },
         {
           "letter": "C",
-          "text": "Who does your Influence cause you to clash with?"
+          "text": "С кем ваше влияние заставляет вас сталкиваться?"
         },
         {
           "letter": "D",
-          "text": "What lies outside of your sphere of Influence?"
+          "text": "Что лежит за пределами вашего влияния?"
         }
       ],
       "improvements": [
         {
           "id": "influence-1",
-          "name": "Follow Me!",
-          "text": "Once per session, when you roll to recruit, muster, or rally someone under your Influence and Succeed, you may create multiple single-use story tags (page 165) for 1 Power each.",
+          "name": "За мной!",
+          "text": "Один раз за сессию, когда вы совершаете бросок, чтобы завербовать, собрать или воодушевить тех, на кого влияете, и получаете Успех, вы можете создать несколько одноразовых сюжетных тегов (стр. 165), потратив по 1 Силе за каждый.",
           "page": 109
         },
         {
           "id": "influence-2",
-          "name": "Friends Everywhere",
-          "text": "When you enter a settlement for the first time, you gain a useful contact there. You may name them and define their relationship with you at the Narrator’s discretion.",
+          "name": "Друзья повсюду",
+          "text": "Впервые оказавшись в поселении, вы приобретаете там полезного знакомого. С согласия ведущего вы можете назвать его и определить ваши отношения.",
           "page": 109
         },
         {
           "id": "influence-3",
-          "name": "Long Reach",
-          "text": "Once per session, you can have a representative of your Influence be present anywhere they could conceivably be, and then take action as that character using tags from this theme.",
+          "name": "Дальняя рука",
+          "text": "Один раз за сессию вы можете объявить, что представитель вашего влияния присутствует в любом месте, где он правдоподобно мог бы оказаться, а затем совершить действие от его лица с тегами этой темы.",
           "page": 109
         },
         {
           "id": "influence-4",
-          "name": "Overextend",
-          "text": "Whenever you roll with tags from this theme and suffer a status as a Consequence, you may increase the tier of that status by 1 and gain 2 more Power to spend on Effects.",
+          "name": "Чрезмерное усилие",
+          "text": "Когда вы совершаете бросок с тегами этой темы и получаете статус в качестве Последствия, вы можете увеличить его степень на 1 и получить ещё 2 Силы для покупки эффектов.",
           "page": 109
         },
         {
           "id": "influence-5",
-          "name": "Read Between the Lines",
-          "text": "Whenever you roll a reaction using tags from this theme to lessen a social or influence-related Consequence, you receive one valuable detail about the source of the Consequence.",
+          "name": "Читать между строк",
+          "text": "Когда вы совершаете бросок реакции с тегами этой темы, чтобы смягчить социальное Последствие или Последствие, связанное с влиянием, вы получаете одну ценную подробность об источнике этого Последствия.",
           "page": 109
         }
       ]
@@ -902,92 +902,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What special Knowledge do you possess?"
+          "text": "Каким особым знанием вы обладаете?"
         },
         {
           "letter": "B",
-          "text": "What subject do you specialize in within your body of Knowledge?"
+          "text": "На каком предмете вы специализируетесь в своей области знаний?"
         },
         {
           "letter": "C",
-          "text": "What can be understood, analyzed, or explained with your Knowledge?"
+          "text": "Что можно понять, проанализировать или объяснить с помощью вашего знания?"
         },
         {
           "letter": "D",
-          "text": "What is a practical application of your Knowledge?"
+          "text": "Каково практическое применение вашего знания?"
         },
         {
           "letter": "E",
-          "text": "What advantage do you have over those lacking your Knowledge?"
+          "text": "Какое преимущество вы имеете перед теми, кому недостаёт ваших знаний?"
         },
         {
           "letter": "F",
-          "text": "How do you protect, store, or preserve your Knowledge?"
+          "text": "Как вы защищаете, храните или сохраняете своё знание?"
         },
         {
           "letter": "G",
-          "text": "What have you learned that is adjacent to your Knowledge?"
+          "text": "Что вы изучили в смежной области?"
         },
         {
           "letter": "H",
-          "text": "What do you always carry with you, because of what you know?"
+          "text": "Что вы всегда носите с собой благодаря своим знаниям?"
         },
         {
           "letter": "I",
-          "text": "What is your method of collection, discovery, or research?"
+          "text": "Каким методом вы собираете сведения, совершаете открытия или ведёте исследования?"
         },
         {
           "letter": "J",
-          "text": "What is a new frontier of Knowledge you are beginning to explore?"
+          "text": "Какую новую область знаний вы начинаете исследовать?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What are the biggest holes in your body of Knowledge?"
+          "text": "Каковы самые большие пробелы в ваших знаниях?"
         },
         {
           "letter": "B",
-          "text": "What is beyond fathom, obscured, or confusing to you?"
+          "text": "Что для вас непостижимо, скрыто или запутанно?"
         },
         {
           "letter": "C",
-          "text": "Who seeks to steal, take, or deny this Knowledge from you?"
+          "text": "Кто стремится украсть ваше знание, отнять его или лишить вас доступа к нему?"
         },
         {
           "letter": "D",
-          "text": "What hurdles stand in your way when you attempt to apply your Knowledge?"
+          "text": "Какие препятствия мешают вам применять своё знание?"
         }
       ],
       "improvements": [
         {
           "id": "knowledge-1",
-          "name": "A Known Expert",
-          "text": "People seek your advice. Once per session, you may gain an audience with any NPC interested in your Knowledge (Narrator’s call), without rolling, or remove from them up to 3 status tiers representing hostility or resistance.",
+          "name": "Признанный знаток",
+          "text": "Люди обращаются к вам за советом. Один раз за сессию вы можете без броска добиться встречи с любым персонажем ведущего, заинтересованным в ваших знаниях (по решению ведущего), либо снять с него до 3 степеней статусов, отражающих враждебность или сопротивление.",
           "page": 111
         },
         {
           "id": "knowledge-2",
-          "name": "Always Thinking",
-          "text": "You’re used to contemplating while doing other things. When you camp or sojourn, you may take an action in the third period using only tags from this theme without automatically suffering Consequences (if you choose to roll, you may still suffer Consequences).",
+          "name": "Всегда в раздумьях",
+          "text": "Вы привыкли размышлять, занимаясь другими делами. В лагере или на постое вы можете совершить действие в третий период, используя только теги этой темы, без автоматических Последствий. Если вы решите сделать бросок, Последствия по-прежнему возможны.",
           "page": 111
         },
         {
           "id": "knowledge-3",
-          "name": "Applied Expertise",
-          "text": "Once per session, when you spend Power to discover a valuable detail after rolling with tags from this theme, you may gain a free story tag representing a practical application of your discovery.",
+          "name": "Прикладные знания",
+          "text": "Один раз за сессию, когда после броска с тегами этой темы вы тратите Силу на получение ценной подробности, вы можете бесплатно получить сюжетный тег, отражающий практическое применение вашего открытия.",
           "page": 111
         },
         {
           "id": "knowledge-4",
-          "name": "Inventive Stroke",
-          "text": "Whenever you invoke this theme’s title tag while applying your Knowledge to a practical task in a way you never have before, you get 2 Power from the tag instead of 1.",
+          "name": "Изобретательный подход",
+          "text": "Когда вы применяете главный тег этой темы, используя свои знания для практической задачи способом, которого ещё не пробовали, этот тег даёт 2 Силы вместо 1.",
           "page": 111
         },
         {
           "id": "knowledge-5",
-          "name": "Flashes of Insight",
-          "text": "Whenever you encounter for the first time a place, object, creature or phenomenon that your Knowledge applies to, you may ask the Narrator to give you one valuable detail about it.",
+          "name": "Вспышки озарения",
+          "text": "Когда вы впервые встречаете место, предмет, существо или явление, к которому применимы ваши знания, вы можете попросить ведущего сообщить одну ценную подробность о нём.",
           "page": 111
         }
       ]
@@ -1001,92 +1001,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What do you call someone who has your Prodigious Ability?"
+          "text": "Как называют человека с вашей выдающейся способностью?"
         },
         {
           "letter": "B",
-          "text": "What is a secondary skill or characteristic of this ability?"
+          "text": "Какой дополнительный навык или качество связаны с этой способностью?"
         },
         {
           "letter": "C",
-          "text": "What incredible technique or stunt can you pull off?"
+          "text": "Какой невероятный приём или трюк вы способны выполнить?"
         },
         {
           "letter": "D",
-          "text": "How can you use your ability to impress and amaze?"
+          "text": "Как вы можете впечатлить или поразить других своей способностью?"
         },
         {
           "letter": "E",
-          "text": "What emotion unleashes your potential?"
+          "text": "Какое чувство раскрывает ваш потенциал?"
         },
         {
           "letter": "F",
-          "text": "What is the chief tool you use when practicing your ability?"
+          "text": "Какой главный инструмент вы используете, применяя свою способность?"
         },
         {
           "letter": "G",
-          "text": "How do you prevent failure or regain the advantage with your ability?"
+          "text": "Как с помощью своей способности вы избегаете неудачи или возвращаете преимущество?"
         },
         {
           "letter": "H",
-          "text": "What signature move or unique slant did you add to your repertoire?"
+          "text": "Каким фирменным приёмом или особым подходом вы дополнили свой арсенал?"
         },
         {
           "letter": "I",
-          "text": "What do you know, sense, or discern that a beginner wouldn’t?"
+          "text": "Что вы знаете, чувствуете или различаете такого, чего не заметит новичок?"
         },
         {
           "letter": "J",
-          "text": "What nearly (or truly) miraculous thing can you accomplish?"
+          "text": "Какое почти чудесное или поистине чудесное деяние вам под силу?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What is a flaw or weakness of your ability you are still refining?"
+          "text": "Какой изъян или слабость своей способности вы всё ещё исправляете?"
         },
         {
           "letter": "B",
-          "text": "What bad habits or behaviors have you developed due to your ability?"
+          "text": "Какие дурные привычки или манеры появились у вас из-за вашей способности?"
         },
         {
           "letter": "C",
-          "text": "Under what conditions is your ability less effective, even with your proficiency?"
+          "text": "В каких условиях ваша способность менее действенна, несмотря на ваше мастерство?"
         },
         {
           "letter": "D",
-          "text": "Who resents or harasses you because of your ability?"
+          "text": "Кто завидует вам или преследует вас из-за вашей способности?"
         }
       ],
       "improvements": [
         {
           "id": "prodigious-1",
-          "name": "Improved Counter",
-          "text": "When you react to lessen a Consequence with tags from this theme and roll a total of 10 or higher, you may, in addition to any other benefit, keep the spotlight to counterattack and may double dip tags already used in this spotlight.",
+          "name": "Улучшенный ответный удар",
+          "text": "Когда вы реагируете с тегами этой темы, чтобы смягчить Последствие, и получаете итоговый результат 10 или выше, вы можете в дополнение к прочим преимуществам сохранить за собой центр внимания для контратаки и повторно использовать теги, уже применённые за это время в центре внимания.",
           "page": 113
         },
         {
           "id": "prodigious-2",
-          "name": "Create An Opening",
-          "text": "Once per session, when you use tags from this theme and Succeed, you may create a free tier-2 status representing an opportunity you create for an ally through your action.",
+          "name": "Создать возможность",
+          "text": "Один раз за сессию, когда вы используете теги этой темы и получаете Успех, вы можете бесплатно создать статус со степенью 2, отражающий возможность, которую ваше действие открывает союзнику.",
           "page": 113
         },
         {
           "id": "prodigious-3",
-          "name": "Discerning Eye",
-          "text": "Once per session, when you have time and access to observe someone’s action or work, you may learn three valuable details about them through your Ability.",
+          "name": "Проницательный взгляд",
+          "text": "Один раз за сессию, если у вас есть время и возможность наблюдать чьи-либо действия или работу, вы можете благодаря своей способности узнать три ценные подробности об этом человеке.",
           "page": 113
         },
         {
           "id": "prodigious-4",
-          "name": "Masterpiece",
-          "text": "With the necessary time and resources, you can create a grand work (art, text, tool, weapon, etc.). Gain a story theme (3 positive tags, 1 negative tag) and mark a Milestone.",
+          "name": "Шедевр",
+          "text": "Располагая необходимым временем и ресурсами, вы можете создать великое произведение: предмет искусства, текст, инструмент, оружие и тому подобное. Получите сюжетную тему с 3 положительными и 1 отрицательным тегом и отметьте Веху.",
           "page": 113
         },
         {
           "id": "prodigious-5",
-          "name": "Practiced Maneuver",
-          "text": "Describe a maneuver you perform regularly. Once per session, when you perform it with tags from this theme and get only Consequences, you may Succeed as well.",
+          "name": "Отработанный манёвр",
+          "text": "Опишите манёвр, который вы регулярно выполняете. Один раз за сессию, когда вы выполняете его с тегами этой темы и получаете только Последствия, вы можете также получить Успех.",
           "page": 113
         }
       ]
@@ -1100,92 +1100,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What powerful or mysterious item do you possess?"
+          "text": "Каким могущественным или таинственным предметом вы владеете?"
         },
         {
           "letter": "B",
-          "text": "What is its most potent power or ability?"
+          "text": "Какова его самая могущественная сила или способность?"
         },
         {
           "letter": "C",
-          "text": "What is another aspect or part of its magic?"
+          "text": "Какая ещё сторона или часть его магии вам доступна?"
         },
         {
           "letter": "D",
-          "text": "What do you feel when you hold, wear, or use it?"
+          "text": "Что вы чувствуете, когда держите, носите или используете его?"
         },
         {
           "letter": "E",
-          "text": "When does your Relic come to life or becomes stronger?"
+          "text": "Когда ваша реликвия оживает или становится сильнее?"
         },
         {
           "letter": "F",
-          "text": "What skill is required to best handle the Relic?"
+          "text": "Какой навык нужен, чтобы лучше всего обращаться с реликвией?"
         },
         {
           "letter": "G",
-          "text": "Who or what was your Relic made to affect the most?"
+          "text": "На кого или на что ваша реликвия должна была воздействовать сильнее всего?"
         },
         {
           "letter": "H",
-          "text": "What is revealed to you through the use of your Relic?"
+          "text": "Что открывается вам благодаря использованию реликвии?"
         },
         {
           "letter": "I",
-          "text": "What is a secret feature of the Relic that no one else knows about?"
+          "text": "О какой тайной особенности реликвии больше никто не знает?"
         },
         {
           "letter": "J",
-          "text": "What does your Relic unlock or unleash?"
+          "text": "Что ваша реликвия отпирает или высвобождает?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What is the most troublesome shortcoming of your Relic?"
+          "text": "Какой недостаток реликвии доставляет больше всего хлопот?"
         },
         {
           "letter": "B",
-          "text": "What can interfere with the powers of your Relic?"
+          "text": "Что может помешать силам вашей реликвии?"
         },
         {
           "letter": "C",
-          "text": "What can damage or destroy your Relic?"
+          "text": "Что может повредить или уничтожить вашу реликвию?"
         },
         {
           "letter": "D",
-          "text": "What has changed in you for the worse because of your Relic?"
+          "text": "Что изменилось в вас к худшему из-за вашей реликвии?"
         }
       ],
       "improvements": [
         {
           "id": "relic-1",
-          "name": "Eternal Bond",
-          "text": "You can scratch a power tag from this theme to immediately retrieve your Relic from anywhere in the world. You can mark Abandon on this theme to immediately remove all statuses from your Relic or reform it.",
+          "name": "Вечная связь",
+          "text": "Вы можете зачеркнуть тег силы этой темы, чтобы немедленно вернуть свою реликвию из любой точки мира. Вы можете отметить Угасание этой темы, чтобы немедленно снять с реликвии все статусы или восстановить её форму.",
           "page": 115
         },
         {
           "id": "relic-2",
-          "name": "Momentary Bearer",
-          "text": "Once per session, you can let another player use power tags from this theme, provided they can access and use your Relic for their action.",
+          "name": "Временный носитель",
+          "text": "Один раз за сессию вы можете позволить другому игроку использовать теги силы этой темы, если его персонаж может добраться до вашей реликвии и применить её в своём действии.",
           "page": 115
         },
         {
           "id": "relic-3",
-          "name": "Reckless Discharge",
-          "text": "Once per session, when you act using tags from this theme, you may treat the theme as if it was one level of Might higher than it is. Mark Abandon on this theme.",
+          "name": "Безрассудный выброс",
+          "text": "Один раз за сессию, когда вы действуете с тегами этой темы, вы можете считать её Могущество на один уровень выше. Отметьте Угасание этой темы.",
           "page": 115
         },
         {
           "id": "relic-4",
-          "name": "Sentinel",
-          "text": "Choose a tier-2 status that describes how your Relic protects you, such as watchful-2, parrying-2, warded-2, or cover-2. You may gain it once per session, when you are in imminent danger.",
+          "name": "Страж",
+          "text": "Выберите статус со степенью 2, описывающий защиту реликвии, например бдительность-2, парирование-2, оберег-2 или укрытие-2. Один раз за сессию вы можете получить его при непосредственной опасности.",
           "page": 115
         },
         {
           "id": "relic-5",
-          "name": "Signature Move",
-          "text": "Choose a power tag from this theme and an appropriate tier-2 status that you can give using this tag. Once per session, when you use this tag in an action and Succeed, you may give this status in addition to (and after applying) the normal outcome.",
+          "name": "Фирменный приём",
+          "text": "Выберите тег силы этой темы и подходящий статус со степенью 2, который вы можете дать с его помощью. Один раз за сессию, когда вы используете этот тег в действии и получаете Успех, вы можете дать этот статус в дополнение к обычному результату и после его применения.",
           "page": 115
         }
       ]
@@ -1199,92 +1199,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What manner of fantastical being are you?"
+          "text": "Что вы за фантастическое существо?"
         },
         {
           "letter": "B",
-          "text": "What can you do that a human never could?"
+          "text": "Что вы можете делать такого, чего человек никогда не смог бы?"
         },
         {
           "letter": "C",
-          "text": "What other magic or supernatural ability do you possess?"
+          "text": "Какой ещё магией или сверхъестественной способностью вы обладаете?"
         },
         {
           "letter": "D",
-          "text": "What unusual shape, feature, or trait do you have or can assume?"
+          "text": "Какой необычной формой, особенностью или чертой вы обладаете либо можете обзавестись?"
         },
         {
           "letter": "E",
-          "text": "What do you know or sense that mundane beings cannot?"
+          "text": "Что вы знаете или чувствуете такого, что недоступно обычным существам?"
         },
         {
           "letter": "F",
-          "text": "How do you gain sustenance, draw strength, or recover?"
+          "text": "Как вы питаетесь, набираетесь сил или восстанавливаетесь?"
         },
         {
           "letter": "G",
-          "text": "What aura, miasma, or other unique essence do you possess or exude?"
+          "text": "Какой аурой, миазмами или иной особой сущностью вы обладаете либо что излучаете?"
         },
         {
           "letter": "H",
-          "text": "What is your natural or preferred habitat, territory, or range?"
+          "text": "Какая среда обитания, территория или местность для вас естественна или предпочтительна?"
         },
         {
           "letter": "I",
-          "text": "Who or what is a common ally or prey to creatures such as you?"
+          "text": "Кто или что обычно служит союзником или добычей существам вроде вас?"
         },
         {
           "letter": "J",
-          "text": "How does your kind interact with mortal and mundane beings?"
+          "text": "Как ваш вид взаимодействует со смертными и обычными существами?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What repels or harms your kind?"
+          "text": "Что отталкивает существ вашего вида или вредит им?"
         },
         {
           "letter": "B",
-          "text": "How can mortal creatures bind or manipulate you?"
+          "text": "Как смертные существа могут сковать вас или управлять вами?"
         },
         {
           "letter": "C",
-          "text": "What is a shortcoming of your physical or magical nature?"
+          "text": "Какой недостаток есть у вашей физической или магической природы?"
         },
         {
           "letter": "D",
-          "text": "Who hunts or antagonizes you?"
+          "text": "Кто охотится на вас или враждует с вами?"
         }
       ],
       "improvements": [
         {
           "id": "uncanny-1",
-          "name": "Expressive Form",
-          "text": "Choose a status that describes your form such as terrifying-2, eerie-2, or welcoming-2. You may gain it at any point once per session.",
+          "name": "Выразительный облик",
+          "text": "Выберите статус, описывающий ваш облик, например устрашение-2, жуткий вид-2 или радушие-2. Один раз за сессию вы можете получить его в любой момент.",
           "page": 117
         },
         {
           "id": "uncanny-2",
-          "name": "Repel Witchery",
-          "text": "You are unusually resistant to magic. Once per scene, when you react to lessen magical Consequences with tags from this theme and roll 6 or less, you may still spend your Power to lessen the Effects.",
+          "name": "Отражение чар",
+          "text": "Вы необычайно устойчивы к магии. Один раз за сцену, когда вы реагируете с тегами этой темы, чтобы смягчить магические Последствия, и получаете 6 или меньше, вы всё равно можете потратить свою Силу на смягчение эффектов.",
           "page": 117
         },
         {
           "id": "uncanny-3",
-          "name": "Self Discovery",
-          "text": "Once per session, when you discover a new detail about your origin, your qualities, or your abilities, mark Improve on this theme.",
+          "name": "Познание себя",
+          "text": "Один раз за сессию, когда вы узнаёте новую подробность о своём происхождении, качествах или способностях, отметьте Развитие этой темы.",
           "page": 117
         },
         {
           "id": "uncanny-4",
-          "name": "Shifting Form",
-          "text": "Once per session, you may replace one of this theme’s power tags (except the theme tag) with a new tag that represents a change in your natural abilities and qualities.",
+          "name": "Переменчивый облик",
+          "text": "Один раз за сессию вы можете заменить один тег силы этой темы, кроме главного тега, новым тегом, отражающим изменение ваших природных способностей и качеств.",
           "page": 117
         },
         {
           "id": "uncanny-5",
-          "name": "Strive to Belong",
-          "text": "You follow the example of your more earthly companions. Once per session, when you watch another Hero perform a mundane action, you may gain a story tag describing your imitation or understanding them.",
+          "name": "Стремление стать своим",
+          "text": "Вы следуете примеру своих более земных спутников. Один раз за сессию, наблюдая, как другой герой совершает обычное действие, вы можете получить сюжетный тег, описывающий ваше подражание ему или понимание его поступка.",
           "page": 117
         }
       ]
@@ -1298,92 +1298,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What Destiny will you fulfill?"
+          "text": "Какую судьбу вам предстоит исполнить?"
         },
         {
           "letter": "B",
-          "text": "How does fate help you out when you are in danger?"
+          "text": "Как судьба выручает вас в опасности?"
         },
         {
           "letter": "C",
-          "text": "What useful resource has Destiny provided you with?"
+          "text": "Какой полезный ресурс предоставила вам судьба?"
         },
         {
           "letter": "D",
-          "text": "Who believes in your Destiny and will do anything to help fulfill it?"
+          "text": "Кто верит в вашу судьбу и готов на всё, чтобы помочь её исполнить?"
         },
         {
           "letter": "E",
-          "text": "What quality is the reason you were chosen for this fate?"
+          "text": "За какое качество вы были избраны для этой судьбы?"
         },
         {
           "letter": "F",
-          "text": "How has your fate made your life much easier than that of others?"
+          "text": "Как судьба сделала вашу жизнь намного легче, чем у других?"
         },
         {
           "letter": "G",
-          "text": "What useful possession of yours seems tied to your fate?"
+          "text": "Какой полезный ваш предмет, похоже, связан с вашей судьбой?"
         },
         {
           "letter": "H",
-          "text": "What signs, advice, intuition, or prophecy helps guide you?"
+          "text": "Какие знаки, советы, предчувствия или пророчества направляют вас?"
         },
         {
           "letter": "I",
-          "text": "What do you need most to fulfill your Destiny?"
+          "text": "Что вам нужнее всего для исполнения вашей судьбы?"
         },
         {
           "letter": "J",
-          "text": "How does fate abruptly alter reality to keep you on your path?"
+          "text": "Как судьба внезапно меняет реальность, чтобы удержать вас на вашем пути?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "Who is determined to thwart your Destiny?"
+          "text": "Кто твёрдо намерен помешать исполнению вашей судьбы?"
         },
         {
           "letter": "B",
-          "text": "What essential piece are you missing to fulfill your Destiny?"
+          "text": "Чего необходимого вам недостаёт для исполнения вашей судьбы?"
         },
         {
           "letter": "C",
-          "text": "What problem are you destined to face at every turn?"
+          "text": "С какой проблемой вам суждено сталкиваться на каждом шагу?"
         },
         {
           "letter": "D",
-          "text": "How has your Destiny gone to your head?"
+          "text": "Как ваша судьба вскружила вам голову?"
         }
       ],
       "improvements": [
         {
           "id": "destiny-1",
-          "name": "As Foretold",
-          "text": "Once per session, you may declare an action by you or another Hero as pivotal in the fulfillment of your Destiny. Count Power normally and, instead of rolling, treat the result as a Success with Consequences.",
+          "name": "Как предсказано",
+          "text": "Один раз за сессию вы можете объявить действие своё или другого героя решающим для исполнения вашей судьбы. Подсчитайте Силу как обычно и вместо броска считайте результат Успехом с Последствиями.",
           "page": 119
         },
         {
           "id": "destiny-2",
-          "name": "Meet It Head-On",
-          "text": "Once per session, when you act against something preventing you from fulfilling your Destiny, you first gain a story tag or a tier-2 status that represents your readiness.",
+          "name": "Встретить лицом к лицу",
+          "text": "Один раз за сессию, когда вы действуете против того, что мешает исполнить вашу судьбу, вы сначала получаете сюжетный тег или статус со степенью 2, отражающий вашу готовность.",
           "page": 119
         },
         {
           "id": "destiny-3",
-          "name": "Not How It Ends",
-          "text": "Once per session, when you take Consequences that would hinder you on the way to your Destiny (despaired, tired, cursed, etc.), you may avoid these Consequences completely.",
+          "name": "Это ещё не конец",
+          "text": "Один раз за сессию, когда вы получаете Последствия, которые помешают вам на пути к вашей судьбе, например отчаяние, усталость или проклятие, вы можете полностью избежать этих Последствий.",
           "page": 119
         },
         {
           "id": "destiny-4",
-          "name": "Reincarnation",
-          "text": "When your Destiny finally manifests, you may remove any harmful status on you, including tier-6 statuses. This theme evolves, and you can replace any number of your other themes. You gain Promise as usual for all themes.",
+          "name": "Перерождение",
+          "text": "Когда ваша судьба наконец исполняется, вы можете снять с себя любой вредоносный статус, включая статусы со степенью 6. Эта тема эволюционирует, и вы можете заменить любое количество других своих тем. За все темы вы получаете Потенциал как обычно.",
           "page": 119
         },
         {
           "id": "destiny-5",
-          "name": "Pull of Destiny",
-          "text": "Once per session, you may ask the Narrator what the best way to pursue your Destiny is, and get one valuable detail.",
+          "name": "Зов судьбы",
+          "text": "Один раз за сессию вы можете спросить ведущего о лучшем способе следовать своей судьбе и получить одну ценную подробность.",
           "page": 119
         }
       ]
@@ -1397,92 +1397,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "State your title, or what you rule over."
+          "text": "Назовите свой титул или то, над чем вы властвуете."
         },
         {
           "letter": "B",
-          "text": "What is the most common or useful use of your authority?"
+          "text": "Как вы чаще всего или с наибольшей пользой применяете свою власть?"
         },
         {
           "letter": "C",
-          "text": "Who is your closest confidant, advisor, or servant?"
+          "text": "Кто ваш ближайший доверенный человек, советник или слуга?"
         },
         {
           "letter": "D",
-          "text": "What underlings serve you in droves?"
+          "text": "Какие подчинённые служат вам во множестве?"
         },
         {
           "letter": "E",
-          "text": "What valuable resources does your Dominion produce regularly?"
+          "text": "Какие ценные ресурсы регулярно производят ваши владения?"
         },
         {
           "letter": "F",
-          "text": "What special quality or circumstance serves you as a ruler?"
+          "text": "Какое особое качество или обстоятельство помогает вам править?"
         },
         {
           "letter": "G",
-          "text": "Where or when is your Dominion at its strongest?"
+          "text": "Где или когда ваше владычество сильнее всего?"
         },
         {
           "letter": "H",
-          "text": "What group within your Dominion supports you most?"
+          "text": "Какая группа в ваших владениях поддерживает вас больше всего?"
         },
         {
           "letter": "I",
-          "text": "What ways have you devised to hold on to your power?"
+          "text": "Какие способы удержать власть вы придумали?"
         },
         {
           "letter": "J",
-          "text": "What is your favored tactic or strategy during conflict?"
+          "text": "Какой тактике или стратегии вы отдаёте предпочтение в конфликте?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "Who seeks to usurp your power or dethrone you?"
+          "text": "Кто стремится присвоить вашу власть или свергнуть вас?"
         },
         {
           "letter": "B",
-          "text": "What problem plagues your Dominion?"
+          "text": "Какая проблема терзает ваши владения?"
         },
         {
           "letter": "C",
-          "text": "What personal flaw have you become known for?"
+          "text": "Каким личным недостатком вы прославились?"
         },
         {
           "letter": "D",
-          "text": "What dark secret do you hide?"
+          "text": "Какую мрачную тайну вы скрываете?"
         }
       ],
       "improvements": [
         {
           "id": "dominion-1",
-          "name": "Embodiment of the Realm",
-          "text": "You are connected to your Dominion in more than title. Any status on your Dominion is considered to apply to you as well, and any status on you is considered to apply to your Dominion.",
+          "name": "Воплощение державы",
+          "text": "Вас связывает с вашими владениями не только титул. Любой статус ваших владений считается действующим и на вас, а любой ваш статус — действующим и на ваши владения.",
           "page": 121
         },
         {
           "id": "dominion-2",
-          "name": "Good Help Is Hard to Find",
-          "text": "Name an advisor, craftsman, or assistant NPC that comes with your position. Once per session, you may gain a story tag they produce for you.",
+          "name": "Хорошего помощника трудно найти",
+          "text": "Назовите персонажа ведущего — советника, ремесленника или помощника, которого вам обеспечивает ваше положение. Один раз за сессию вы можете получить сюжетный тег, созданный им для вас.",
           "page": 121
         },
         {
           "id": "dominion-3",
-          "name": "My Word Is Absolute",
-          "text": "Once per session, you may gain a story tag representing a decree you have made in your Dominion (expiring any previous tag created this way). White it exists, it holds true throughout your Dominion, although it can be scratched.",
+          "name": "Моё слово — закон",
+          "text": "Один раз за сессию вы можете получить сюжетный тег, отражающий ваш указ в пределах ваших владений. Предыдущий тег, созданный этим способом, исчезает. Пока тег существует, указ действует повсюду в ваших владениях, хотя сам тег может быть зачёркнут.",
           "page": 121
         },
         {
           "id": "dominion-4",
-          "name": "Regalia",
-          "text": "Choose a physical symbol of your position. Once per scene, when you wear, wield, or are in the presence of this symbol, you may gain majestic-2.",
+          "name": "Регалии",
+          "text": "Выберите вещественный символ вашего положения. Один раз за сцену, когда вы носите его, держите в руках или находитесь рядом с ним, вы можете получить статус величие-2.",
           "page": 121
         },
         {
           "id": "dominion-5",
-          "name": "Untarnished Glory",
-          "text": "Once per session, you may remove 2 tiers of a negative status on your Dominion or recover a scratched tag in this theme.",
+          "name": "Незапятнанная слава",
+          "text": "Один раз за сессию вы можете снять 2 степени отрицательного статуса с ваших владений или восстановить зачёркнутый тег этой темы.",
           "page": 121
         }
       ]
@@ -1496,92 +1496,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What skill, ability, or field have you come to Master?"
+          "text": "В каком навыке, способности или области вы достигли мастерства?"
         },
         {
           "letter": "B",
-          "text": "What supplementary skills have you become equally proficient at?"
+          "text": "Какими вспомогательными навыками вы овладели столь же хорошо?"
         },
         {
           "letter": "C",
-          "text": "What can you do that no other practitioner can?"
+          "text": "Что вы умеете делать такого, чего не умеет ни один другой знаток вашего дела?"
         },
         {
           "letter": "D",
-          "text": "How can your Mastery change the world?"
+          "text": "Как ваше мастерство может изменить мир?"
         },
         {
           "letter": "E",
-          "text": "What specially-made tools or expert assistants are at your disposal?"
+          "text": "Какие особые инструменты или опытные помощники есть в вашем распоряжении?"
         },
         {
           "letter": "F",
-          "text": "What is the name of your legendary workshop, library, forge, or the like?"
+          "text": "Как называется ваша легендарная мастерская, библиотека, кузница или подобное место?"
         },
         {
           "letter": "G",
-          "text": "What can you do with incredible effectiveness, speed, or magnitude?"
+          "text": "Что вы можете сделать с невероятной эффективностью, скоростью или размахом?"
         },
         {
           "letter": "H",
-          "text": "What is your most well-practiced technique or best-studied subject?"
+          "text": "Какой приём вы отработали лучше всего или какой предмет изучили глубже всего?"
         },
         {
           "letter": "I",
-          "text": "What awe-striking feat can you perform at your whim?"
+          "text": "Какое внушающее трепет деяние вы можете совершить по своей воле?"
         },
         {
           "letter": "J",
-          "text": "What special privileges or material benefits come with your Mastery?"
+          "text": "Какие особые привилегии или материальные блага приносит ваше мастерство?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What are the inherent repercussions of practicing at your level?"
+          "text": "Какие неизбежные последствия влечёт применение мастерства на вашем уровне?"
         },
         {
           "letter": "B",
-          "text": "How has your Mastery affected your disposition or lifestyle for the worse?"
+          "text": "Как ваше мастерство изменило к худшему ваш нрав или образ жизни?"
         },
         {
           "letter": "C",
-          "text": "What do you ignore, because you no longer notice such trivial things?"
+          "text": "Что вы игнорируете, потому что больше не замечаете таких мелочей?"
         },
         {
           "letter": "D",
-          "text": "Who feels jealous of your Mastery?"
+          "text": "Кто завидует вашему мастерству?"
         }
       ],
       "improvements": [
         {
           "id": "mastery-1",
-          "name": "Always Prepared",
-          "text": "Once per scene, when a broad tag from this theme is indirectly relevant to your action, you may use it as directly relevant instead, skipping the required prep action.",
+          "name": "Всегда наготове",
+          "text": "Один раз за сцену, если широкий тег этой темы лишь косвенно относится к вашему действию, вы можете использовать его как непосредственно относящийся к делу, пропустив необходимое подготовительное действие.",
           "page": 123
         },
         {
           "id": "mastery-2",
-          "name": "Calculated Sacrifice",
-          "text": "Before Making a Sacrifice at the Grave sacrifice level related to your Mastery, replace a theme other than this one that is dearest to you. You may then treat a 7-9 roll as a 10 or more result. If you Succeed, you don’t need to replace another theme – you already paid that price.",
+          "name": "Обдуманная жертва",
+          "text": "Прежде чем совершить связанное с вашим мастерством особое действие «Пойти на жертву» на уровне «Тяжёлая жертва», замените самую дорогую вам тему, кроме этой. После этого вы можете считать результат броска 7–9 результатом 10 или выше. При Успехе заменять ещё одну тему не нужно: вы уже заплатили эту цену.",
           "page": 123
         },
         {
           "id": "mastery-3",
-          "name": "Foresee the Outcome",
-          "text": "Once per session, you may declare that an action in which you rolled a total of 9 or less (including Power) was only a prediction of an unwanted outcome and did not actually happen. Disregard the action and take a different action instead.",
+          "name": "Предвидеть исход",
+          "text": "Один раз за сессию вы можете объявить, что действие, в котором итоговый результат вашего броска с учётом Силы составил 9 или меньше, было лишь предвидением нежелательного исхода и на самом деле не происходило. Отмените это действие и совершите вместо него другое.",
           "page": 123
         },
         {
           "id": "mastery-4",
-          "name": "Lifelong Insight",
-          "text": "When you replace this theme, you may keep one of the Special Improvements you chose (except for this one) and add it to the new theme.",
+          "name": "Озарение на всю жизнь",
+          "text": "Когда вы заменяете эту тему, вы можете сохранить одно из выбранных особых улучшений, кроме этого, и добавить его к новой теме.",
           "page": 123
         },
         {
           "id": "mastery-5",
-          "name": "Second Wind",
-          "text": "Once per session, you may restore two scratched tags in this theme, at the cost of scratching one tag on another theme.",
+          "name": "Второе дыхание",
+          "text": "Один раз за сессию вы можете восстановить два зачёркнутых тега этой темы, зачеркнув взамен один тег другой темы.",
           "page": 123
         }
       ]
@@ -1595,92 +1595,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What magnificent or terrifying creature are you?"
+          "text": "Что вы за величественное или ужасающее существо?"
         },
         {
           "letter": "B",
-          "text": "What is your most prominent physical feature?"
+          "text": "Какая физическая особенность у вас самая заметная?"
         },
         {
           "letter": "C",
-          "text": "What innate magical ability do you most often wield?"
+          "text": "Какую врождённую магическую способность вы применяете чаще всего?"
         },
         {
           "letter": "D",
-          "text": "What feature, move, or power enables you to affect many at once?"
+          "text": "Какая особенность, приём или сила позволяет вам воздействовать сразу на многих?"
         },
         {
           "letter": "E",
-          "text": "How do you defend yourself with magic or size?"
+          "text": "Как вы защищаете себя с помощью магии или размеров?"
         },
         {
           "letter": "F",
-          "text": "What unique offensive capability do you possess?"
+          "text": "Какой уникальной атакующей способностью вы обладаете?"
         },
         {
           "letter": "G",
-          "text": "What powerful emotion drives you or is rooted in your core?"
+          "text": "Какое сильное чувство движет вами или лежит в основе вашей сущности?"
         },
         {
           "letter": "H",
-          "text": "What arcane truth is revealed to you that mere mortals cannot sense?"
+          "text": "Какая тайная истина открыта вам, но недоступна чувствам простых смертных?"
         },
         {
           "letter": "I",
-          "text": "Who serves you?"
+          "text": "Кто вам служит?"
         },
         {
           "letter": "J",
-          "text": "What about you commands respect from lesser creatures?"
+          "text": "Что в вас внушает уважение менее могущественным существам?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What is your blind spot, that you miss due to your size or power?"
+          "text": "Чего вы не замечаете из-за своих размеров или могущества?"
         },
         {
           "letter": "B",
-          "text": "What can counteract your magic or weaken you?"
+          "text": "Что может противодействовать вашей магии или ослабить вас?"
         },
         {
           "letter": "C",
-          "text": "What is your one weak spot or bane?"
+          "text": "Каково ваше единственное уязвимое место или губительное для вас средство?"
         },
         {
           "letter": "D",
-          "text": "Who seeks out your destruction?"
+          "text": "Кто стремится вас уничтожить?"
         }
       ],
       "improvements": [
         {
           "id": "monstrosity-1",
-          "name": "Display of Force",
-          "text": "Once per session, when you act using tags from this theme and Succeed without Consequences, your incredible display gives a tier-3 status of your choice representing amazement, respect, or fear to a crowd of impressionable onlookers or one observer not easily impressed.",
+          "name": "Демонстрация силы",
+          "text": "Один раз за сессию, когда вы действуете с тегами этой темы и получаете Успех без Последствий, ваше невероятное деяние даёт выбранный вами статус со степенью 3, отражающий изумление, уважение или страх, толпе впечатлительных зрителей либо одному наблюдателю, которого трудно впечатлить.",
           "page": 125
         },
         {
           "id": "monstrosity-2",
-          "name": "Fine Control",
-          "text": "You learned how to better control your form’s unique abilities. Choose and gain a Special Improvement from the Mastery themebook.",
+          "name": "Тонкий контроль",
+          "text": "Вы научились лучше управлять особыми способностями своего облика. Выберите и получите особое улучшение из темника «Мастерство».",
           "page": 125
         },
         {
           "id": "monstrosity-3",
-          "name": "Invulnerability",
-          "text": "Choose a power tag in this theme representing a type of physical or magical protection. You ignore all Consequences that this protection is relevant to, as long as this tag is unscratched.",
+          "name": "Неуязвимость",
+          "text": "Выберите тег силы этой темы, отражающий физическую или магическую защиту определённого типа. Пока этот тег не зачёркнут, вы игнорируете все Последствия, против которых применима эта защита.",
           "page": 125
         },
         {
           "id": "monstrosity-4",
-          "name": "Magical Trace",
-          "text": "At the end of a scene, you may leave behind a magical trace (expiring any previous tag created this way). You may scratch this tag to take an action using tags from this theme as if you were at the tag’s location.",
+          "name": "Магический след",
+          "text": "В конце сцены вы можете оставить магический след. Предыдущий тег, созданный этим способом, исчезает. Вы можете зачеркнуть этот тег, чтобы совершить действие с тегами этой темы, словно вы находитесь там, где оставлен след.",
           "page": 125
         },
         {
           "id": "monstrosity-5",
-          "name": "Surge of Power",
-          "text": "Once per session, when burning a tag from this theme for Power, you may add 5 Power to the roll instead of 3. After the roll is resolved, you take exhausted-2. You cannot lessen this status.",
+          "name": "Всплеск могущества",
+          "text": "Один раз за сессию, сжигая тег этой темы ради Силы, вы можете добавить к броску 5 Силы вместо 3. После разрешения броска вы получаете статус истощение-2. Этот статус нельзя смягчить.",
           "page": 125
         }
       ]
@@ -1694,92 +1694,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "Who is regularly at your side, supporting you?"
+          "text": "Кто постоянно рядом с вами и поддерживает вас?"
         },
         {
           "letter": "B",
-          "text": "What is your Companion’s most handy quality or skill?"
+          "text": "Какое качество или умение вашего спутника наиболее полезно?"
         },
         {
           "letter": "C",
-          "text": "How does your Companion get you out of a jam?"
+          "text": "Как ваш спутник вытаскивает вас из передряг?"
         },
         {
           "letter": "D",
-          "text": "What activity do you and your Companion do well together?"
+          "text": "Что у вас со спутником хорошо получается делать вместе?"
         },
         {
           "letter": "E",
-          "text": "Where do you and your Companion go to relax or to get things done?"
+          "text": "Куда вы со спутником отправляетесь отдохнуть или заняться делами?"
         },
         {
           "letter": "F",
-          "text": "What is your Companion’s signature move, trick, or ability?"
+          "text": "Каков фирменный приём, трюк или способность вашего спутника?"
         },
         {
           "letter": "G",
-          "text": "What useful item does your Companion always have at the ready?"
+          "text": "Какой полезный предмет всегда наготове у вашего спутника?"
         },
         {
           "letter": "H",
-          "text": "How does your Companion help you improve or recover, or vice versa?"
+          "text": "Как ваш спутник помогает вам развиваться или восстанавливаться — либо вы ему?"
         },
         {
           "letter": "I",
-          "text": "What is a useful physical characteristic of your Companion?"
+          "text": "Какая физическая особенность вашего спутника полезна?"
         },
         {
           "letter": "J",
-          "text": "What is your Companion’s outlook or modus operandi?"
+          "text": "Каковы взгляды вашего спутника или его привычный образ действий?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "How does your Companion get you into trouble or danger?"
+          "text": "Как ваш спутник втягивает вас в неприятности или опасности?"
         },
         {
           "letter": "B",
-          "text": "What is your Companion’s most annoying quality?"
+          "text": "Какое качество вашего спутника раздражает больше всего?"
         },
         {
           "letter": "C",
-          "text": "What causes your Companion to become unavailable?"
+          "text": "Из-за чего ваш спутник становится недоступен?"
         },
         {
           "letter": "D",
-          "text": "In what situation is your Companion least useful?"
+          "text": "В какой ситуации ваш спутник наименее полезен?"
         }
       ],
       "improvements": [
         {
           "id": "companion-1",
-          "name": "Everyone’s Best Friend",
-          "text": "Once per session, when your Companion helps another member of your Fellowship, you may invoke only tags from this theme, forgo rolling, and get a Success without Consequences.",
+          "name": "Всеобщий любимец",
+          "text": "Один раз за сессию, когда ваш спутник помогает другому члену Братства, вы можете применить только теги этой темы, отказаться от броска и получить Успех без Последствий.",
           "page": 127
         },
         {
           "id": "companion-2",
-          "name": "Here For You",
-          "text": "Once per session, when you or your Companion take action to heal one another or help the other recover, mark Improve on this theme. This does not apply while camping.",
+          "name": "Я рядом",
+          "text": "Один раз за сессию, когда вы или ваш спутник совершаете действие, чтобы исцелить другого или помочь ему восстановиться, отметьте Развитие этой темы. Это не действует во время отдыха в лагере.",
           "page": 127
         },
         {
           "id": "companion-3",
-          "name": "Perfect Positioning",
-          "text": "Once per session, you can declare your Companion is positioned anywhere in the scene as long as they could get there, and give them a tier-2 status representing their advantageous position.",
+          "name": "Идеальная позиция",
+          "text": "Один раз за сессию вы можете объявить, что ваш спутник находится в любой точке сцены, до которой он мог добраться, и дать ему статус со степенью 2, отражающий выгодную позицию.",
           "page": 127
         },
         {
           "id": "companion-4",
-          "name": "Reliable Ally",
-          "text": "Once per session, when you act alongside your Companion and get only Consequences, you may scratch a tag in this theme to Succeed as well.",
+          "name": "Надёжный союзник",
+          "text": "Один раз за сессию, когда вы действуете вместе со спутником и получаете только Последствия, вы можете зачеркнуть тег этой темы, чтобы также получить Успех.",
           "page": 127
         },
         {
           "id": "companion-5",
-          "name": "Retaliation",
-          "text": "Whenever anyone gives your Companion a harmful or hindering tag or status, you gain provoked-2, which helps actions to retaliate against the offender.",
+          "name": "Возмездие",
+          "text": "Всякий раз, когда кто-либо даёт вашему спутнику вредоносный или мешающий тег либо статус, вы получаете статус негодование-2, который помогает действиям возмездия против обидчика.",
           "page": 127
         }
       ]
@@ -1793,92 +1793,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What is your magical nature, art, or expression?"
+          "text": "Какова ваша магическая природа, искусство или способ проявления магии?"
         },
         {
           "letter": "B",
-          "text": "What category, field, or type of Magic do you specialize in?"
+          "text": "На какой области, школе или разновидности магии вы специализируетесь?"
         },
         {
           "letter": "C",
-          "text": "What specific magical ability, maneuver, or spell do you use regularly?"
+          "text": "Какую конкретную магическую способность, приём или заклинание вы регулярно используете?"
         },
         {
           "letter": "D",
-          "text": "What is different, better, or special about the way you use Magic?"
+          "text": "Чем ваш способ использования магии отличается от других, превосходит их или выделяется?"
         },
         {
           "letter": "E",
-          "text": "Which personal style or flourish have you added to your Magic?"
+          "text": "Каким личным стилем или эффектным штрихом вы дополнили свою магию?"
         },
         {
           "letter": "F",
-          "text": "What knowledge or lore related to this form of Magic did you acquire?"
+          "text": "Какие знания или предания об этом виде магии вы приобрели?"
         },
         {
           "letter": "G",
-          "text": "In which conditions is your Magic most powerful?"
+          "text": "В каких условиях ваша магия сильнее всего?"
         },
         {
           "letter": "H",
-          "text": "What item or material do you use to empower your Magic?"
+          "text": "Какой предмет или материал вы используете для усиления магии?"
         },
         {
           "letter": "I",
-          "text": "What skill related to your Magic have you developed?"
+          "text": "Какой связанный с вашей магией навык вы развили?"
         },
         {
           "letter": "J",
-          "text": "What social skill, trait, or benefit do you have thanks to your Magic?"
+          "text": "Какой навык общения, черту или преимущество даёт вам ваша магия?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What conditions, uses, or targets are unfavorable for your Magic?"
+          "text": "Какие условия, способы применения или цели неблагоприятны для вашей магии?"
         },
         {
           "letter": "B",
-          "text": "What does your Magic require in order to function well?"
+          "text": "Что необходимо вашей магии, чтобы действовать как следует?"
         },
         {
           "letter": "C",
-          "text": "What are the side effects of having or using your Magic?"
+          "text": "Какие побочные эффекты возникают из-за обладания вашей магией или её применения?"
         },
         {
           "letter": "D",
-          "text": "How does having Magic make your life harder?"
+          "text": "Как обладание магией усложняет вашу жизнь?"
         }
       ],
       "improvements": [
         {
           "id": "magic-1",
-          "name": "Scholar of Magic",
-          "text": "Once per scene, when you see someone practicing magic of the same kind you practice, you may ask the Narrator for one valuable detail about the magic they’re performing.",
+          "name": "Знаток магии",
+          "text": "Один раз за сцену, наблюдая, как кто-либо практикует тот же вид магии, что и вы, вы можете спросить ведущего об одной ценной подробности творимой им магии.",
           "page": 129
         },
         {
           "id": "magic-2",
-          "name": "Ward Breaker",
-          "text": "Once per session, when you act against someone warded against your Magic and Succeed, you may scratch a tag or reduce by two tiers a status representing their defense, in addition to the normal outcome.",
+          "name": "Разрушитель оберегов",
+          "text": "Один раз за сессию, действуя против того, кто защищён от вашей магии, и получив Успех, вы можете в дополнение к обычному результату зачеркнуть тег его защиты или снизить степень отражающего её статуса на 2.",
           "page": 129
         },
         {
           "id": "magic-3",
-          "name": "Rote Technique",
-          "text": "Once per session, when you use your Magic in a way you’ve used it before and get only Consequences, you may Succeed as well.",
+          "name": "Заученный приём",
+          "text": "Один раз за сессию, когда вы применяете магию уже знакомым способом и получаете только Последствия, вы можете также получить Успех.",
           "page": 129
         },
         {
           "id": "magic-4",
-          "name": "Reputation Precedes",
-          "text": "Choose a tier-2 status representing a reaction to your magic. Whenever you meet a character for the first time, you may give them this status, at the Narrator’s discretion.",
+          "name": "Слава опережает",
+          "text": "Выберите статус со степенью 2, отражающий реакцию на вашу магию. Впервые встречая персонажа, вы можете с согласия ведущего дать ему этот статус.",
           "page": 129
         },
         {
           "id": "magic-5",
-          "name": "Inspired Ingenuity",
-          "text": "Once per session, when you use your Magic to achieve a goal in a way you never have before, you may mark Improve on this theme.",
+          "name": "Вдохновенная изобретательность",
+          "text": "Один раз за сессию, когда вы применяете магию для достижения цели способом, которого ещё не пробовали, вы можете отметить Развитие этой темы.",
           "page": 129
         }
       ]
@@ -1892,92 +1892,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "What is your most important Possession or material resource?"
+          "text": "Какое ваше владение или материальный ресурс важнее всего?"
         },
         {
           "letter": "B",
-          "text": "What useful characteristic or feature does it have?"
+          "text": "Какое полезное свойство или особенность у него есть?"
         },
         {
           "letter": "C",
-          "text": "What supplemental or related item or set do you possess?"
+          "text": "Каким дополнительным или связанным с ним предметом либо набором вы владеете?"
         },
         {
           "letter": "D",
-          "text": "What is the most common way you use your Possession?"
+          "text": "Как вы чаще всего используете своё владение?"
         },
         {
           "letter": "E",
-          "text": "What surprising secret or trick use does this item have?"
+          "text": "Какой неожиданный секрет или хитрый способ применения есть у этого предмета?"
         },
         {
           "letter": "F",
-          "text": "What situations or conditions was this item designed for?"
+          "text": "Для каких ситуаций или условий создан этот предмет?"
         },
         {
           "letter": "G",
-          "text": "How do you handle, repair, or maintain your Possessions?"
+          "text": "Как вы обращаетесь со своими владениями, ремонтируете их или ухаживаете за ними?"
         },
         {
           "letter": "H",
-          "text": "What emotion or memory does this Possession evoke in you?"
+          "text": "Какое чувство или воспоминание вызывает у вас это владение?"
         },
         {
           "letter": "I",
-          "text": "How do you keep your Possession safe or concealed?"
+          "text": "Как вы оберегаете или скрываете своё владение?"
         },
         {
           "letter": "J",
-          "text": "What is the make, style, design, or quality standard of this item?"
+          "text": "Каковы изготовление, стиль, устройство или качество этого предмета?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What is a flaw or downside of your Possession?"
+          "text": "Какой недостаток или изъян есть у вашего владения?"
         },
         {
           "letter": "B",
-          "text": "What causes your Possession to need repair or maintenance?"
+          "text": "Из-за чего вашему владению требуется ремонт или обслуживание?"
         },
         {
           "letter": "C",
-          "text": "How do you overuse or abuse your Possession?"
+          "text": "Как вы чрезмерно или неправильно используете своё владение?"
         },
         {
           "letter": "D",
-          "text": "What is beyond the capabilities or standards of your Possession?"
+          "text": "Что выходит за пределы возможностей или качества вашего владения?"
         }
       ],
       "improvements": [
         {
           "id": "possessions-1",
-          "name": "Durable",
-          "text": "Choose a tag from this theme. Once per session, you can prevent Consequence Effects that would scratch it or give it a status of tier 3 or less.",
+          "name": "Прочность",
+          "text": "Выберите тег этой темы. Один раз за сессию вы можете предотвратить эффекты Последствий, которые зачеркнули бы его или дали бы ему статус со степенью не выше 3.",
           "page": 131
         },
         {
           "id": "possessions-2",
-          "name": "Favorite Piece",
-          "text": "Choose a power tag in this theme. Once per session, you may burn this tag for Power without scratching it.",
+          "name": "Любимая вещь",
+          "text": "Выберите тег силы этой темы. Один раз за сессию вы можете сжечь этот тег ради Силы, не зачёркивая его.",
           "page": 131
         },
         {
           "id": "possessions-3",
-          "name": "I’m Keeping This",
-          "text": "Choose one of your backpack tags and move it to this theme; it becomes a power tag. Once per session, you may return this tag to your backpack and pick a different one to move to this theme.",
+          "name": "Оставлю себе",
+          "text": "Выберите один тег своего рюкзака и перенесите его в эту тему: он становится тегом силы. Один раз за сессию вы можете вернуть этот тег в рюкзак и выбрать другой для переноса в тему.",
           "page": 131
         },
         {
           "id": "possessions-4",
-          "name": "Just The Thing",
-          "text": "Once per session, you may gain a story tag that represents something useful you have on you or that you have access to, or a new use for your items.",
+          "name": "Именно то, что нужно",
+          "text": "Один раз за сессию вы можете получить сюжетный тег, отражающий полезную вещь, которая есть при вас или к которой у вас есть доступ, либо новый способ применения ваших предметов.",
           "page": 131
         },
         {
           "id": "possessions-5",
-          "name": "Quartermaster",
-          "text": "Choose a power tag from this theme representing an item. Members of your Fellowship may treat it as if it were in their backpack, as long as it is possible for you to hand it to them and let them use it. (It retains the Might of this theme.)",
+          "name": "Квартирмейстер",
+          "text": "Выберите тег силы этой темы, отражающий предмет. Члены Братства могут считать его находящимся в своём рюкзаке, если вы можете передать им предмет и позволить им воспользоваться. Он сохраняет Могущество этой темы.",
           "page": 131
         }
       ]
@@ -1991,92 +1991,92 @@
       "power": [
         {
           "letter": "A",
-          "text": "Who are you, as a group?"
+          "text": "Кто вы как группа?"
         },
         {
           "letter": "B",
-          "text": "Where do you meet, work, rest, or prepare for action?"
+          "text": "Где вы встречаетесь, работаете, отдыхаете или готовитесь к действиям?"
         },
         {
           "letter": "C",
-          "text": "What do you do well together?"
+          "text": "Что у вас хорошо получается делать вместе?"
         },
         {
           "letter": "D",
-          "text": "Who mentors you, aids you, or is sympathetic to your goals?"
+          "text": "Кто наставляет вас, помогает вам или сочувствует вашим целям?"
         },
         {
           "letter": "E",
-          "text": "What helps you travel from one place to the next?"
+          "text": "Что помогает вам путешествовать из одного места в другое?"
         },
         {
           "letter": "F",
-          "text": "In what environments or situations are you most comfortable?"
+          "text": "В какой среде или ситуациях вы чувствуете себя увереннее всего?"
         },
         {
           "letter": "G",
-          "text": "What special sources of information do you have?"
+          "text": "Какие особые источники информации вам доступны?"
         },
         {
           "letter": "H",
-          "text": "What sort of reputation or name have you made for yourselves?"
+          "text": "Какую репутацию или известность вы себе создали?"
         },
         {
           "letter": "I",
-          "text": "How do you help, assist, or support one another?"
+          "text": "Как вы помогаете друг другу или поддерживаете друг друга?"
         },
         {
           "letter": "J",
-          "text": "What kind of special gear, resource, or power is at your disposal?"
+          "text": "Какое особое снаряжение, ресурс или сила есть в вашем распоряжении?"
         }
       ],
       "weakness": [
         {
           "letter": "A",
-          "text": "What is flawed or lacking in the way you work together?"
+          "text": "В чём ваше сотрудничество несовершенно или чего ему недостаёт?"
         },
         {
           "letter": "B",
-          "text": "How do you get into trouble?"
+          "text": "Как вы попадаете в неприятности?"
         },
         {
           "letter": "C",
-          "text": "Who or what threatens your Fellowship or shared goals?"
+          "text": "Кто или что угрожает вашему Братству или общим целям?"
         },
         {
           "letter": "D",
-          "text": "What places or situations do you find tough to handle?"
+          "text": "С какими местами или ситуациями вам трудно справляться?"
         }
       ],
       "improvements": [
         {
           "id": "fellowship-1",
-          "name": "Campfire Stories",
-          "text": "Whenever you camp or sojourn, between the first and second activities, one of the Heroes may share a story from their past. Each member of the Fellowship may then remove one tier of a harmful status, at the Narrator’s discretion.",
+          "name": "Истории у костра",
+          "text": "Каждый раз, когда вы разбиваете лагерь или останавливаетесь на постой, между первым и вторым занятиями один из героев может рассказать историю из своего прошлого. После этого каждый член Братства может с согласия ведущего снять одну степень вредоносного статуса.",
           "page": 141
         },
         {
           "id": "fellowship-2",
-          "name": "One Of Us",
-          "text": "Choose an NPC accompanying the Fellowship – a person, animal, or any other thing that feels. All members of the Fellowship may write an additional Fellowship relationship tag with this character on their Hero cards.",
+          "name": "Один из нас",
+          "text": "Выберите сопровождающего Братство персонажа ведущего: человека, животное или любое другое чувствующее существо. Все члены Братства могут записать на своих карточках героя дополнительный тег отношений Братства с этим персонажем.",
           "page": 141
         },
         {
           "id": "fellowship-3",
-          "name": "Sacrifice",
-          "text": "When two or more of you suffer the same Consequences, a Hero who can reasonably defend another Hero may spend Power from their own reaction to lessen their ally’s Consequences.",
+          "name": "Самопожертвование",
+          "text": "Когда двое или более из вас получают одни и те же Последствия, герой, который правдоподобно может защитить другого героя, вправе потратить Силу своей реакции на смягчение Последствий союзника.",
           "page": 141
         },
         {
           "id": "fellowship-4",
-          "name": "Teamwork",
-          "text": "When two or more Heroes take the same action while camping or sojourning, they all get 1 more Power for this action.",
+          "name": "Командная работа",
+          "text": "Когда двое или более героев совершают одно и то же действие в лагере или на постое, каждый получает 1 дополнительную Силу для этого действия.",
           "page": 141
         },
         {
           "id": "fellowship-5",
-          "name": "United by the Cause",
-          "text": "Once per session, when the entire Fellowship cooperates in a single scene while aligned with this theme’s Quest, each member of the Fellowship may unscratch a Fellowship theme tag.",
+          "name": "Общее дело",
+          "text": "Один раз за сессию, когда всё Братство сотрудничает в одной сцене в согласии со Стремлением этой темы, каждый член Братства может восстановить один зачёркнутый тег темы Братства.",
           "page": 141
         }
       ]
@@ -2085,110 +2085,110 @@
   "quintessences": [
     {
       "id": "quint-1",
-      "name": "Beyond Luck",
-      "text": "You no longer automatically miss when you roll double ones.",
+      "name": "Выше удачи",
+      "text": "Две единицы на костях больше не означают для вас автоматический провал.",
       "page": 194
     },
     {
       "id": "quint-2",
-      "name": "Canny One",
-      "text": "Once per session, when the Narrator delivers Consequences or activates a Challenge’s ability, you may treat them as a Threat instead, take the spotlight, and take a single action, even if you just acted. Your action must address the Threat and could even nullify it.",
+      "name": "Хитрец",
+      "text": "Один раз за сессию, когда ведущий назначает Последствия или активирует способность Препятствия, вы можете вместо этого считать их Угрозой, оказаться в центре внимания и совершить одно действие, даже если вы только что действовали. Ваше действие должно быть направлено против Угрозы и может даже полностью её устранить.",
       "page": 194
     },
     {
       "id": "quint-3",
-      "name": "Dark Horse",
-      "text": "When you die for any reason, you may narrate your death scene, and in the process, describe any one change to your immediate surroundings or to a character present, as big and dramatic as you want it to be. Any change is subject to the approval of the Narrator and the player of any affected character. If agreed on, this change counts as a tier-6 status that cannot be lessened or reduced in any way.",
+      "name": "Тёмная лошадка",
+      "text": "Когда вы умираете по любой причине, вы можете описать сцену своей смерти и в ходе неё — одно изменение ближайшего окружения или присутствующего персонажа, настолько масштабное и драматичное, насколько пожелаете. Любое изменение требует одобрения ведущего и игрока каждого затронутого персонажа. При согласии это изменение считается статусом со степенью 6, который нельзя смягчить или уменьшить каким-либо способом.",
       "page": 194
     },
     {
       "id": "quint-4",
-      "name": "Diligent Drudge",
-      "text": "From now on, the Improve track on all of your themes has 5 boxes instead of 3. Whenever you mark Improve for the 5th time on a theme, you gain two improvements and reset the Improve track.",
+      "name": "Усердный труженик",
+      "text": "Отныне шкала Развития каждой вашей темы содержит 5 ячеек вместо 3. Когда вы отмечаете Развитие темы в пятый раз, вы получаете два улучшения и сбрасываете шкалу Развития.",
       "page": 194
     },
     {
       "id": "quint-5",
-      "name": "Fumbling Master",
-      "text": "Whenever one of your weakness tags is invoked in a roll (regardless of who invoked it), you may choose to lose 2 Power and mark 2 Improve (instead of 1).",
+      "name": "Мастер ошибок",
+      "text": "Всякий раз, когда при броске применяется один из ваших тегов слабости, независимо от того, кто его применил, вы можете потерять 2 Силы и отметить 2 ячейки Развития вместо 1.",
       "page": 194
     },
     {
       "id": "quint-6",
-      "name": "Jack of Many Lives",
-      "text": "Once per scene, you may gain as a story tag any non-item power tag you previously had in a theme you evolved or replaced. It expires at the end of the scene.",
+      "name": "Опыт многих жизней",
+      "text": "Один раз за сцену вы можете получить как сюжетный тег любой тег силы, не являющийся предметом, который раньше был у вас в эволюционировавшей или заменённой теме. Он исчезает в конце сцены.",
       "page": 194
     },
     {
       "id": "quint-7",
-      "name": "Larger Than Life",
-      "text": "When your action is Imperiled due having lower Might, you lose only 2 Power instead of 3, and status Consequences against you are increased by only 2 tiers instead of 3 (tag statuses are still increased by 1 tag).",
+      "name": "Больше, чем жизнь",
+      "text": "Когда ваше действие находится в опасном положении из-за более низкого Могущества, вы теряете лишь 2 Силы вместо 3, а Последствия против вас в виде статусов усиливаются лишь на 2 степени вместо 3. Последствия в виде тегов по-прежнему усиливаются на 1 тег.",
       "page": 194
     },
     {
       "id": "quint-8",
-      "name": "Loyal Companion",
-      "text": "Once per scene, when you are directly helping another Hero, you may ignore being Imperiled, or treat being Extremely Imperiled as being Imperiled.",
+      "name": "Верный спутник",
+      "text": "Один раз за сцену, когда вы непосредственно помогаете другому герою, вы можете игнорировать опасное положение либо считать крайне опасное положение просто опасным.",
       "page": 194
     },
     {
       "id": "quint-9",
-      "name": "Lucky Bastard",
-      "text": "Once per session, when you roll a 6 or less, you may treat it as a 7, as long as you didn’t roll double ones.",
+      "name": "Чертовски везучий",
+      "text": "Один раз за сессию, получив результат броска 6 или меньше, вы можете считать его равным 7, если на костях не выпали две единицы.",
       "page": 195
     },
     {
       "id": "quint-10",
-      "name": "Magus Magnificent",
-      "text": "Whenever you take action to prepare magic (at camp or otherwise) and gain Power to spend, you may keep your Power in your backpack instead of spending it. If you still have unspent saved Power from before, it expires. You may later spend this kept Power at any time to create magic ability tags on the fly (they must relate to your preparation).",
+      "name": "Великолепный маг",
+      "text": "Когда вы совершаете действие для подготовки магии, в лагере или где-либо ещё, и получаете Силу для покупки эффектов, вы можете сохранить её в рюкзаке вместо того, чтобы тратить. Если у вас осталась неистраченная Сила от предыдущей подготовки, она исчезает. Позднее вы можете в любой момент тратить сохранённую Силу на создание тегов магических способностей на ходу. Эти теги должны быть связаны с вашей подготовкой.",
       "page": 195
     },
     {
       "id": "quint-11",
-      "name": "Master of Craft",
-      "text": "Whenever you take a crafting action while camping or sojourning, you may ignore being Imperiled by the Might of the task, or treat an Extremely Imperiled action as Imperiled.",
+      "name": "Мастер ремесла",
+      "text": "Когда вы совершаете действие по изготовлению чего-либо в лагере или на постое, вы можете игнорировать опасное положение из-за Могущества задачи либо считать крайне опасное положение просто опасным.",
       "page": 195
     },
     {
       "id": "quint-12",
-      "name": "Master of the Little Things",
-      "text": "Choose one of your Adventure or Greatness themes. When its Might would be used against you, you may tell the Narrator to treat it as one level of Might lower than it is. If you evolve or replace this theme, you may choose a new one to bear this Quintessence.",
+      "name": "Мастер мелочей",
+      "text": "Выберите одну из ваших тем Приключения или Величия. Когда её Могущество должно применяться против вас, вы можете попросить ведущего считать его на один уровень ниже. Если вы эволюционируете или заменяете эту тему, вы можете выбрать новую тему для этой квинтэссенции.",
       "page": 195
     },
     {
       "id": "quint-13",
-      "name": "Nine Lives",
-      "text": "When you take a status that exceeds your Limit (usually tier-6), you may reduce it to your Limit at the beginning of the next scene, explaining how you escaped certain death or irreversible transformation. After you do this three times, remove this Quintessence.",
+      "name": "Девять жизней",
+      "text": "Когда вы получаете статус, превышающий ваш Предел, обычно со степенью 6, вы можете в начале следующей сцены снизить его до своего Предела, объяснив, как избежали верной смерти или необратимого превращения. После третьего применения удалите эту квинтэссенцию.",
       "page": 195
     },
     {
       "id": "quint-14",
-      "name": "Old Hand",
-      "text": "Choose 7 Special Improvements across all your themes.",
+      "name": "Бывалый",
+      "text": "Выберите 7 особых улучшений из всех ваших тем.",
       "page": 195
     },
     {
       "id": "quint-15",
-      "name": "Pillar of Wisdom",
-      "text": "Once per scene, when you offer valuable guidance to another Hero in an action, they may ignore being Imperiled, or treat being Extremely Imperiled as being Imperiled.",
+      "name": "Опора мудрости",
+      "text": "Один раз за сцену, когда вы даёте другому герою ценный совет для его действия, он может игнорировать опасное положение либо считать крайне опасное положение просто опасным.",
       "page": 195
     },
     {
       "id": "quint-16",
-      "name": "The Bearer",
-      "text": "Whenever you take action to pack (at camp or otherwise) and gain Power to spend, you may keep your Power in your backpack instead of spending it. If you still have unspent saved Power from before, it expires. You may later spend it at any time to create item tags on the fly (they must relate to your packing).",
+      "name": "Носильщик",
+      "text": "Когда вы совершаете действие, чтобы собрать припасы или снаряжение, в лагере или где-либо ещё, и получаете Силу для покупки эффектов, вы можете сохранить её в рюкзаке вместо того, чтобы тратить. Если у вас осталась неистраченная Сила от предыдущих сборов, она исчезает. Позднее вы можете в любой момент тратить сохранённую Силу на создание тегов предметов на ходу. Эти теги должны быть связаны с вашими сборами.",
       "page": 195
     },
     {
       "id": "quint-17",
-      "name": "The Common Hero",
-      "text": "Choose one of your Origin or Adventure themes. When using tags from this theme, you may tell the Narrator to treat it as one level of Might higher than it is. If you evolve or replace this theme, you may choose a new one to bear this Quintessence.",
+      "name": "Простой герой",
+      "text": "Выберите одну из ваших тем Истоков или Приключения. Когда вы используете теги этой темы, вы можете попросить ведущего считать её Могущество на один уровень выше. Если вы эволюционируете или заменяете эту тему, вы можете выбрать новую тему для этой квинтэссенции.",
       "page": 195
     },
     {
       "id": "quint-18",
-      "name": "Virtuoso",
-      "text": "Once per session, when you roll a 7-9, you may treat it as a 10.",
+      "name": "Виртуоз",
+      "text": "Один раз за сессию, получив результат броска 7–9, вы можете считать его равным 10.",
       "page": 195
     }
   ]

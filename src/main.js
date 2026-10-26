@@ -49,7 +49,7 @@ async function start(inOwlbear) {
   if (view === 'gm' && role !== 'GM' && inOwlbear) { message('Эта панель доступна только ведущему комнаты.'); return; }
   const scope = inOwlbear ? { room: OBR.room.id, player: OBR.player.id } : { room: 'preview', player: 'preview' };
   let storage;
-  try { storage = window.localStorage; } catch { storage = { getItem: () => null, setItem: () => { throw new Error('Storage unavailable'); } }; }
+  try { storage = window.localStorage; } catch { storage = { getItem: () => null, setItem: () => { throw new Error('Локальное хранилище недоступно'); } }; }
   const close = async () => {
     if(view==='gm')await gmBoard?.flush();
     if (inOwlbear) { if (view === 'gm') await OBR.modal.close(MODAL_ID); else await OBR.popover.close(SHEET_POPOVER_ID); }

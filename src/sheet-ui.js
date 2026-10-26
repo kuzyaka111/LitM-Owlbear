@@ -141,7 +141,7 @@ export function mountSheet(root,state,save,actions) {
     const quint=el('div','mt-improvements mt-quintessences');quint.setAttribute('aria-label','Квинтэссенции');
     for(const item of quintessences){const active=state.quintessenceIds.includes(item.id),row=el('div','mt-improvement-row'+(!active?' mt-inactive-improvement':''));
       const toggle=btn(active?'◆':'◇','mt-improvement-toggle',()=>{state.quintessenceIds=active?state.quintessenceIds.filter(x=>x!==item.id):[...state.quintessenceIds,item.id];drawCharacter();localSave();},'Активировать '+item.name);toggle.setAttribute('aria-pressed',String(active));
-      const title=btn(item.name,'mt-improvement-title',()=>dialog(item.name,form=>form.append(el('p','',item.text),el('small','mt-source-note','The Hero · стр. '+item.page))));title.title=item.text;row.append(toggle,title);quint.append(row);
+      const title=btn(item.name,'mt-improvement-title',()=>dialog(item.name,form=>form.append(el('p','',item.text),el('small','mt-source-note','Герой · стр. '+item.page))));title.title=item.text;row.append(toggle,title);quint.append(row);
     }
     if(state.quintessences){const legacy=el('details','mt-details'),copy=el('p','',state.quintessences);copy.title='Двойное нажатие — изменить';copy.addEventListener('dblclick',()=>inlineText(copy,state.quintessences,async value=>{state.quintessences=value;drawCharacter();localSave();},2000,'Прежние записи о квинтэссенциях'));legacy.append(el('summary','','Прежние записи'),copy);quint.append(legacy);}article.append(growth,quint);
     preserveReplace(q('.mt-character-host'),dressScroll(article,{flowingFooter:true,extensionLabel:'Квинтэссенции',expanded:expanded.get('quint')||false,onExpand:open=>{expanded.set('quint',open);return fit();}}));

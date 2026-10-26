@@ -1,4 +1,4 @@
-import {questionLetterPath} from './question-letters.js';
+import {questionLetterPath,questionLetterViewBox} from './question-letters.js';
 import {dressScroll} from './scroll-view.js';
 import {renderedScale} from './sheet-scale.js';
 import { clawIcon } from './icons.js';
@@ -57,7 +57,7 @@ export function renderTheme(theme, ctx, tools) {
   function row(kind,index,isTitle=false) {
     const slot=theme[kind][index], key=tagKey(theme,kind,index), q=book[kind].find(x=>x.letter===slot.q);
     const r=el('div','mt-tag-row'+(isTitle?' mt-title-row':'')+(slot.scratched?' mt-scratched':''));r.dataset.kind=kind;r.dataset.index=String(index);
-    const letter=story?el('span','mt-story-diamond','◇'):btn('','mt-question',()=>question(kind,index),'Выбрать вопрос '+slot.q);if(!story){letter.dataset.letter=slot.q;letter.append(el('span','mt-question-letter-text',slot.q));const path=tools.doc.createElementNS('http://www.w3.org/2000/svg','path'),svg=tools.doc.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('class','mt-question-glyph');svg.setAttribute('viewBox','0 0 20 20');svg.setAttribute('aria-hidden','true');path.setAttribute('d',questionLetterPath(slot.q));svg.append(path);letter.append(svg);letter.title=q?.text||'Выбрать вопрос';}
+    const letter=story?el('span','mt-story-diamond','◇'):btn('','mt-question',()=>question(kind,index),'Выбрать вопрос '+slot.q);if(!story){letter.dataset.letter=slot.q;letter.append(el('span','mt-question-letter-text',slot.q));const path=tools.doc.createElementNS('http://www.w3.org/2000/svg','path'),svg=tools.doc.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('class','mt-question-glyph');svg.setAttribute('viewBox',questionLetterViewBox);svg.setAttribute('aria-hidden','true');path.setAttribute('d',questionLetterPath(slot.q));svg.append(path);letter.append(svg);letter.title=q?.text||'Выбрать вопрос';}
     const edit=()=>inlineText(text,slot.text,value=>change({kind,index,field:'text',value}),160,isTitle?'Название темы':kind==='power'?'Тег силы':'Тег слабости');
     let pending;const text=btn(slot.text||(isTitle?'Название темы':'Пустой тег'),'mt-tag-text',e=>{});text.dataset.key=key;text.title=slot.text+'\nДвойное нажатие — изменить.';text.classList.toggle('mt-empty-tag',!slot.text);
     tagTexts.set(r,text);

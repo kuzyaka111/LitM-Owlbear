@@ -3,7 +3,7 @@ import {parse} from 'opentype.js';
 import {boardCardElement} from './board-render.js';
 import {boardDebug} from './board-debug.js';
 const FONT_NAMES={writing:'Bad Script',heading:'Alegreya SC'};
-export const BOARD_GRAPHICS_VERSION=11;
+export const BOARD_GRAPHICS_VERSION=12;
 let fontsPromise;
 export const boardAsset=(file,base=globalThis.location?.href)=>new URL('./board-assets/'+file,base).href;
 async function fonts(){

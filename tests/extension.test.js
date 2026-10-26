@@ -31,7 +31,7 @@ test('player cannot open the GM modal even by invoking its handler', async () =>
 
 test('GM opens a separate modal with a URL valid under a repository path', async () => {
   const m = mockOBR('GM'); assert.equal(await openGM(m.obr, base), true);
-  assert.equal(m.calls[0][1].url, 'https://example.github.io/legend-in-the-mist-owlbear/gm.html');
+  const url=new URL(m.calls[0][1].url);assert(url.searchParams.has('opened'));url.searchParams.delete('opened');assert.equal(url.href, 'https://example.github.io/legend-in-the-mist-owlbear/gm.html');
   assert.equal(pageUrl('./gm.svg', base), 'https://example.github.io/legend-in-the-mist-owlbear/gm.svg');
 });
 

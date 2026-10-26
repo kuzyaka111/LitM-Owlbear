@@ -25,9 +25,10 @@ export function createGMTool(obr, base) {
 export async function openGM(obr, base) {
   if (await obr.player.getRole() !== 'GM') return false;
   if (!await obr.scene.isReady()) return false;
+  const url=new URL('./gm.html',base);url.searchParams.set('opened',String(Date.now()));
   await obr.modal.open({
     id: MODAL_ID,
-    url: pageUrl('./gm.html', base),
+    url: url.href,
     width: 620,
     height: 730,
   });

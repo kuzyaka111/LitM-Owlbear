@@ -47,13 +47,16 @@ export function createDetachedHost(obr,win,{storage=win.localStorage,bus=obr.roo
   session.port=port;port.onmessage=e=>{if(session.port===port)void receive(session,e.data);};port.start?.();
   send(session,{type:'welcome',scope:scope(session.view),values:storageSnapshot(storage,scope(session.view))});
  }
- function open(view){
+ function open(view,provided){
   if(!alive||!['sheet','gm'].includes(view))throw Error('Не удалось открыть вкладку.');
   const existing=[...sessions.values()].find(s=>s.view===view&&!s.window.closed);if(existing){existing.window.focus();return existing.window;}
-  const token=crypto.randomUUID(),url=new URL(view==='gm'?'./gm.html':'./index.html',base);url.search='';url.searchParams.set('surface','sheet');url.searchParams.set('detached','1');url.searchParams.set('obrref',btoa(origin+' '+obr.room.id));url.hash=token;
-  const child=win.open(url.href,'legend-mist-'+view+'-'+obr.room.id+'-'+obr.player.id);if(!child)throw Error('Браузер заблокировал вкладку. Разрешите всплывающие окна для Owlbear и повторите.');
-  sessions.set(token,{token,view,window:child,port:null,subs:new Map(),interactions:new Set(),connection:0});return child;
+  const token=crypto.randomUUID(),url=new URL(view==='gm'?'./gm.html':'./index.html',base);url.search='';url.searchParams.set('surface','sheet');url.searchParams.set('detached','1');url.searchParams.set('opened',String(Date.now()));url.searchParams.set('obrref',btoa(origin+' '+obr.room.id));url.hash=token;
+  const child=provided?provided(url.href):win.open(url.href,'legend-mist-'+view+'-'+obr.room.id+'-'+obr.player.id);if(!child)throw Error('Браузер заблокировал вкладку. Разрешите всплывающие окна для Owlbear и повторите.');
+  sessions.set(token,{token,view,window:child,port:null,subs:new Map(),interactions:new Set(),connection:0});
+  if(provided){try{child.opener=win;}catch(error){sessions.delete(token);throw error;}}
+  return child;
  }
+ open.version=2;open.find=view=>[...sessions.values()].find(s=>s.view===view&&!s.window.closed)?.window;
  win[DETACHED_OPEN]=open;win.addEventListener('message',hello);win.addEventListener('storage',publishStorage);win.addEventListener('legend-mist-store',publishStorage);
  const offRole=obr.player.onChange(player=>{if(role!==player.role){role=player.role;++access;}for(const session of [...sessions.values()])if(!permitted(session))disposeSession(session,'Доступ ведущего закрыт.');});
  const timer=win.setInterval(()=>{for(const session of [...sessions.values()])if(session.window.closed)disposeSession(session,'Вкладка закрыта.');},2000);

@@ -4,10 +4,16 @@ export const isDetached=win=>new URLSearchParams(win.location.search).get('detac
 export function openDetached(win,view,{preview=false}={}){
  if(preview){const url=new URL(view==='gm'?'./gm.html':'./index.html',win.location.href);url.search='?surface=sheet';return win.open(url.href,'_blank','noopener');}
  const parent=win.parent;
+ let open;
  for(let i=0;i<parent.frames.length;i++){
-  try{const host=parent.frames[i];if(host.location.origin===win.location.origin&&typeof host[OPEN]==='function'){const child=host[OPEN](view);child.focus();return child;}}catch(error){if(error.name!=='SecurityError')throw error;}
+  try{const host=parent.frames[i];if(host.location.origin===win.location.origin&&typeof host[OPEN]==='function'){open=host[OPEN];break;}}catch(error){if(error.name!=='SecurityError')throw error;}
  }
- throw Error('Связь с комнатой ещё не готова. Обновите комнату Owlbear и повторите.');
+ if(!open||open.version!==2)throw Error('Фоновая часть комнаты ещё не обновилась. Нажмите Ctrl+F5 во вкладке Owlbear, снова откройте лист и повторите.');
+ const existing=open.find?.(view);if(existing){existing.focus();return existing;}
+ // Open from the clicked, visible frame while its user activation is live.
+ // A hidden background iframe may not carry activation in some browsers.
+ let child;
+ try{const attached=open(view,url=>{child=win.open(url,'_blank');return child;});attached.focus();return attached;}catch(error){child?.close();throw error;}
 }
 export function connectDetached(win,{onDisconnect=()=>{},onError=()=>{}}={}){
  const token=win.location.hash.slice(1),origin=win.location.origin;

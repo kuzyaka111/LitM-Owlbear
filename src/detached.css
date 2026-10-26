@@ -3,6 +3,8 @@ body.mt-detached-page{margin:0;background:#242733!important}
 .mt-detached-bar button,.mt-detached-recovery button{border:1px solid #a68c64;border-radius:3px;background:#654831;color:#fff0d0;font:inherit;padding:4px 10px;cursor:pointer}
 .mt-detached-page #mist-table-design{height:calc(100dvh - 36px)!important}
 .mt-detached-page #mist-table-design .mt-v4 .mt-scroll-frame{max-height:calc((100dvh - 36px)/1.25 - var(--toolbar-height,34px) - 44px)}
-#mist-table-design .mt-gm-v2 .mt-detached-button{padding:0 5px;min-width:28px;font-size:23px;align-self:center;background:transparent;border:0;color:#654831}
+#mist-table-design .mt-gm-v2 .mt-detached-button{padding:5px 8px;min-width:28px;font-size:13px;align-self:center;background:#654831;border:1px solid #795b40;color:#fff0d0}
 #mist-table-design .mt-settings-list .mt-detached-button{white-space:normal;text-align:left}
+#mist-table-design .mt-detached-error{margin:6px 0;padding:8px;border:1px solid #b88c68;border-radius:3px;background:#f3dbcf;color:#7b3328;font:500 13px/1.5 'Alegreya SC',Georgia,serif;white-space:normal;overflow-wrap:anywhere}
+#mist-table-design .mt-ui-message:empty{display:none!important}
 .mt-detached-recovery{background:#f5db9f;justify-content:flex-start}

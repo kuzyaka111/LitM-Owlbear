@@ -9,6 +9,7 @@ import {sharedSDKSubscriptions} from '../src/detached-sdk.js';
 import {mountUI} from '../src/ui.js';
 import {makeStore} from '../src/storage.js';
 import {createSheetTransfer} from '../src/sheet-transfer.js';
+import {openDetached} from '../src/detached-client.js';
 const tick=()=>new Promise(resolve=>setTimeout(resolve,0));
 const scope={room:'room',player:'player',view:'gm'};
 const key=view=>'legend-mist-prototype:v1:'+JSON.stringify(['room','player',view]);
@@ -32,6 +33,16 @@ test('native and detached SDK subscriptions do not unsubscribe one another',()=>
 });
 test('the background opens the correct project URL and reuses one live tab per view',t=>{
  const s=setup(t);const one=s.host.open('sheet'),again=s.host.open('sheet'),gm=s.host.open('gm');assert.equal(one,again);const url=new URL(one.url);assert.equal(url.pathname,'/LitM-Owlbear/index.html');assert.equal(url.searchParams.get('detached'),'1');assert.equal(atob(url.searchParams.get('obrref')),'https://example.org room');assert.equal(new URL(gm.url).pathname,'/LitM-Owlbear/gm.html');
+});
+test('a visible click opens the popup and the background takes ownership before navigation',t=>{
+ const s=setup(t);let destination,visibleCalls=0;const child={closed:false,focus(){}};
+ const visible={location:{origin:'https://example.org'},parent:{frames:[s.win]},open(url){destination=url;visibleCalls++;return child;}};
+ assert.equal(openDetached(visible,'sheet'),child);assert.equal(visibleCalls,1);assert.equal(child.opener,s.win);assert.equal(new URL(destination).pathname,'/LitM-Owlbear/index.html');assert(new URL(destination).searchParams.has('opened'));
+ assert.equal(openDetached(visible,'sheet'),child);assert.equal(visibleCalls,1);
+});
+test('an old background and a blocked popup give distinct errors without opening a second window',t=>{
+ const old=()=>{};const visible={location:{origin:'https://example.org'},parent:{frames:[{location:{origin:'https://example.org'},__legendMistOpenDetached:old}]},open(){throw Error('must not open');}};assert.throws(()=>openDetached(visible,'sheet'),/Ctrl\+F5/);
+ const s=setup(t);visible.parent.frames=[s.win];visible.open=()=>null;assert.throws(()=>openDetached(visible,'gm'),/заблокировал/);
 });
 test('a genuine tab receives scoped data; a forged source or origin receives nothing',async t=>{
  const s=setup(t);s.win.localStorage.setItem(key('gm'),'private');s.win.localStorage.setItem('unrelated-secret','secret');const forged=s.connect('gm',{source:{}});await tick();assert.equal(forged.messages.length,0);const wrong=s.connect('gm',{origin:'https://evil.invalid'});await tick();assert.equal(wrong.messages.length,0);
@@ -75,4 +86,7 @@ test('buttons are in sheet settings and fixed GM actions; detached mode offers a
 test('detached sheets keep board updates and visibility but never start a drag transfer',t=>{
  const dom=new JSDOM('<main><nav class="mt-tabs"></nav></main>');t.after(()=>dom.window.close());let resized=0;const root=dom.window.document.querySelector('main'),scene={items:()=>[],subscribe:()=>()=>{}};
  const transfer=createSheetTransfer(root,{},()=>{},{scene,allowDrag:false,resize:()=>resized++,getShared:()=>null,fit:()=>{},report:()=>{}});t.after(()=>transfer.dispose());assert.equal(transfer.move({}, {clientY:-100}),false);assert.equal(resized,0);
+});
+test('a failed sheet launch displays its message by the clicked setting, not in the sheet footer',async t=>{
+ const dom=new JSDOM('<main id="mist-table-design"></main>',{url:'https://example.org'});t.after(()=>dom.window.close());const root=dom.window.document.querySelector('main'),store=makeStore(dom.window.localStorage,{room:'room',player:'player'},'sheet');mountUI(root,'sheet',fs.readFileSync(new URL('../src/sheet.html',import.meta.url),'utf8'),store,{openDetached:()=>{throw Error('Разрешите новую вкладку');},fitWindow:()=>{},close:()=>{}});root.querySelector('.mt-detached-button').click();assert.equal(root.querySelector('.mt-settings-list .mt-detached-error').textContent,'Разрешите новую вкладку');assert(root.querySelector('.mt-ui-message').hidden);
 });
